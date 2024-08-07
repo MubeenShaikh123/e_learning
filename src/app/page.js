@@ -5,7 +5,6 @@ export default function Home() {
     <div className="text-blue-500 text-7xl">
       Home Page
     </div>
-      {process.env.MONGO_URL}
     </>
   );
 }
