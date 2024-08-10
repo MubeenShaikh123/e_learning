@@ -45,7 +45,7 @@ const forgotPassword = async (req, res) => {
         to: email,
         from: process.env.EMAIL,
         subject: 'Password Reset',
-        text: `Click the link to reset your password: ${process.env.BASE_URL}/auth/change-password/${resetToken}`
+        text: `Click the link to reset your password: ${process.env.NEXT_PUBLIC_BASE_URL}/auth/change-password/${resetToken}`
       };
 
       await transporter.sendMail(mailOptions);
