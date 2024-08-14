@@ -5,7 +5,7 @@ import Link from 'next/link'
 const Quizz = ({ isHome }) => {
     const quizzes = [
         {
-            _id: "64d123456789abcd01234575", // Dummy ObjectId for the quiz
+            _id: "66bce68f317341e67df79f10", // Dummy ObjectId for the quiz
             title: "Python Programming Basics",
             description: "An introductory quiz on Python programming.",
             category: "Programming",
@@ -209,7 +209,7 @@ const Quizz = ({ isHome }) => {
                             <div key={quizz._id} className="lg:w-1/3 sm:w-1/2 p-4">
                                 <div className="flex relative group">
                                     <Image width={1470} height={436} alt="gallery" className="hue-rotate-[323deg] absolute inset-0 w-full h-full object-cover object-center" src="/bg4.jfif" />
-                                    <Link href={`./courses/${quizz._id}`} className='bg-transparent z-50'>
+                                    <Link href={`./quizzes/${quizz._id}`} className='bg-transparent z-50'>
                                         <div className=" transition-opacity hover:duration-1000 duration-0 px-8 py-10 relative z-10 w-full border-4 border-gray-200 text-white backdrop-brightness-75 opacity-0 hover:opacity-100">
                                             <h1 className="title-font text-lg font-medium text-white mb-3">{quizz.title}</h1>
                                             <p className="leading-relaxed">{`${quizz.description.substring(0, 115)}...`} &nbsp;</p>

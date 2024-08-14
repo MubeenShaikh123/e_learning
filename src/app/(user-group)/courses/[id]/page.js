@@ -2,51 +2,102 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
+import Details from './details/details';
 
 const CoursePage = async ({ params }) => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/get/${params.id}`);
   const { data: course } = await res.json();
-
   if (!course) {
     notFound();
   }
 
+  // const course = {
+  //   "_id": "66b0614fe62c16a46fe8a151",
+  //   "title": "Full Stack Web Development",
+  //   "description": "Learn to build complete web applications from scratch using modern technologies like React, Node.js, and MongoDB.",
+  //   "price": 299,
+  //   "duration": 2,
+  //   "startingFrom": '2 Aug 2024',
+  //   "instructor": "John Doe",
+  //   "category": "Web Development",
+  //   "modules": [
+  //     {
+  //       "title": "Introduction to Web Development",
+  //       "description": "An overview of web development, including the basics of HTML, CSS, and JavaScript.",
+  //       "duration": 60,
+  //       "content": [
+  //         "What is Web Development?",
+  //         "Introduction to HTML, CSS, and JavaScript",
+  //         "Setting up a Development Environment"
+  //       ]
+  //     },
+  //     {
+  //       "title": "Frontend Development with React",
+  //       "description": "Learn how to create dynamic and interactive user interfaces using React.",
+  //       "duration": 120,
+  //       "content": [
+  //         "Introduction to React",
+  //         "Components and Props",
+  //         "State Management with Hooks",
+  //         "Building a Simple React Application"
+  //       ]
+  //     },
+  //     {
+  //       "title": "Backend Development with Node.js",
+  //       "description": "Learn how to create server-side applications using Node.js and Express.",
+  //       "duration": 150,
+  //       "content": [
+  //         "Introduction to Node.js",
+  //         "Setting up an Express Server",
+  //         "Building RESTful APIs",
+  //         "Connecting to a MongoDB Database"
+  //       ]
+  //     },
+  //     {
+  //       "title": "Full Stack Project",
+  //       "description": "Build a full-stack web application using the skills you've learned in this course.",
+  //       "duration": 180,
+  //       "content": [
+  //         "Project Planning and Setup",
+  //         "Building the Frontend with React",
+  //         "Creating the Backend with Node.js and Express",
+  //         "Connecting the Frontend and Backend",
+  //         "Deploying the Application"
+  //       ]
+  //     }
+  //   ],
+  //   "reviews": [
+  //       {
+  //           "_id": "1",
+  //           "reviewerName": "Alice Johnson",
+  //           "rating": 5,
+  //           "comment": "An excellent course that covers everything you need to know about full-stack development. Highly recommended!"
+  //         },
+  //         {
+  //         "_id": "2",
+  //         "reviewerName": "Bob Smith",
+  //         "rating": 4,
+  //         "comment": "Great content and practical examples, but the pace could be a bit faster. Overall, very informative."
+  //       },
+  //       {
+  //         "_id": "3",
+  //         "reviewerName": "Charlie Brown",
+  //         "rating": 4,
+  //         "comment": "Good course with a lot of valuable information. The project at the end was especially helpful for understanding how to apply the concepts."
+  //       }
+  //     ],
+  //     "createdAt": "2024-08-05T12:00:00Z"
+  // }
+
   return (
-    <section class="text-gray-600 body-font overflow-hidden">
-      <div class="container px-5 py-24 mx-auto">
-        <div class="lg:w-4/5 mx-auto flex flex-wrap">
-          <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
-            <h2 class="text-sm title-font text-gray-500 tracking-widest">BRAND NAME</h2>
-            <h1 class="text-gray-900 text-3xl title-font font-medium mb-4">Animated Night Hill Illustrations</h1>
-            <div class="flex mb-4">
-              <button class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">Description</button>
-              <button class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">Reviews</button>
-              <button class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">Details</button>
-            </div>
-            <p class="leading-relaxed mb-4">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam inxigo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean.</p>
-            <div class="flex border-t border-gray-200 py-2">
-              <span class="text-gray-500">Color</span>
-              <span class="ml-auto text-gray-900">Blue</span>
-            </div>
-            <div class="flex border-t border-gray-200 py-2">
-              <span class="text-gray-500">Size</span>
-              <span class="ml-auto text-gray-900">Medium</span>
-            </div>
-            <div class="flex border-t border-b mb-6 border-gray-200 py-2">
-              <span class="text-gray-500">Quantity</span>
-              <span class="ml-auto text-gray-900">4</span>
-            </div>
-            <div class="flex">
-              <span class="title-font font-medium text-2xl text-gray-900">$58.00</span>
-              <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Button</button>
-              <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                </svg>
-              </button>
-            </div>
+    <section className="text-gray-600 body-font overflow-hidden">
+      <div className="container px-5 pt-12 pb-24 mx-auto">
+        <div className="lg:w-full justify-center items-center mx-auto flex flex-wrap flex-col">
+          <Image width={1250} height={360} alt="ecommerce" className="lg:w-2/3 w-full lg:h-auto h-64 object-cover object-center rounded hue-rotate-[323deg]" src="/bg4.jfif" />
+          <div className="lg:w-2/3 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+            {/* <h2 className="text-sm title-font text-gray-500 tracking-widest">{course.title}</h2> */}
+            <Details course={course}></Details>
           </div>
-          <Image width={1250} height={360} alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="/bg4.jfif"/>
         </div>
       </div>
     </section>
