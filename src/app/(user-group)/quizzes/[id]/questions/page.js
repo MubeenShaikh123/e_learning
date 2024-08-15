@@ -1,7 +1,7 @@
 "use client"
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { nextQuestion, prevQuestion, saveAnswer, setQuiz,setQuestionIndex } from '@/lib/features/quiz/quizSlice';
+import { nextQuestion, prevQuestion, saveAnswer, setQuiz, setQuestionIndex } from '@/lib/features/quiz/quizSlice';
 import { FcNext, FcPrevious } from "react-icons/fc";
 
 const QuestionPage = ({ initialQuiz }) => {
@@ -10,6 +10,7 @@ const QuestionPage = ({ initialQuiz }) => {
     const quiz = useSelector((state) => state.quiz.quiz);
     const currentQuestion = quiz.questions[currentQuestionIndex];
     const answers = useSelector((state) => state.quiz.answers);
+    const [selectedAnswer, setSelectedAnswer] = useState(undefined);
 
     useEffect(() => {
         // Set the initial quiz data when the component mounts
@@ -18,49 +19,88 @@ const QuestionPage = ({ initialQuiz }) => {
         }
     }, [initialQuiz, dispatch]);
 
+    useEffect(() => {
+        setSelectedAnswer(answers[currentQuestionIndex])
+    }, [currentQuestionIndex]);
+
     const handleNext = () => {
+        setSelectedAnswer(undefined)
         dispatch(nextQuestion());
     };
 
     const handlePrev = () => {
+        setSelectedAnswer(undefined)
         dispatch(prevQuestion());
     };
 
-    const handleSaveAnswer = ({index,answer}) => {
-        dispatch(saveAnswer({ questionId: index, answer }));
+    const handleSaveAnswer = ({ index, questionId, answer }) => {
+        dispatch(saveAnswer({ index, questionId, answer }));
+        setSelectedAnswer(answer);
     };
 
     const handleQuestionChange = (index) => {
+        setSelectedAnswer(undefined)
         dispatch(setQuestionIndex({ index }));
+    };
+
+    const renderOptions = () => {
+        switch (currentQuestion.type) {
+            case 'multiple-choice':
+                return currentQuestion.options.map((option, index) => (
+                    <button
+                        key={index}
+                        className={`place-self-start border min-w-[80%] p-2 ${(selectedAnswer == option) ? ' bg-green-400 text-white ' : ''}`}
+                        onClick={() => handleSaveAnswer({ index: currentQuestionIndex, questionId: currentQuestion._id, answer: option })}
+                    >
+                        {option}
+                    </button>
+                ));
+            case 'true-false':
+                return (
+                    <>
+                        <button
+                            className={`place-self-start border min-w-[80%] p-2 ${(selectedAnswer == 'true') ? ' bg-green-400 text-white ' : ''}`}
+                            onClick={() => handleSaveAnswer({ index: currentQuestionIndex, questionId: currentQuestion._id, answer: "true" })}
+                        >
+                            True
+                        </button>
+                        <button
+                            className={`place-self-start border min-w-[80%] p-2 ${(selectedAnswer == 'false') ? ' bg-green-400 text-white ' : ''}`}
+                            onClick={() => handleSaveAnswer({ index: currentQuestionIndex, questionId: currentQuestion._id, answer: "false" })}
+                        >
+                            False
+                        </button>
+                    </>
+                );
+            case 'short-answer':
+                return (
+                    <input
+                        type="text"
+                        className="border p-2 min-w-[80%]"
+                        value={`${(selectedAnswer == option) ? ' bg-green-400 text-white ' : ''}`}
+                        onBlur={(e) => handleSaveAnswer({ index: currentQuestionIndex, questionId: currentQuestion._id, answer: e.target.value })}
+                        placeholder="Type your answer here..."
+                    />
+                );
+            default:
+                return <p>No options available for this question.</p>;
+        }
     };
 
     return (
         <section className="text-gray-600 body-font overflow-hidden">
-            <div className="container px-5 pt-12 pb-24 mx-auto">
+            <div className="container px-2 md:px-5 pt-4 md:pt-12 pb-24 mx-auto">
                 <div className="lg:w-full justify-center items-center mx-auto flex flex-wrap flex-col">
                     <div className="border lg:w-2/3 w-full lg:px-4 lg:py-6 mb-6 lg:mb-0">
-                        <h2 className='text-3xl font-semibold'>{quiz?.title || 'Quiz Title'}</h2>
+                        <h2 className='text-3xl font-semibold p-2'>{quiz?.title || 'Quiz Title'}</h2>
                         <div className='p-4'>
                             {currentQuestion ? (
-                                <p className='text-xl'>{currentQuestion.text}</p>
+                                <p className='text-xl'>Q.{currentQuestionIndex + 1} {currentQuestion.text}</p>
                             ) : (
                                 <p>No question available.</p>
                             )}
                             <div className="options grid grid-cols-2 gap-3 my-3">
-                                {currentQuestion.options &&
-                                    currentQuestion.options.map((option, index) => (
-                                        <button key={index} className='place-self-start border min-w-[80%] p-2' onClick={() => handleSaveAnswer({index:currentQuestionIndex,answer:option})}>
-                                            {option}
-                                        </button>
-                                    ))}
-                                {/* For short-answer questions */}
-                                {currentQuestion.type === 'short-answer' && (
-                                    <input
-                                        type="text"
-                                        onBlur={(e) => handleSaveAnswer(e.target.value)}
-                                        placeholder="Type your answer here..."
-                                    />
-                                )}
+                                {renderOptions()}
                             </div>
 
                             <div className="navigation-buttons flex flex-row justify-between">
@@ -73,11 +113,11 @@ const QuestionPage = ({ initialQuiz }) => {
                             </div>
                         </div>
 
-                        <div className="question-list p-2 border grid gap-1 grid-cols-10">
+                        <div className="question-list p-2 border grid gap-1 grid-cols-5 md:grid-cols-10">
                             {quiz.questions.map((_, index) => (
                                 <button
                                     key={index}
-                                    className={`border p-2 px-4 place-self-center question-number ${index === currentQuestionIndex ? 'current' : ''} ${answers[quiz.questions[index]._id] ? 'answered' : 'unanswered'
+                                    className={`border p-2 px-4 w-full place-self-center question-number  ${(answers[index] && 1) ? ' bg-green-400 ' : `${(index === currentQuestionIndex) ? ' bg-purple-400 ' : ''}`
                                         }`}
                                     onClick={() => handleQuestionChange(index)}
                                 >
@@ -87,7 +127,7 @@ const QuestionPage = ({ initialQuiz }) => {
                         </div>
                     </div>
                 </div></div>
-            /</section>
+        </section>
     );
 };
 

@@ -1,5 +1,6 @@
 // lib/features/quiz/quizSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { act } from 'react';
 
 const initialState = {
   quiz: {
@@ -16,33 +17,34 @@ const quizSlice = createSlice({
   reducers: {
     setQuiz: (state, action) => {
       state.quiz = action.payload;
-      console.log("quizzSlice setquiz", action.payload)
+      state.answers = new Array(action.payload.questions.length);
     },
     nextQuestion: (state) => {
       if (state.currentQuestionIndex < state.quiz.questions.length - 1) {
-        console.log("quizzSlice nextq")
         state.currentQuestionIndex += 1;
       }
     },
     prevQuestion: (state) => {
       if (state.currentQuestionIndex > 0) {
-        console.log("quizzSlice prevq")
         state.currentQuestionIndex -= 1;
       }
     },
     saveAnswer: (state, action) => {
-      const { questionId, answer } = action.payload;
-      state.answers[questionId] = {answer};
+      const { index, questionId, answer } = action.payload;
+      state.answers[index]=answer
+      for (let i = 0; i < state.answers.length; i++) {
+        console.log(` ${i} : `,state.answers[i]);
+      }
     },
     setQuestionIndex: (state, action) => {
       const { index } = action.payload;
       if (index >= 0 && index < state.quiz.questions.length) {
-        console.log("quizSlice setQuestionIndex", index);
         state.currentQuestionIndex = index;
       }
     },
   },
-});
+},
+);
 
 export const { setQuiz, nextQuestion, prevQuestion, saveAnswer, setQuestionIndex } = quizSlice.actions;
 
