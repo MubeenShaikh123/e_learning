@@ -5,48 +5,48 @@ import Contents from './contents';
 import Reviews from './reviews';
 
 const Details = ({ course }) => {
-    const [tab, setTab] = useState('Description');
-    // Function to render content based on the active tab
-    const renderContent = () => {
-        switch (tab) {
-            case 'Description':
-                return <Description course={course}></Description>;
-            case 'Contents':
-                return <Contents course={course}></Contents>;
-            case 'Reviews':
-                return <Reviews course={course}></Reviews>;
-            default:
-                return <Description course={course}></Description>;
-        }
-    };
+  const [activeTab, setActiveTab] = useState('description');
 
-    return (
-        <>
-            <h1 className="text-gray-900 text-3xl title-font font-medium mb-4 uppercase">{course.title}</h1>
-            <div className="flex mb-4">
-                <button
-                    className={`flex-grow ${tab === 'Description' ? 'text-indigo-500 border-b-2 border-indigo-500' : 'border-b-2 border-gray-300'} py-2 text-lg px-1`}
-                    onClick={() => setTab('Description')}
-                >
-                    Description
-                </button>
-                <button
-                    className={`flex-grow ${tab === 'Contents' ? 'text-indigo-500 border-b-2 border-indigo-500' : 'border-b-2 border-gray-300'} py-2 text-lg px-1`}
-                    onClick={() => setTab('Contents')}
-                >
-                    Contents
-                </button>
-                <button
-                    className={`flex-grow ${tab === 'Reviews' ? 'text-indigo-500 border-b-2 border-indigo-500' : 'border-b-2 border-gray-300'} py-2 text-lg px-1`}
-                    onClick={() => setTab('Reviews')}
-                >
-                    Reviews
-                </button>
-            </div>
-            {renderContent()}
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">{course.title}</h1>
+        <div className="flex items-center space-x-4 text-gray-600">
+          <span className="flex items-center">
+            ★ {course.rating} ({course.reviews?.length} reviews)
+          </span>
+          <span>•</span>
+          <span>{course.duration} Months</span>
+          <span>•</span>
+          <span>Instructor: {course.instructor}</span>
+        </div>
+      </div>
 
-        </>
-    );
-};
+      <div className="border-b border-gray-200 mb-8">
+        <nav className="flex space-x-8">
+          {['description', 'contents', 'reviews'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`pb-4 px-1 border-b-2 font-medium ${
+                activeTab === tab
+                  ? 'border-indigo-600 text-indigo-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </nav>
+      </div>
 
-export default Details;
+      <div className="space-y-8">
+        {activeTab === 'description' && <Description course={course} />}
+        {activeTab === 'contents' && <Contents course={course} />}
+        {activeTab === 'reviews' && <Reviews course={course} />}
+      </div>
+    </div>
+  )
+}
+
+export default Details

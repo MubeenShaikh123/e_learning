@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import "../globals.css";
 import Navbar from "@/components/navbar";
 import Head from "next/head";
@@ -13,13 +14,15 @@ export default function UserGroupLayout({ children }) {
         <title>E_learning app</title>
       </Head>
       <body>
-        <header>
+        {/* <header>
           <Navbar />
-        </header>
+        </header> */}
         <main className="min-h-screen">
           {children}
         </main>
-        <footer></footer>
+        {/* <footer className="text-gray-600 body-font border-t">
+          <Footer></Footer>
+        </footer> */}
       </body>
     </html>
   );

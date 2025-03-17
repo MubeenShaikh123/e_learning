@@ -1,9 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { GrLinkNext } from "react-icons/gr";
 
 const Course = ({ isHome }) => {
+
     const courses = [{
         "_id": "66b0614fe62c16a46fe8a151",
         "title": "Full Stack Web Development",
@@ -282,39 +282,75 @@ const Course = ({ isHome }) => {
     }
     ]
 
-    return (
-        <section className="text-gray-600 body-font">
-            <div className="container px-5 py-24 mx-auto">
-                <div className="flex flex-col text-center w-full mb-20">
-                    <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Explore Our Expert-Led Courses</h1>
-                    <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Discover a wide range of courses designed to help you excel in your career. From beginner to advanced levels, our expert instructors guide you through practical, hands-on learning experiences to master the skills you need for success.</p>
+  return (
+    <section className="bg-gray-50 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Explore Our Expert-Led Courses</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Discover a wide range of courses designed to help you excel in your career. From beginner to advanced levels.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {courses.map((course) => (
+            <div 
+              key={course._id}
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="relative h-48">
+                <Image
+                  fill
+                  alt={course.title}
+                  className="object-cover"
+                  src="/bg4.jfif"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
+              </div>
+              
+              <div className="p-6">
+                <div className="mb-3">
+                  <span className="inline-block bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1 rounded-full">
+                    {course.category}
+                  </span>
                 </div>
-                <div className="flex flex-wrap -m-4">
-                    {courses.map((course) => {
-                        return (
-                                <div key={course._id} className="lg:w-1/3 sm:w-1/2 p-4">
-                                    <div className="flex relative group max-h-52">
-                                        <Image width={1470} height={436} alt="gallery" className="hue-rotate-[323deg] absolute inset-0 w-full h-full object-cover object-center" src="/bg4.jfif" />
-                                        <Link href={`./courses/${course._id}`} className='bg-transparent z-50'>
-                                            <div className=" transition-opacity hover:duration-1000 duration-0 px-8 py-10 relative z-10 w-full border-4 border-gray-200 text-white backdrop-brightness-75 opacity-0 hover:opacity-100">
-                                                <h1 className="title-font text-lg font-medium text-white mb-3">{course.title}</h1>
-                                                <p className="leading-relaxed">{`${course.description.substring(0, 115)}...`} &nbsp;</p>
-                                            </div>
-                                        </Link>
-                                        <span className='block group-hover:hidden bg-transparent backdrop-blur-lg backdrop-brightness-90 border-t absolute top-full translate-y-[-100%] left-0 w-full px-4 py-2'>
-                                            <h1 className="title-font text-lg font-medium text-white mb-3">
-                                                    {course.title}
-                                            </h1>
-                                        </span>
-                                    </div>
-                                </div>
-                        )
-                    })}
+                
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  <Link href={`/courses/${course._id}`} className="hover:text-indigo-600 transition-colors">
+                    {course.title}
+                  </Link>
+                </h3>
+                
+                <p className="text-gray-600 line-clamp-3 mb-4">
+                  {course.description}
+                </p>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-yellow-500">★</span>
+                    <span className="font-medium">4.8</span>
+                    <span className="text-gray-500">(1.2k)</span>
+                  </div>
+                  <span className="text-lg font-bold text-indigo-600">₹{course.price}</span>
                 </div>
-                {isHome && <Link href={'./courses'} className='text-xl block mt-4 float-left underline px-2 hover:no-underline text-slate-600'>view all &gt;</Link>}
+              </div>
             </div>
-        </section>
-    )
+          ))}
+        </div>
+
+        {isHome && (
+          <div className="mt-12 text-center">
+            <Link href="/courses" className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium">
+              View All Courses
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        )}
+      </div>
+    </section>
+  )
 }
 
 export default Course
