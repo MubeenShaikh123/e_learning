@@ -36,7 +36,7 @@ const CourseVideos = ({ params }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-indigo-900 border-b border-indigo-200 pb-2">
           Course Videos

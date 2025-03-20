@@ -35,7 +35,7 @@ const VideoPlayer = ({ params }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-indigo-900">{video.title}</h1>
         <div className="relative overflow-hidden rounded-lg w-full aspect-video">

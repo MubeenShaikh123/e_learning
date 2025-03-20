@@ -1,23 +1,123 @@
 "use client";
 
-
 import { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const router = useRouter();
 
   const courses = [
     {
-      id: 1,
-      title: 'Web Development Bootcamp',
+      id: "66b0614fe62c16a46fe8a151",
+      title: 'Full Stack Web Development',
       category: 'Programming',
       duration: '32 hours',
       lessons: 45,
       progress: 70,
       rating: 4.8,
+      price: 299,
     },
-    // Add more courses...
+    {
+      id: 2,
+      title: 'Data Science and Machine Learning',
+      category: 'Data Science',
+      duration: '40 hours',
+      lessons: 50,
+      progress: 60,
+      rating: 4.7,
+      price: 399,
+    },
+    {
+      id: 3,
+      title: 'Mobile App Development with Flutter',
+      category: 'Mobile Development',
+      duration: '28 hours',
+      lessons: 38,
+      progress: 85,
+      rating: 4.9,
+      price: 349,
+    },
+    {
+      id: 4,
+      title: 'Cybersecurity Essentials',
+      category: 'Cybersecurity',
+      duration: '25 hours',
+      lessons: 30,
+      progress: 55,
+      rating: 4.6,
+      price: 259,
+    },
+    {
+      id: 5,
+      title: 'Artificial Intelligence with Python',
+      category: 'AI',
+      duration: '35 hours',
+      lessons: 42,
+      progress: 75,
+      rating: 4.8,
+      price: 499,
+    },
+  ];
+
+  const quizzes = [
+    {
+      id: 1,
+      title: 'JavaScript Fundamentals',
+      category: 'Web Dev',
+      duration: '~20 min',
+      questions: 15,
+      description: 'Test your knowledge of JavaScript basics, from variables to functions.',
+      rating: 4.7,
+      gradient: 'from-blue-500 to-indigo-600',
+      tagColor: 'bg-blue-100 text-blue-800',
+    },
+    {
+      id: 2,
+      title: 'Data Science Basics',
+      category: 'Data Science',
+      duration: '~30 min',
+      questions: 20,
+      description: 'Challenge yourself with statistics, Python, and data visualization concepts.',
+      rating: 4.9,
+      gradient: 'from-purple-500 to-pink-600',
+      tagColor: 'bg-purple-100 text-purple-800',
+    },
+    {
+      id: 3,
+      title: 'Cloud Computing',
+      category: 'DevOps',
+      duration: '~15 min',
+      questions: 12,
+      description: 'Evaluate your knowledge of AWS, Azure, and cloud infrastructure.',
+      rating: 4.6,
+      gradient: 'from-green-500 to-teal-600',
+      tagColor: 'bg-green-100 text-green-800',
+    },
+    {
+      id: 4,
+      title: 'React Mastery',
+      category: 'Web Dev',
+      duration: '~25 min',
+      questions: 18,
+      description: 'Test your knowledge of React hooks, state management, and components.',
+      rating: 4.8,
+      gradient: 'from-red-500 to-orange-500',
+      tagColor: 'bg-red-100 text-red-800',
+    },
+    {
+      id: 5,
+      title: 'UX Design Principles',
+      category: 'Design',
+      duration: '~20 min',
+      questions: 15,
+      description: 'Check your understanding of user experience design fundamentals.',
+      rating: 4.5,
+      gradient: 'from-yellow-400 to-amber-500',
+      tagColor: 'bg-yellow-100 text-yellow-800',
+    },
   ];
 
   return (
@@ -80,11 +180,15 @@ export default function HomePage() {
         <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Courses</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
-            <div key={course.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <div
+              key={course.id}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => router.push(`/courses/${course.id}`)}
+            >
               <div className="p-6">
                 <div className="flex justify-between items-start">
                   <h3 className="text-xl font-semibold text-gray-900">{course.title}</h3>
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                  <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
                     {course.category}
                   </span>
                 </div>
@@ -108,8 +212,75 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+
+        {/* View All Button */}
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => router.push('/courses')}
+            className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition"
+          >
+            View All Courses
+          </button>
+        </div>
       </div>
 
+      {/* Popular Quizzes Section */}
+      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <h2 className="text-3xl font-bold text-gray-900 mb-8">Popular Quizzes</h2>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {quizzes.map((quiz) => (
+            <div
+              key={quiz.id}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
+            >
+              <div className={`h-40 bg-gradient-to-r ${quiz.gradient} relative`}>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-white text-5xl font-bold opacity-30">Q</span>
+                </div>
+                <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1 text-sm font-medium text-indigo-800">
+                  {quiz.questions} Questions
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start">
+                  <h3 className="text-xl font-semibold text-gray-900">{quiz.title}</h3>
+                  <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${quiz.tagColor}`}>
+                    {quiz.category}
+                  </span>
+                </div>
+                <p className="mt-2 text-gray-600 text-sm">{quiz.description}</p>
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <span className="text-yellow-400">★</span>
+                    <span className="ml-1 text-gray-600">{quiz.rating}</span>
+                  </div>
+                  <span className="text-gray-600">{quiz.duration}</span>
+                </div>
+                <div className="mt-4">
+                  <button
+                    onClick={() => router.push(`/quizzes/${quiz.id}`)}
+                    className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+                  >
+                    Start Quiz
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* View All Button */}
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => router.push('/quizzes')}
+            className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+          >
+            View All Quizzes
+          </button>
+        </div>
+      </div>
+      
       {/* CTA Section */}
       <div className="bg-indigo-700">
         <div className="max-w-7xl mx-auto py-12 px-4 sm:py-16 sm:px-6 lg:px-8 lg:py-20">
