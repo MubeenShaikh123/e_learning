@@ -6,6 +6,16 @@ import Reviews from './reviews';
 
 const Details = ({ course }) => {
   const [activeTab, setActiveTab] = useState('description');
+  const [isEnrolled, setIsEnrolled] = useState(false);
+
+  const handleEnroll = () => {
+    if (isEnrolled) {
+      alert('Access granted to recorded videos!');
+    } else {
+      setIsEnrolled(true);
+      alert('Enrollment successful!');
+    }
+  };
 
   return (
     <div>
@@ -41,12 +51,12 @@ const Details = ({ course }) => {
       </div>
 
       <div className="space-y-8">
-        {activeTab === 'description' && <Description course={course} />}
+        {activeTab === 'description' && <Description course={course} isEnrolled={isEnrolled} handleEnroll={handleEnroll} />}
         {activeTab === 'contents' && <Contents course={course} />}
         {activeTab === 'reviews' && <Reviews course={course} />}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Details
+export default Details;
