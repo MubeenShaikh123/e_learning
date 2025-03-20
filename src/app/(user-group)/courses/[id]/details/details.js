@@ -1,19 +1,35 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Description from './description';
 import Contents from './contents';
 import Reviews from './reviews';
 
 const Details = ({ course }) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('description');
-  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  
+  // Dummy enrollment check for now (replace with real check later)
+  const isEnrolled = false; 
 
   const handleEnroll = () => {
     if (isEnrolled) {
-      alert('Access granted to recorded videos!');
+      router.push(`/courses/${course._id}/videos`);
     } else {
-      setIsEnrolled(true);
+      setShowModal(true);
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (userName && email) {
+      setShowModal(false);
       alert('Enrollment successful!');
+      // After enrollment, navigate to videos
+      router.push(`/courses/${course._id}/videos`);
     }
   };
 
@@ -51,10 +67,56 @@ const Details = ({ course }) => {
       </div>
 
       <div className="space-y-8">
-        {activeTab === 'description' && <Description course={course} isEnrolled={isEnrolled} handleEnroll={handleEnroll} />}
+        {activeTab === 'description' && <Description course={course} handleEnroll={handleEnroll} />}
         {activeTab === 'contents' && <Contents course={course} />}
         {activeTab === 'reviews' && <Reviews course={course} />}
       </div>
+
+      {/* Enrollment Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+            <h2 className="text-xl font-bold mb-4">Enroll in {course.title}</h2>
+            <form onSubmit={handleFormSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="w-full p-2 border rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-2 border rounded-lg"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 bg-gray-200 rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                >
+                  Confirm Enrollment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
