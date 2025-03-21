@@ -10,12 +10,12 @@ const dummyQuizzes = [
         category: "Programming",
         instructor: "Alice Johnson",
         price: 12.99,
-        timeLimit: 35,
+        timeLimit: 2,
         questionCount: 20,
         difficulty: "Beginner",
         color: "from-blue-500 to-indigo-600",
         icon: "🐍",
-        questions: Array(20).fill({
+        questions: Array(2).fill({
             text: "Sample question", // Changed from `question` to `text`
             type: "multiple-choice", // Added question type
             options: ["A", "B", "C", "D"],
