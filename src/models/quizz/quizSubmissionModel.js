@@ -8,8 +8,7 @@ const QuizSubmissionSchema = new mongoose.Schema(
             required: true,
         },
         userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User", // Assuming you have a User model
+            type: String,
             required: true,
         },
         answers: [
@@ -37,4 +36,4 @@ const QuizSubmissionSchema = new mongoose.Schema(
 );
 
 export default mongoose.models.QuizSubmission ||
-    mongoose.model("QuizSubmission", QuizSubmissionSchema);
+    mongoose.model("QuizSubmissions", QuizSubmissionSchema);

@@ -49,4 +49,4 @@ const courseSchema = new mongoose.Schema({
 }
 );
 
-export default mongoose.models.Course || mongoose.model('Course', courseSchema);
+export default mongoose.models.Course || mongoose.model('courses', courseSchema);

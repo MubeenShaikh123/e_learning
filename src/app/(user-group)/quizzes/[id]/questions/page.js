@@ -2,240 +2,244 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  nextQuestion,
-  prevQuestion,
-  saveAnswer,
-  setQuiz,
-  setQuestionIndex,
+    nextQuestion,
+    prevQuestion,
+    saveAnswer,
+    setQuiz,
+    setQuestionIndex,
 } from "@/lib/features/quiz/quizSlice";
 import { FcNext, FcPrevious } from "react-icons/fc";
 
 const QuestionPage = ({ initialQuiz, userId }) => {
-  const dispatch = useDispatch();
-  const currentQuestionIndex = useSelector(
-    (state) => state.quiz.currentQuestionIndex
-  );
-  const quiz = useSelector((state) => state.quiz.quiz);
-  const answers = useSelector((state) => state.quiz.answers);
-  const currentQuestion = quiz.questions[currentQuestionIndex];
-  const [selectedAnswer, setSelectedAnswer] = useState(undefined);
-  const [markedForReview, setMarkedForReview] = useState({});
-  const [timeLeft, setTimeLeft] = useState(quiz.timeLimit * 60); // Convert minutes to seconds
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    const dispatch = useDispatch();
+    const currentQuestionIndex = useSelector(
+        (state) => state.quiz.currentQuestionIndex
+    );
+    const quiz = useSelector((state) => state.quiz.quiz);
+    const answers = useSelector((state) => state.quiz.answers);
+    const currentQuestion = quiz.questions[currentQuestionIndex];
+    const [selectedAnswer, setSelectedAnswer] = useState(undefined);
+    const [markedForReview, setMarkedForReview] = useState({});
+    const [timeLeft, setTimeLeft] = useState(quiz.timeLimit * 60); // Convert minutes to seconds
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (initialQuiz) {
-      dispatch(setQuiz(initialQuiz));
-    }
-  }, [initialQuiz, dispatch]);
+    useEffect(() => {
+        if (initialQuiz) {
+            dispatch(setQuiz(initialQuiz));
+        }
+    }, [initialQuiz, dispatch]);
 
-  useEffect(() => {
-    setSelectedAnswer(answers[currentQuestionIndex]);
-  }, [currentQuestionIndex, answers]);
+    useEffect(() => {
+        setSelectedAnswer(answers[currentQuestionIndex]);
+    }, [currentQuestionIndex, answers]);
 
-  useEffect(() => {
-    if (timeLeft <= 0) {
-      handleSubmit();
-      return;
-    }
+    useEffect(() => {
+        if (timeLeft <= 0) {
+            handleSubmit();
+            return;
+        }
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
+        const timer = setInterval(() => {
+            setTimeLeft((prev) => prev - 1);
+        }, 1000);
 
-    return () => clearInterval(timer);
-  }, [timeLeft]);
+        return () => clearInterval(timer);
+    }, [timeLeft]);
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
-  const handleNext = () => {
-    setSelectedAnswer(undefined);
-    dispatch(nextQuestion());
-  };
-
-  const handlePrev = () => {
-    setSelectedAnswer(undefined);
-    dispatch(prevQuestion());
-  };
-
-  const handleSaveAnswer = ({ index, questionId, answer }) => {
-    dispatch(saveAnswer({ index, questionId, answer }));
-    setSelectedAnswer(answer);
-  };
-
-  const handleQuestionChange = (index) => {
-    setSelectedAnswer(undefined);
-    dispatch(setQuestionIndex({ index }));
-  };
-
-  const handleMarkForReview = () => {
-    setMarkedForReview((prev) => ({
-      ...prev,
-      [currentQuestionIndex]: !prev[currentQuestionIndex],
-    }));
-  };
-
-  const handleSubmit = async () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
-    const payload = {
-      quizId: quiz._id,
-      userId, // Ensure userId is included
-      answers: Object.entries(answers).map(([index, answer]) => ({
-        questionId: quiz.questions[index]._id,
-        answer,
-      })),
-      markedForReview,
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
     };
 
-    try {
-      const response = await fetch("/api/quizzes/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    const handleNext = () => {
+        setSelectedAnswer(undefined);
+        dispatch(nextQuestion());
+    };
 
-      const data = await response.json();
+    const handlePrev = () => {
+        setSelectedAnswer(undefined);
+        dispatch(prevQuestion());
+    };
 
-      if (response.ok) {
-        alert("✅ Quiz submitted successfully!");
-      } else {
-        alert("❌ Failed to submit quiz: " + data.message);
-      }
-    } catch (error) {
-      console.error("Error submitting quiz:", error);
-      alert("❌ An error occurred. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    const handleSaveAnswer = ({ index, questionId, answer }) => {
+        dispatch(saveAnswer({ index, questionId, answer }));
+        setSelectedAnswer(answer);
+    };
 
-  const allQuestionsAnswered = Object.keys(answers).length === quiz.questions.length;
+    const handleQuestionChange = (index) => {
+        setSelectedAnswer(undefined);
+        dispatch(setQuestionIndex({ index }));
+    };
 
-  return (
-    <section className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-            {/* Timer and Progress */}
-            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 text-white flex justify-between items-center">
-              <h2 className="text-2xl font-bold">{quiz?.title || "Quiz Title"}</h2>
-              <div className="text-lg font-semibold bg-white text-indigo-700 px-3 py-1 rounded-lg">
-                ⏳ {formatTime(timeLeft)}
-              </div>
+    const handleMarkForReview = () => {
+        setMarkedForReview((prev) => ({
+            ...prev,
+            [currentQuestionIndex]: !prev[currentQuestionIndex],
+        }));
+    };
+
+    const handleSubmit = async () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+      
+        const payload = {
+          quizId: quiz._id,
+          userId:"mubeenshaikh8072@gmail.com", // Ensure userId is included
+          answers: quiz.questions.map((question, index) => ({
+            questionId: question._id, 
+            answer: answers[index] || null 
+          })),
+          markedForReview: quiz.questions.reduce((acc, question, index) => {
+            if (markedForReview[index]) {
+              acc[question._id] = true;
+            }
+            return acc;
+          }, {})
+        };
+      
+        console.log(`Payload: ${JSON.stringify(payload)}`);
+      
+        try {
+          const response = await fetch("/api/quizzes/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+      
+          const data = await response.json();
+      
+          if (response.ok) {
+            alert("✅ Quiz submitted successfully!");
+          } else {
+            alert("❌ Failed to submit quiz: " + data.message);
+          }
+        } catch (error) {
+          console.error("Error submitting quiz:", error);
+          alert("❌ An error occurred. Please try again.");
+        } finally {
+          setIsSubmitting(false);
+        }
+      };      
+
+    const allQuestionsAnswered = Object.keys(answers).length === quiz.questions.length;
+
+    return (
+        <section className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-6">
+            <div className="container mx-auto px-4 md:px-6">
+                <div className="max-w-4xl mx-auto">
+                    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                        {/* Timer and Progress */}
+                        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 text-white flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">{quiz?.title || "Quiz Title"}</h2>
+                            <div className="text-lg font-semibold bg-white text-indigo-700 px-3 py-1 rounded-lg">
+                                ⏳ {formatTime(timeLeft)}
+                            </div>
+                        </div>
+
+                        <div className="p-6">
+                            {currentQuestion ? (
+                                <>
+                                    <p className="text-xl font-medium text-gray-800 mb-4">{currentQuestion.text}</p>
+
+                                    {/* Options */}
+                                    <div className="flex flex-col space-y-4">
+                                        {currentQuestion.options.map((option, index) => (
+                                            <button
+                                                key={index}
+                                                className={`w-full text-left p-4 rounded-lg transition-all duration-200 hover:shadow-md ${selectedAnswer === option
+                                                        ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg"
+                                                        : "bg-white border border-gray-200 hover:border-green-300"
+                                                    }`}
+                                                onClick={() =>
+                                                    handleSaveAnswer({
+                                                        index: currentQuestionIndex,
+                                                        questionId: currentQuestion._id,
+                                                        answer: option,
+                                                    })
+                                                }
+                                            >
+                                                <span className="inline-block w-8 h-8 mr-3 text-center rounded-full border border-current">
+                                                    {String.fromCharCode(65 + index)}
+                                                </span>
+                                                {option}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {/* Mark for Review */}
+                                    <button
+                                        className={`mt-4 px-4 py-2 rounded-lg ${markedForReview[currentQuestionIndex]
+                                                ? "bg-yellow-500 text-white"
+                                                : "bg-gray-200 text-gray-800"
+                                            }`}
+                                        onClick={handleMarkForReview}
+                                    >
+                                        {markedForReview[currentQuestionIndex] ? "Unmark" : "Mark for Review"}
+                                    </button>
+                                </>
+                            ) : (
+                                <p className="text-gray-500">No question available.</p>
+                            )}
+
+                            {/* Navigation Buttons */}
+                            <div className="mt-8 flex justify-between">
+                                <button
+                                    onClick={handlePrev}
+                                    disabled={currentQuestionIndex === 0}
+                                    className="bg-gray-200 px-4 py-2 rounded-lg"
+                                >
+                                    <FcPrevious className="inline mr-2" /> Previous
+                                </button>
+                                {allQuestionsAnswered && (
+                                    <button
+                                        onClick={handleSubmit}
+                                        disabled={isSubmitting}
+                                        className="bg-green-500 text-white px-4 py-2 rounded-lg"
+                                    >
+                                        {isSubmitting ? "Submitting..." : "Submit Quiz"}
+                                    </button>
+                                )}
+                                <button
+                                    onClick={handleNext}
+                                    disabled={currentQuestionIndex === quiz.questions.length - 1}
+                                    className="bg-gray-200 px-4 py-2 rounded-lg"
+                                >
+                                    Next <FcNext className="inline ml-2" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Question Navigation */}
+                        <div className="p-6 bg-gray-50 border-t border-gray-200">
+                            <h3 className="text-sm font-medium text-gray-500 mb-3">Questions</h3>
+                            <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
+                                {quiz.questions.map((_, index) => {
+                                    const isAnswered = answers[index] !== undefined;
+                                    const isMarked = markedForReview[index];
+
+                                    return (
+                                        <button
+                                            key={index}
+                                            className={`w-10 h-10 rounded-full text-sm font-medium transition-all ${isMarked
+                                                    ? "bg-yellow-500 text-white"
+                                                    : isAnswered
+                                                        ? "bg-green-500 text-white"
+                                                        : "bg-white border border-gray-300"
+                                                }`}
+                                            onClick={() => handleQuestionChange(index)}
+                                        >
+                                            {index + 1}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div className="p-6">
-              {currentQuestion ? (
-                <>
-                  <p className="text-xl font-medium text-gray-800 mb-4">{currentQuestion.text}</p>
-
-                  {/* Options */}
-                  <div className="flex flex-col space-y-4">
-                    {currentQuestion.options.map((option, index) => (
-                      <button
-                        key={index}
-                        className={`w-full text-left p-4 rounded-lg transition-all duration-200 hover:shadow-md ${
-                          selectedAnswer === option
-                            ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg"
-                            : "bg-white border border-gray-200 hover:border-green-300"
-                        }`}
-                        onClick={() =>
-                          handleSaveAnswer({
-                            index: currentQuestionIndex,
-                            questionId: currentQuestion._id,
-                            answer: option,
-                          })
-                        }
-                      >
-                        <span className="inline-block w-8 h-8 mr-3 text-center rounded-full border border-current">
-                          {String.fromCharCode(65 + index)}
-                        </span>
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Mark for Review */}
-                  <button
-                    className={`mt-4 px-4 py-2 rounded-lg ${
-                      markedForReview[currentQuestionIndex]
-                        ? "bg-yellow-500 text-white"
-                        : "bg-gray-200 text-gray-800"
-                    }`}
-                    onClick={handleMarkForReview}
-                  >
-                    {markedForReview[currentQuestionIndex] ? "Unmark" : "Mark for Review"}
-                  </button>
-                </>
-              ) : (
-                <p className="text-gray-500">No question available.</p>
-              )}
-
-              {/* Navigation Buttons */}
-              <div className="mt-8 flex justify-between">
-                <button
-                  onClick={handlePrev}
-                  disabled={currentQuestionIndex === 0}
-                  className="bg-gray-200 px-4 py-2 rounded-lg"
-                >
-                  <FcPrevious className="inline mr-2" /> Previous
-                </button>
-                {allQuestionsAnswered && (
-                  <button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg"
-                  >
-                    {isSubmitting ? "Submitting..." : "Submit Quiz"}
-                  </button>
-                )}
-                <button
-                  onClick={handleNext}
-                  disabled={currentQuestionIndex === quiz.questions.length - 1}
-                  className="bg-gray-200 px-4 py-2 rounded-lg"
-                >
-                  Next <FcNext className="inline ml-2" />
-                </button>
-              </div>
-            </div>
-
-            {/* Question Navigation */}
-            <div className="p-6 bg-gray-50 border-t border-gray-200">
-              <h3 className="text-sm font-medium text-gray-500 mb-3">Questions</h3>
-              <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
-                {quiz.questions.map((_, index) => {
-                  const isAnswered = answers[index] !== undefined;
-                  const isMarked = markedForReview[index];
-
-                  return (
-                    <button
-                      key={index}
-                      className={`w-10 h-10 rounded-full text-sm font-medium transition-all ${
-                        isMarked
-                          ? "bg-yellow-500 text-white"
-                          : isAnswered
-                          ? "bg-green-500 text-white"
-                          : "bg-white border border-gray-300"
-                      }`}
-                      onClick={() => handleQuestionChange(index)}
-                    >
-                      {index + 1}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default QuestionPage;

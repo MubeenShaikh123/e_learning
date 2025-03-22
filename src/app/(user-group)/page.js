@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function HomePage() {
   // const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -135,8 +136,8 @@ export default function HomePage() {
               <h1 className="text-2xl font-bold text-indigo-600">SkillUp</h1>
               <div className="hidden md:flex space-x-8 ml-10">
                 <a href="#" className="text-gray-700 hover:text-indigo-600">Home</a>
-                <a href="/courses" className="text-gray-700 hover:text-indigo-600">Courses</a>
-                <a href="#" className="text-gray-700 hover:text-indigo-600">Quizzes</a>
+                <Link href="/courses" className="text-gray-700 hover:text-indigo-600">Courses</Link>
+                <Link href="/quizzes" className="text-gray-700 hover:text-indigo-600">Quizzes</Link>
                 <a href="#" className="text-gray-700 hover:text-indigo-600">Dashboard</a>
               </div>
             </div>

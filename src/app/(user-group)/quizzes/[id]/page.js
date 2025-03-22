@@ -1,77 +1,44 @@
-import React from 'react';
-import { notFound } from 'next/navigation';
-import Button from './button';
-
-const dummyQuizzes = [
-    {
-        _id: "66bce68f317341e67df79f10",
-        title: "Python Programming Basics",
-        description: "An introductory quiz on Python programming.",
-        category: "Programming",
-        instructor: "Alice Johnson",
-        price: 12.99,
-        timeLimit: 2,
-        questionCount: 20,
-        difficulty: "Beginner",
-        color: "from-blue-500 to-indigo-600",
-        icon: "🐍",
-        questions: Array(2).fill({
-            text: "Sample question", // Changed from `question` to `text`
-            type: "multiple-choice", // Added question type
-            options: ["A", "B", "C", "D"],
-            correctAnswer: "A" // Changed from `answer` to `correctAnswer`
-        }),
-        createdAt: "2024-08-08T14:00:00Z",
-        updatedAt: "2024-08-08T14:00:00Z"
-    },
-    {
-        _id: "64d123456789abcd01234579",
-        title: "Data Structures & Algorithms",
-        description: "Test your knowledge of common data structures and algorithms.",
-        category: "Computer Science",
-        instructor: "Robert Lee",
-        price: 15.99,
-        timeLimit: 45,
-        questionCount: 25,
-        difficulty: "Intermediate",
-        color: "from-purple-500 to-pink-500",
-        icon: "🔍",
-        questions: Array(25).fill({
-            text: "Sample question", // Changed from `question` to `text`
-            type: "multiple-choice", // Added question type
-            options: ["A", "B", "C", "D"],
-            correctAnswer: "B" // Changed from `answer` to `correctAnswer`
-        }),
-        createdAt: "2024-08-07T10:15:00Z",
-        updatedAt: "2024-08-07T10:15:00Z"
-    }
-];
+import { notFound } from "next/navigation";
+import Button from "./button";
 
 async function fetchQuizData(id) {
-    const quizz = dummyQuizzes.find(q => q._id === id);
-    if (!quizz) {
+    try {
+        // Use absolute URL for fetch inside a server component
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/quizzes/get/${id}`, { 
+            cache: "no-store" // Ensures fresh data every time
+        });
+        
+        if (!response.ok) {
+            console.log(`Quiz not found: ${id}`);
+            return null;
+        }
+        
+        const data = await response.json();
+        return data.data; // Assuming the response structure has `{ quiz: {...} }`
+    } catch (error) {
+        console.error("Error fetching quiz:", error);
         return null;
     }
-    return quizz;
 }
 
 const QuizzPage = async ({ params }) => {
+
     const quizz = await fetchQuizData(params.id);
-    
+
     if (!quizz) {
-        notFound(); // Redirect to 404 if quiz not found
+        return notFound(); // Fix: Ensure `notFound()` is returned immediately
     }
-    
+
     return (
         <section className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl">
-                    <div className={`bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-[1.01]`}>
+                    <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-[1.01]">
                         <div className={`h-16 bg-gradient-to-r ${quizz.color} flex items-center px-6`}>
                             <span className="text-3xl mr-4">{quizz.icon}</span>
                             <h1 className="text-2xl font-bold text-white">{quizz.title}</h1>
                         </div>
-                        
+
                         <div className="p-6">
                             <div className="mb-6">
                                 <p className="text-gray-700 text-lg mb-4">{quizz.description}</p>
@@ -87,7 +54,7 @@ const QuizzPage = async ({ params }) => {
                                     </span>
                                 </div>
                             </div>
-                            
+
                             <div className="border-t border-gray-200 pt-4 space-y-3">
                                 <div className="flex justify-between items-center py-2">
                                     <div className="flex items-center text-gray-600">
@@ -96,9 +63,9 @@ const QuizzPage = async ({ params }) => {
                                         </svg>
                                         <span>Time Limit</span>
                                     </div>
-                                    <span className="text-gray-900 font-medium">{quizz.timeLimit || '30'} Minutes</span>
+                                    <span className="text-gray-900 font-medium">{quizz.timeLimit || "30"} Minutes</span>
                                 </div>
-                                
+
                                 <div className="flex justify-between items-center py-2">
                                     <div className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -106,9 +73,9 @@ const QuizzPage = async ({ params }) => {
                                         </svg>
                                         <span>Number of Questions</span>
                                     </div>
-                                    <span className="text-gray-900 font-medium">{quizz.questions.length || 'N/A'}</span>
+                                    <span className="text-gray-900 font-medium">{quizz.questions.length || "N/A"}</span>
                                 </div>
-                                
+
                                 <div className="flex justify-between items-center py-2">
                                     <div className="flex items-center text-gray-600">
                                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -119,7 +86,7 @@ const QuizzPage = async ({ params }) => {
                                     <span className="text-gray-900 font-medium">{quizz.instructor}</span>
                                 </div>
                             </div>
-                            
+
                             <div className="mt-8 flex justify-center">
                                 <Button quiz={quizz} />
                             </div>
