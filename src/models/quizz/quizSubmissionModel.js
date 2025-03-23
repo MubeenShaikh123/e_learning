@@ -35,5 +35,8 @@ const QuizSubmissionSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-export default mongoose.models.QuizSubmission ||
-    mongoose.model("QuizSubmissions", QuizSubmissionSchema);
+// Prevent recompiling the model on every request
+const QuizSubmission =
+    mongoose.models.QuizSubmission || mongoose.model("QuizSubmission", QuizSubmissionSchema);
+
+export default QuizSubmission;

@@ -15,8 +15,6 @@ const submitQuiz = async (req, res) => {
   }
   
   try {
-    await dbConnect();
-    
     // Fetch the quiz to validate answers and calculate score
     const quiz = await QuizQuestion.findById(quizId);
     if (!quiz) {

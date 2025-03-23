@@ -4,7 +4,8 @@ import Link from 'next/link'
 
 const Course = ({ isHome }) => {
 
-    const courses = [{
+    const courses = [
+        {
         "_id": "66b0614fe62c16a46fe8a151",
         "title": "Full Stack Web Development",
         "description": "Learn to build complete web applications from scratch using modern technologies like React, Node.js, and MongoDB.",

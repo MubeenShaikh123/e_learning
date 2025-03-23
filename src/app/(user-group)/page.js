@@ -135,10 +135,10 @@ export default function HomePage() {
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-indigo-600">SkillUp</h1>
               <div className="hidden md:flex space-x-8 ml-10">
-                <a href="#" className="text-gray-700 hover:text-indigo-600">Home</a>
+                <Link href="/" className="text-gray-700 hover:text-indigo-600">Home</Link>
                 <Link href="/courses" className="text-gray-700 hover:text-indigo-600">Courses</Link>
                 <Link href="/quizzes" className="text-gray-700 hover:text-indigo-600">Quizzes</Link>
-                <a href="#" className="text-gray-700 hover:text-indigo-600">Dashboard</a>
+                <Link href="/dashboard" className="text-gray-700 hover:text-indigo-600">Dashboard</Link>
               </div>
             </div>
             <div className="flex items-center">
@@ -281,7 +281,7 @@ export default function HomePage() {
           </button>
         </div>
       </div>
-      
+
       {/* CTA Section */}
       <div className="bg-indigo-700">
         <div className="max-w-7xl mx-auto py-12 px-4 sm:py-16 sm:px-6 lg:px-8 lg:py-20">
