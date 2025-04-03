@@ -4,66 +4,50 @@ import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import CoursesGrid from '@/components/CourseGrid';
+import QuizzesGrid from '@/components/QuizzesGrid';
 
 export default function HomePage() {
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const router = useRouter();
+  const [courses, setCourses] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const courses = [
-    {
-      id: "66b0614fe62c16a46fe8a151",
-      title: 'Full Stack Web Development',
-      category: 'Programming',
-      duration: '32 hours',
-      lessons: 45,
-      progress: 70,
-      rating: 4.8,
-      price: 299,
-    },
-    {
-      id: 2,
-      title: 'Data Science and Machine Learning',
-      category: 'Data Science',
-      duration: '40 hours',
-      lessons: 50,
-      progress: 60,
-      rating: 4.7,
-      price: 399,
-    },
-    {
-      id: 3,
-      title: 'Mobile App Development with Flutter',
-      category: 'Mobile Development',
-      duration: '28 hours',
-      lessons: 38,
-      progress: 85,
-      rating: 4.9,
-      price: 349,
-    },
-    {
-      id: 4,
-      title: 'Cybersecurity Essentials',
-      category: 'Cybersecurity',
-      duration: '25 hours',
-      lessons: 30,
-      progress: 55,
-      rating: 4.6,
-      price: 259,
-    },
-    {
-      id: 5,
-      title: 'Artificial Intelligence with Python',
-      category: 'AI',
-      duration: '35 hours',
-      lessons: 42,
-      progress: 75,
-      rating: 4.8,
-      price: 499,
-    },
-  ];
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/courses/getall?limit=3");
+        const data = await response.json();
+        console.log(`courses: ${JSON.stringify(data)}`)
+        setCourses(data.data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchQuizzes = async () => {
+      try {
+        const response = await fetch("/api/quizzes/getall?limit=3",{
+          cache:'no-store'
+        });
+        const data = await response.json();
+        console.log(`quizzes: ${JSON.stringify(data)}`)
+        setQuizzes(data.data);
+        // setQuizzes(dummyQuizzes);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const quizzes = [
+    fetchCourses();
+    fetchQuizzes();
+  }, []);
+
+  const dummyQuizzes = [
     {
       id: 1,
       title: 'JavaScript Fundamentals',
@@ -162,7 +146,7 @@ export default function HomePage() {
             <p className="mt-3 max-w-md mx-auto text-base text-indigo-100 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Access 5000+ online courses and quizzes from 500+ professional instructors.
             </p>
-            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 invisible">
               <input
                 type="text"
                 placeholder="Search courses..."
@@ -177,110 +161,10 @@ export default function HomePage() {
       </div>
 
       {/* Featured Courses */}
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Courses</h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-              onClick={() => router.push(`/courses/${course.id}`)}
-            >
-              <div className="p-6">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-xl font-semibold text-gray-900">{course.title}</h3>
-                  <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                    {course.category}
-                  </span>
-                </div>
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <span className="text-yellow-400">★</span>
-                    <span className="ml-1 text-gray-600">{course.rating}</span>
-                  </div>
-                  <span className="text-gray-600">{course.duration}</span>
-                </div>
-                <div className="mt-4">
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-indigo-600 rounded-full h-2"
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                  <p className="mt-1 text-sm text-gray-600">{course.progress}% Complete</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* View All Button */}
-        <div className="mt-8 text-center">
-          <button
-            onClick={() => router.push('/courses')}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition"
-          >
-            View All Courses
-          </button>
-        </div>
-      </div>
+      <CoursesGrid courses={courses} onViewAllCourses={() => router.push('/courses')} />
 
       {/* Popular Quizzes Section */}
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8">Popular Quizzes</h2>
-
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {quizzes.map((quiz) => (
-            <div
-              key={quiz.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100"
-            >
-              <div className={`h-40 bg-gradient-to-r ${quiz.gradient} relative`}>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-white text-5xl font-bold opacity-30">Q</span>
-                </div>
-                <div className="absolute top-4 right-4 bg-white rounded-full px-3 py-1 text-sm font-medium text-indigo-800">
-                  {quiz.questions} Questions
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-xl font-semibold text-gray-900">{quiz.title}</h3>
-                  <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${quiz.tagColor}`}>
-                    {quiz.category}
-                  </span>
-                </div>
-                <p className="mt-2 text-gray-600 text-sm">{quiz.description}</p>
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <span className="text-yellow-400">★</span>
-                    <span className="ml-1 text-gray-600">{quiz.rating}</span>
-                  </div>
-                  <span className="text-gray-600">{quiz.duration}</span>
-                </div>
-                <div className="mt-4">
-                  <button
-                    onClick={() => router.push(`/quizzes/${quiz.id}`)}
-                    className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
-                  >
-                    Start Quiz
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* View All Button */}
-        <div className="mt-8 text-center">
-          <button
-            onClick={() => router.push('/quizzes')}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
-          >
-            View All Quizzes
-          </button>
-        </div>
-      </div>
+      <QuizzesGrid quizzes={quizzes} onViewAllQuizzes={() => router.push('/quizzes')} />
 
       {/* CTA Section */}
       <div className="bg-indigo-700">

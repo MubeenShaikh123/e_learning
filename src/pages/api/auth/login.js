@@ -2,7 +2,7 @@
 import CryptoJS from 'crypto-js';
 import jwt from 'jsonwebtoken';
 import dbConnect from "@/middleware/mongoose";
-import User from '@/models/userModel';
+import User from '@/models/auth/userModel';
 
 const login = async (req, res) => {
   if (req.method === 'POST') {

@@ -39,10 +39,10 @@ const Details = ({ course }) => {
         <h1 className="text-4xl font-bold text-gray-900 mb-4">{course.title}</h1>
         <div className="flex items-center space-x-4 text-gray-600">
           <span className="flex items-center">
-            ★ {course.rating} ({course.reviews?.length} reviews)
+            ★ {course.rating} ({course.reviews} reviews)
           </span>
           <span>•</span>
-          <span>{course.duration} Months</span>
+          <span>{course.totalDuration} Minutes</span>
           <span>•</span>
           <span>Instructor: {course.instructor}</span>
         </div>

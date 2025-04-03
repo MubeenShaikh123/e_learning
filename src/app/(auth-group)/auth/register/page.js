@@ -1,51 +1,187 @@
-import React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+"use client";
 
-const register = () => {
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from "lucide-react";
+
+const Register = () => {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [message, setMessage] = useState(null); // Fixed the TypeScript-style syntax
+
+    // Handle form input changes
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Basic client-side validation
+        if (formData.password !== formData.confirmPassword) {
+            setMessage({ type: "error", text: "Passwords do not match" });
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                setMessage({ type: "success", text: result.message });
+                setFormData({ name: "", email: "", password: "", confirmPassword: "" }); // Clear form on success
+            } else {
+                setMessage({ type: "error", text: result.message });
+            }
+            console.log(`result: ${JSON.stringify(result)}`);
+        } catch (error) {
+            console.log(`error: ${error}`);
+            setMessage({ type: "error", text: "Something went wrong" });
+        }
+    };
+
     return (
-        <div>
-            <section className="bg-gray-50 dark:bg-gray-900">
-                <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                    <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-                        <Image className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" width={10} height={10} alt="logo" />
-                        E_Learning
-                    </a>
-                    <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                                Sign up
-                            </h1>
-                            <form className="space-y-4 md:space-y-6" action="#">
-                                <div className='relative group'>
-                                    <label for="name" className="block absolute top-[50%] translate-y-[-50%] left-4 group-hover:left-3 group-hover:top-0 group-hover:bg-[#F9FAFB] group-hover:px-1 transition-all text-base group-hover:text-sm font-medium text-gray-900 dark:text-white rounded-sm">Your name</label>
-                                    <input type="name" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
-                                </div>
-                                <div className='relative group'>
-                                    <label for="email" className="block absolute top-[50%] translate-y-[-50%] left-4 group-hover:left-3 group-hover:top-0 group-hover:bg-[#F9FAFB] group-hover:px-1 transition-all text-base group-hover:text-sm font-medium text-gray-900 dark:text-white rounded-sm">Your email</label>
-                                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
-                                </div>
-                                <div className='relative group'>
-                                    <label for="password" className="block absolute top-[50%] translate-y-[-50%] left-4 group-hover:left-3 group-hover:top-0 group-hover:bg-[#F9FAFB] group-hover:px-1 transition-all text-base group-hover:text-sm font-medium text-gray-900 dark:text-white rounded-sm">Password</label>
-                                    <input type="password" name="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
-                                </div>
-                                <div className='relative group'>
-                                    <label for="confirmPassword" className="block absolute top-[50%] translate-y-[-50%] left-4 group-hover:left-3 group-hover:top-0 group-hover:bg-[#F9FAFB] group-hover:px-1 transition-all text-base group-hover:text-sm font-medium text-gray-900 dark:text-white rounded-sm">Confirm Password</label>
-                                    <input type="confirmPassword" name="confirmPassword" id="confirmPassword" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
-                                </div>
-                                <div className="flex items-center justify-between">
-                                </div>
-                                <button type="submit" class="w-full text-white border-2 bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign in</button>
-                                <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                                    Already have an account? <Link href="./login" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Sign up</Link>
-                                </p>
-                            </form>
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+            <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+                {/* Header Section */}
+                <div className="bg-blue-600 text-white p-6 text-center">
+                    <h1 className="text-3xl font-bold mb-2">Create Account</h1>
+                    <p className="text-blue-100">Start your learning journey today</p>
+                </div>
+
+                {/* Form Section */}
+                <div className="p-8">
+                    {/* Error/Success Message */}
+                    {message && (
+                        <div className={`mb-4 p-3 rounded-lg text-center ${message.type === "error" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+                            {message.text}
                         </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {/* Name Input */}
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <UserIcon className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <input 
+                                type="text" 
+                                name="name" 
+                                placeholder="Full Name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                required 
+                            />
+                        </div>
+
+                        {/* Email Input */}
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <MailIcon className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                placeholder="Email Address"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                required 
+                            />
+                        </div>
+
+                        {/* Password Input */}
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <LockIcon className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                name="password" 
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                required 
+                            />
+                            <button 
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            >
+                                {showPassword ? (
+                                    <EyeOffIcon className="h-5 w-5 text-gray-400" />
+                                ) : (
+                                    <EyeIcon className="h-5 w-5 text-gray-400" />
+                                )}
+                            </button>
+                        </div>
+
+                        {/* Confirm Password Input */}
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <LockIcon className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <input 
+                                type={showConfirmPassword ? "text" : "password"} 
+                                name="confirmPassword" 
+                                placeholder="Confirm Password"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                required 
+                            />
+                            <button 
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            >
+                                {showConfirmPassword ? (
+                                    <EyeOffIcon className="h-5 w-5 text-gray-400" />
+                                ) : (
+                                    <EyeIcon className="h-5 w-5 text-gray-400" />
+                                )}
+                            </button>
+                        </div>
+
+                        {/* Submit Button */}
+                        <button 
+                            type="submit" 
+                            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 ease-in-out transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        >
+                            Create Account
+                        </button>
+                    </form>
+
+                    {/* Login Link */}
+                    <div className="text-center mt-6">
+                        <p className="text-gray-600">
+                            Already have an account?{" "}
+                            <Link href="/auth/login" className="text-blue-600 hover:underline font-semibold">
+                                Sign In
+                            </Link>
+                        </p>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
-    )
-}
+    );
+};
 
-export default register
+export default Register;

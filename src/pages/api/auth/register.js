@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
 import dbConnect from "@/middleware/mongoose";
-import userModel from '@/models/userModel';
+import userModel from '@/models/auth/userModel';
 
 const register = async (req, res) => {
   if (req.method === 'POST') {

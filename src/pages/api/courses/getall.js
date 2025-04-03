@@ -5,7 +5,10 @@ import Course from '@/models/course/courseModel';
 const getCourses = async (req, res) => {
   if (req.method === 'GET') {
     try {
-      const courses = await Course.find({});
+      // Get limit from query params, convert to number, default to null (no limit)
+      const limit = req.query.limit ? parseInt(req.query.limit) : null;
+
+      const courses = await Course.find({}, "-modules").limit(limit);
       return res.status(200).json({ success: true, data: courses });
     } catch (error) {
       console.error('Error fetching courses:', error.message);
