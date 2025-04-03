@@ -4,8 +4,10 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { EyeIcon, EyeOffIcon, MailIcon, LockIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
+    const router=useRouter();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -35,6 +37,7 @@ const Login = () => {
 
             if (response.ok) {
                 setMessage({ type: 'success', text: result.message });
+                router.push('/');
                 // Redirect or handle successful login
             } else {
                 setMessage({ type: 'error', text: result.message });
@@ -114,7 +117,7 @@ const Login = () => {
 
                         {/* Remember Me and Forgot Password */}
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center">
+                            {/* <div className="flex items-center">
                                 <input
                                     type="checkbox"
                                     id="remember"
@@ -126,9 +129,9 @@ const Login = () => {
                                 >
                                     Remember me
                                 </label>
-                            </div>
+                            </div> */}
                             <Link
-                                href="/forgot-password"
+                                href="/auth/forgot-password"
                                 className="text-sm text-blue-600 hover:text-blue-500"
                             >
                                 Forgot password?
@@ -158,7 +161,7 @@ const Login = () => {
                     </div>
 
                     {/* Optional Social Login Divider */}
-                    <div className="mt-6 relative">
+                    {/* <div className="mt-6 relative">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-gray-300"></div>
                         </div>
@@ -167,10 +170,10 @@ const Login = () => {
                                 Or continue with
                             </span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Social Login Buttons */}
-                    <div className="mt-6 grid grid-cols-3 gap-3">
+                    {/* <div className="mt-6 grid grid-cols-3 gap-3">
                         <button className="w-full bg-white border border-gray-300 rounded-lg py-2 flex items-center justify-center hover:bg-gray-50 transition-colors">
                             <svg className="h-5 w-5" viewBox="0 0 24 24">
                                 <path fill="#EA4335" d="M5.266 9.765A7.076 7.076 0 0 1 12 4.909c1.69 0 3.113.615 4.254 1.627L19.444 3C17.352 1.081 14.864 0 12 0 7.23 0 3.082 2.554 1.18 6.481l4.086 3.284z" />
@@ -189,7 +192,7 @@ const Login = () => {
                                 <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                             </svg>
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
