@@ -2,6 +2,7 @@ import Footer from "@/components/footer";
 import "../globals.css";
 import Navbar from "@/components/navbar";
 import Head from "next/head";
+import AuthWrapper from "./AuthWrapper";
 
 export const metadata = {
   title: 'e_learning app',
@@ -14,15 +15,17 @@ export default function UserGroupLayout({ children }) {
         <title>E_learning app</title>
       </Head>
       <body>
-        {/* <header>
+        <AuthWrapper>
+          {/* <header>
           <Navbar />
-        </header> */}
-        <main className="min-h-screen">
-          {children}
-        </main>
-        {/* <footer className="text-gray-600 body-font border-t">
+          </header> */}
+          <main className="min-h-screen">
+            {children}
+          </main>
+          {/* <footer className="text-gray-600 body-font border-t">
           <Footer></Footer>
-        </footer> */}
+          </footer> */}
+        </AuthWrapper>
       </body>
     </html>
   );
