@@ -4,21 +4,66 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        otp: ""
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [message, setMessage] = useState(null); // Fixed the TypeScript-style syntax
+    const [otpSent, setOtpSent] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(false);
 
     // Handle form input changes
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+
+        if (name === "email") {
+            validateEmail(value);
+        }
+    };
+
+    // Validate email format
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setIsEmailValid(emailRegex.test(email));
+    };
+
+    // Handle sending OTP
+    const handleSendOtp = async () => {
+        if (!formData.email) {
+            setMessage({ type: "error", text: "Email is required" });
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/auth/sendotp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: formData.email }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                setMessage({ type: "success", text: "OTP sent successfully" });
+                setOtpSent(true);
+            } else {
+                setMessage({ type: "error", text: result.message });
+            }
+        } catch (error) {
+            setMessage({ type: "error", text: "Something went wrong" });
+        }
     };
 
     // Handle form submission
@@ -31,26 +76,37 @@ const Register = () => {
             return;
         }
 
+        if (!otpSent) {
+            setMessage({ type: "error", text: "Please verify your email first" });
+            return;
+        }
+
         try {
             const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
 
             const result = await response.json();
 
             if (response.ok) {
                 setMessage({ type: "success", text: result.message });
-                setFormData({ name: "", email: "", password: "", confirmPassword: "" }); // Clear form on success
+                setFormData({
+                    name: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                    otp: "",
+                });
+                setOtpSent(false);
+                router.push('/auth/login');
             } else {
                 setMessage({ type: "error", text: result.message });
             }
-            console.log(`result: ${JSON.stringify(result)}`);
         } catch (error) {
-            console.log(`error: ${error}`);
             setMessage({ type: "error", text: "Something went wrong" });
         }
     };
@@ -79,14 +135,14 @@ const Register = () => {
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <UserIcon className="h-5 w-5 text-gray-400" />
                             </div>
-                            <input 
-                                type="text" 
-                                name="name" 
+                            <input
+                                type="text"
+                                name="name"
                                 placeholder="Full Name"
                                 value={formData.name}
                                 onChange={handleChange}
                                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                required 
+                                required
                             />
                         </div>
 
@@ -95,32 +151,59 @@ const Register = () => {
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <MailIcon className="h-5 w-5 text-gray-400" />
                             </div>
-                            <input 
-                                type="email" 
-                                name="email" 
+                            <input
+                                type="email"
+                                name="email"
                                 placeholder="Email Address"
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                required 
+                                required
                             />
+                            {isEmailValid && (
+                                <button
+                                    type="button"
+                                    onClick={handleSendOtp}
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-600 hover:underline"
+                                >
+                                    Send OTP
+                                </button>
+                            )}
                         </div>
+
+                        {/* OTP Input */}
+                        {otpSent && (
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <LockIcon className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="otp"
+                                    placeholder="Enter OTP"
+                                    value={formData.otp}
+                                    onChange={handleChange}
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
+                                />
+                            </div>
+                        )}
 
                         {/* Password Input */}
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <LockIcon className="h-5 w-5 text-gray-400" />
                             </div>
-                            <input 
-                                type={showPassword ? "text" : "password"} 
-                                name="password" 
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                name="password"
                                 placeholder="Password"
                                 value={formData.password}
                                 onChange={handleChange}
                                 className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                required 
+                                required
                             />
-                            <button 
+                            <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
@@ -138,16 +221,16 @@ const Register = () => {
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <LockIcon className="h-5 w-5 text-gray-400" />
                             </div>
-                            <input 
-                                type={showConfirmPassword ? "text" : "password"} 
-                                name="confirmPassword" 
+                            <input
+                                type={showConfirmPassword ? "text" : "password"}
+                                name="confirmPassword"
                                 placeholder="Confirm Password"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                required 
+                                required
                             />
-                            <button 
+                            <button
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
@@ -161,8 +244,8 @@ const Register = () => {
                         </div>
 
                         {/* Submit Button */}
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 ease-in-out transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                         >
                             Create Account

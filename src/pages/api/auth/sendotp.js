@@ -1,8 +1,6 @@
 // src/pages/api/sendotp.js
-import nodemailer from 'nodemailer';
-import CryptoJS from 'crypto-js';
 import dbConnect from "@/middleware/mongoose";
-import User from '@/models/userModel';
+import User from '@/models/auth/userModel';
 import OTP from '@/models/auth/otpModel';
 
 const sendOTP = async (req, res) => {
@@ -14,36 +12,24 @@ const sendOTP = async (req, res) => {
     }
 
     try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ message: 'User not found' });
+
+      // Check if there's an existing non-expired OTP for this email
+      const existingOtp = await OTP.findOne({ email, expiresAt: { $gt: new Date() } });
+      if (existingOtp) {
+        return res.status(400).json({ message: 'An OTP has already been generated. Please check your email.' });
       }
 
+      // Generate a new 6-digit OTP
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // Expires in 10 minutes
 
+      // Create a new OTP record.
+      // The pre-save hook in the OTP model will automatically send the email.
       await OTP.create({
         email,
-        otp: CryptoJS.SHA256(otp).toString(),
+        otp,
         expiresAt,
       });
-
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL,
-          pass: process.env.APP_PASSWORD,
-        },
-      });
-
-      const mailOptions = {
-        from: 'your-email@gmail.com',
-        to: email,
-        subject: 'Your OTP Code',
-        text: `Your OTP code is ${otp}`,
-      };
-
-      await transporter.sendMail(mailOptions);
 
       return res.status(200).json({ message: 'OTP sent successfully' });
     } catch (error) {
