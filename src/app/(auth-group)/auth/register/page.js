@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const Register = () => {
+    const MySwal = withReactContent(Swal);
     const router = useRouter();
     const [formData, setFormData] = useState({
         name: "",
@@ -94,19 +97,28 @@ const Register = () => {
 
             if (response.ok) {
                 setMessage({ type: "success", text: result.message });
-                setFormData({
-                    name: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                    otp: "",
+                MySwal.fire({
+                    title: 'Registration Successful!',
+                    text: 'Welcome aboard! Redirecting to the login page...',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000, // Auto close after 2 seconds (2000 milliseconds)
+                }).then(() => {
+                    setFormData({
+                        name: "",
+                        email: "",
+                        password: "",
+                        confirmPassword: "",
+                        otp: "",
+                    });
+                    setOtpSent(false);
+                    router.push('/auth/login');
                 });
-                setOtpSent(false);
-                router.push('/auth/login');
             } else {
                 setMessage({ type: "error", text: result.message });
             }
         } catch (error) {
+            console.log(`error: ${error}`)
             setMessage({ type: "error", text: "Something went wrong" });
         }
     };
@@ -147,24 +159,26 @@ const Register = () => {
                         </div>
 
                         {/* Email Input */}
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <MailIcon className="h-5 w-5 text-gray-400" />
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <div className="relative flex-grow">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <MailIcon className="h-5 w-5 text-gray-400" />
+                                </div>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email Address"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full pl-10 pr-2 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    required
+                                />
                             </div>
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="Email Address"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                required
-                            />
                             {isEmailValid && (
                                 <button
                                     type="button"
                                     onClick={handleSendOtp}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-600 hover:underline"
+                                    className="py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap"
                                 >
                                     Send OTP
                                 </button>

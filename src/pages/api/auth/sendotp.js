@@ -14,7 +14,7 @@ const sendOTP = async (req, res) => {
     try {
 
       // Check if there's an existing non-expired OTP for this email
-      const existingOtp = await OTP.findOne({ email, expiresAt: { $gt: new Date() } });
+      const existingOtp = await OTP.findOne({ email });
       if (existingOtp) {
         return res.status(400).json({ message: 'An OTP has already been generated. Please check your email.' });
       }

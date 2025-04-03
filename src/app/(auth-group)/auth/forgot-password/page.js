@@ -5,9 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
 
 const forgotpass = () => {
     const router = useRouter();
+    const MySwal = withReactContent(Swal);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -79,7 +83,7 @@ const forgotpass = () => {
             setMessage({ type: "error", text: "Please verify your email first" });
             return;
         }
-
+        
         try {
             const response = await fetch("/api/auth/change-password", {
                 method: "POST",
@@ -92,16 +96,23 @@ const forgotpass = () => {
             const result = await response.json();
 
             if (response.ok) {
-                alert("Password changed successfully. You will now be redirected to the login page.");
                 setMessage({ type: "success", text: result.message });
-                setFormData({
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                    otp: "",
-                });
-                setOtpSent(false);
-                router.push('/auth/login');
+                MySwal.fire({
+                    title: 'Success!',
+                    text: 'Your password has been changed successfully.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 2000, // Auto close after 2 seconds (2000 milliseconds)
+                  }).then(() => {
+                    setFormData({
+                      email: '',
+                      password: '',
+                      confirmPassword: '',
+                      otp: '',
+                    });
+                    setOtpSent(false);
+                    router.push('/auth/login');
+                  });
             } else {
                 setMessage({ type: "error", text: result.message });
             }
