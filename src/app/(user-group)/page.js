@@ -7,8 +7,11 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import CoursesGrid from '@/components/CourseGrid';
 import QuizzesGrid from '@/components/QuizzesGrid';
+import { useSelector } from 'react-redux';
 
 export default function HomePage() {
+  const user = useSelector((state) => state.user);
+  console.log(`user from store: ${JSON.stringify(user)}`)
   const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
@@ -19,7 +22,6 @@ export default function HomePage() {
       try {
         const response = await fetch("/api/courses/getall?limit=3");
         const data = await response.json();
-        console.log(`courses: ${JSON.stringify(data)}`)
         setCourses(data.data);
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -33,7 +35,6 @@ export default function HomePage() {
           cache:'no-store'
         });
         const data = await response.json();
-        console.log(`quizzes: ${JSON.stringify(data)}`)
         setQuizzes(data.data);
         // setQuizzes(dummyQuizzes);
       } catch (error) {

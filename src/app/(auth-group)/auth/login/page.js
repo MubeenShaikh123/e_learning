@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { EyeIcon, EyeOffIcon, MailIcon, LockIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/lib/features/user/userSlice';
 
 const Login = () => {
-    const router=useRouter();
+    const router = useRouter();
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -36,6 +38,10 @@ const Login = () => {
             const result = await response.json();
 
             if (response.ok) {
+                // Save the token in localStorage
+                console.log(JSON.stringify(result));
+                localStorage.setItem('x-access-token', result.token);
+                dispatch(setUser({ name: result.name, email: result.email }));
                 setMessage({ type: 'success', text: result.message });
                 router.push('/');
                 // Redirect or handle successful login

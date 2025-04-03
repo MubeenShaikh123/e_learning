@@ -38,7 +38,7 @@ const login = async (req, res) => {
       );
 
       // Return success response with the token
-      return res.status(200).json({ message: 'Login successful', token });
+      return res.status(200).json({ message: 'Login successful', token: token, email: user.email, name: user.name, phone: user.phone });
     } catch (error) {
       console.error('Error logging in:', error.message);
       return res.status(500).json({ message: 'Failed to login user', error: error.message });
