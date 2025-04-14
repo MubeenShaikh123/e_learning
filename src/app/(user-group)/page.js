@@ -48,64 +48,6 @@ export default function HomePage() {
     fetchQuizzes();
   }, []);
 
-  const dummyQuizzes = [
-    {
-      id: 1,
-      title: 'JavaScript Fundamentals',
-      category: 'Web Dev',
-      duration: '~20 min',
-      questions: 15,
-      description: 'Test your knowledge of JavaScript basics, from variables to functions.',
-      rating: 4.7,
-      gradient: 'from-blue-500 to-indigo-600',
-      tagColor: 'bg-blue-100 text-blue-800',
-    },
-    {
-      id: 2,
-      title: 'Data Science Basics',
-      category: 'Data Science',
-      duration: '~30 min',
-      questions: 20,
-      description: 'Challenge yourself with statistics, Python, and data visualization concepts.',
-      rating: 4.9,
-      gradient: 'from-purple-500 to-pink-600',
-      tagColor: 'bg-purple-100 text-purple-800',
-    },
-    {
-      id: 3,
-      title: 'Cloud Computing',
-      category: 'DevOps',
-      duration: '~15 min',
-      questions: 12,
-      description: 'Evaluate your knowledge of AWS, Azure, and cloud infrastructure.',
-      rating: 4.6,
-      gradient: 'from-green-500 to-teal-600',
-      tagColor: 'bg-green-100 text-green-800',
-    },
-    {
-      id: 4,
-      title: 'React Mastery',
-      category: 'Web Dev',
-      duration: '~25 min',
-      questions: 18,
-      description: 'Test your knowledge of React hooks, state management, and components.',
-      rating: 4.8,
-      gradient: 'from-red-500 to-orange-500',
-      tagColor: 'bg-red-100 text-red-800',
-    },
-    {
-      id: 5,
-      title: 'UX Design Principles',
-      category: 'Design',
-      duration: '~20 min',
-      questions: 15,
-      description: 'Check your understanding of user experience design fundamentals.',
-      rating: 4.5,
-      gradient: 'from-yellow-400 to-amber-500',
-      tagColor: 'bg-yellow-100 text-yellow-800',
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
