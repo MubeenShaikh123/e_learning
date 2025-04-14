@@ -2,15 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/lib/features/user/userSlice';
 
 export default function AuthWrapper({ children }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const verifyUser = async () => {
       const token = localStorage.getItem('x-access-token');
-      
+
       if (!token) {
         router.push('/auth/login');
         return;
@@ -33,9 +36,11 @@ export default function AuthWrapper({ children }) {
           return;
         }
 
+        console.log(`data: ${JSON.stringify(data)}`)
+        dispatch(setUser({ name: data.name, email: data.email }));
         setLoading(false); // Allow access after successful verification
       } catch (error) {
-        console.error('Auth Error:', error);
+        console.error(`Auth Error:, ${error}`);
         router.push('/auth/login');
       }
     };
@@ -53,7 +58,7 @@ export default function AuthWrapper({ children }) {
               {/* Ripple effects */}
               <div className="absolute -inset-2 rounded-full bg-blue-500 opacity-30 animate-ping"></div>
               <div className="absolute -inset-4 rounded-full bg-blue-400 opacity-20 animate-pulse"></div>
-              
+
               {/* Main spinner */}
               <div className="relative flex items-center justify-center w-16 h-16">
                 <div className="w-16 h-16 border-4 border-blue-100 dark:border-gray-700 rounded-full"></div>
@@ -62,16 +67,16 @@ export default function AuthWrapper({ children }) {
               </div>
             </div>
           </div>
-          
+
           <div className="mt-8 text-center">
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Authenticating</h2>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">Securing your session...</p>
-            
+
             {/* Progress bar */}
             <div className="w-full h-1 mt-6 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full animate-pulse"></div>
             </div>
-            
+
             <p className="mt-6 text-xs text-gray-500 dark:text-gray-400">
               This may take a few moments
             </p>

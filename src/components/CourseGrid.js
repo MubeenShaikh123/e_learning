@@ -1,25 +1,40 @@
 import React from 'react';
 import { BookOpen, Clock, Star, UserCircle } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const CourseCard = ({ course, onSelectCourse }) => {
   return (
-    <div 
+    <div
       className="group bg-white border border-gray-200 rounded-xl shadow-soft hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-2 cursor-pointer"
       onClick={onSelectCourse}
     >
-      {/* Course Image Placeholder */}
-      <div className="relative h-48 overflow-hidden rounded-t-xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-70"></div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <BookOpen className="w-16 h-16 text-white opacity-90" />
+      {course.image ? (<div className="relative h-48 overflow-hidden rounded-t-xl">
+        <Image
+          fill
+          alt={course.title}
+          className="object-cover"
+          src={course.image}
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
+      </div>) : (
+        // Course Image Placeholder
+        <div className="relative h-48 overflow-hidden rounded-t-xl">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-70"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <BookOpen className="w-16 h-16 text-white opacity-90" />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Course Details */}
       <div className="p-5">
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
-            {course.title}
+            <Link href={`/courses/${course._id}`} className="hover:text-indigo-600 transition-colors">
+              {course.title}
+            </Link>
           </h3>
           <span className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium">
             {course.category}
@@ -73,9 +88,9 @@ const CoursesGrid = ({ courses, onViewAllCourses }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => (
-          <CourseCard 
-            key={course.id} 
-            course={course} 
+          <CourseCard
+            key={course.id}
+            course={course}
             onSelectCourse={() => handleCourseSelect(course.id)}
           />
         ))}

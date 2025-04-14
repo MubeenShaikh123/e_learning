@@ -5,6 +5,7 @@ import {
     UserCircle,
     ChevronRight
 } from 'lucide-react';
+import Link from 'next/link';
 
 const QuizCard = ({ quiz, onStartQuiz }) => {
     return (
@@ -12,7 +13,7 @@ const QuizCard = ({ quiz, onStartQuiz }) => {
             hover:shadow-lg transition-all duration-300 ease-in-out 
             transform hover:-translate-y-2 overflow-hidden">
             {/* Quiz Header with Gradient and Icon */}
-            <div 
+            <div
                 className={`h-36 bg-gradient-to-r ${quiz.color} relative flex items-center justify-center`}
             >
                 <span className="text-6xl text-white opacity-80">{quiz.icon}</span>
@@ -59,15 +60,13 @@ const QuizCard = ({ quiz, onStartQuiz }) => {
                     </div>
                 </div>
 
-                <button
-                    onClick={onStartQuiz}
-                    className="mt-4 w-full bg-indigo-600 text-white py-2 rounded-lg 
-                    font-semibold hover:bg-indigo-700 transition-colors 
-                    flex items-center justify-center"
+                <Link
+                    href={`/quizzes/${quiz._id}`}
+                    className="flex items-center justify-center w-full text-center py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200"
                 >
-                    Start Quiz
+                    <span>Start Quiz</span>
                     <ChevronRight className="ml-2 w-5 h-5" />
-                </button>
+                </Link>
             </div>
         </div>
     );

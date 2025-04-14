@@ -1,14 +1,29 @@
 "use client"; // Add this at the top
 
 // pages/dashboard.js
-import React, { useState } from 'react';
-import { 
-  BookOpen, Award, Bell, BarChart2, Menu, X, ChevronRight 
+import React, { useState, useEffect } from 'react';
+import {
+  BookOpen, Award, Bell, BarChart2, Menu, X, ChevronRight
 } from 'lucide-react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { useSelector } from 'react-redux';
 
 export default function Dashboard() {
+  const MySwal = withReactContent(Swal);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('progress');
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    MySwal.fire({
+      icon: 'info',
+      title: 'Demo Dashboard',
+      text: 'This is a demo dashboard. Personalized dashboard features are not implemented yet.',
+      showConfirmButton: false,
+      timer: 3000, // Auto close after 2 seconds (2000 milliseconds)
+    })
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -16,7 +31,7 @@ export default function Dashboard() {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-20 bg-white shadow-sm">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-3">
-            <button 
+            <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="text-gray-600 hover:text-indigo-600 focus:outline-none"
             >
@@ -43,28 +58,28 @@ export default function Dashboard() {
             <h1 className="text-2xl font-bold text-gray-800">LearnHub</h1>
           </div>
           <nav className="flex-1 px-4 py-4 space-y-2">
-            <button 
+            <button
               onClick={() => setActiveTab('progress')}
               className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg ${activeTab === 'progress' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
             >
               <BookOpen size={20} />
               <span className="font-medium">Course Progress</span>
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab('results')}
               className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg ${activeTab === 'results' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
             >
               <BarChart2 size={20} />
               <span className="font-medium">Quiz Results</span>
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab('notifications')}
               className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg ${activeTab === 'notifications' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
             >
               <Bell size={20} />
               <span className="font-medium">Notifications</span>
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab('badges')}
               className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg ${activeTab === 'badges' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
             >
@@ -78,8 +93,8 @@ export default function Dashboard() {
                 JD
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">John Doe</p>
-                <p className="text-xs text-gray-500">john.doe@example.com</p>
+                <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                <p className="text-xs text-gray-500">{user.email}</p>
               </div>
             </div>
           </div>
@@ -127,7 +142,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Time spent card */}
                   <div className="bg-white rounded-lg shadow p-6">
                     <h3 className="text-lg font-medium text-gray-900">Time Spent</h3>
@@ -141,7 +156,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Upcoming deadline card */}
                   <div className="bg-white rounded-lg shadow p-6">
                     <h3 className="text-lg font-medium text-gray-900">Next Deadline</h3>
@@ -156,7 +171,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Courses in progress */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="px-6 py-4 border-b">
@@ -179,8 +194,8 @@ export default function Dashboard() {
                           <div className="w-full sm:w-64">
                             <div className="flex items-center">
                               <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                <div 
-                                  className="bg-indigo-600 h-2 rounded-full" 
+                                <div
+                                  className="bg-indigo-600 h-2 rounded-full"
                                   style={{ width: `${course.progress}%` }}
                                 ></div>
                               </div>
@@ -194,7 +209,7 @@ export default function Dashboard() {
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Recommended courses */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="px-6 py-4 border-b">
@@ -241,7 +256,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Quizzes completed card */}
                   <div className="bg-white rounded-lg shadow p-6">
                     <h3 className="text-lg font-medium text-gray-900">Quizzes Completed</h3>
@@ -255,7 +270,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Next quiz card */}
                   <div className="bg-white rounded-lg shadow p-6">
                     <h3 className="text-lg font-medium text-gray-900">Next Quiz</h3>
@@ -270,7 +285,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Recent quiz results */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="px-6 py-4 border-b">
@@ -351,7 +366,7 @@ export default function Dashboard() {
                     </button>
                   </div>
                 </div>
-                
+
                 {/* Notifications list */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="px-6 py-4 border-b">
@@ -359,34 +374,34 @@ export default function Dashboard() {
                   </div>
                   <div className="divide-y">
                     {[
-                      { 
-                        id: 1, 
-                        type: 'announcement', 
-                        title: 'New Course Available', 
+                      {
+                        id: 1,
+                        type: 'announcement',
+                        title: 'New Course Available',
                         message: 'A new course on TypeScript has been added to the platform.',
                         time: '2 hours ago',
                         isNew: true
                       },
-                      { 
-                        id: 2, 
-                        type: 'deadline', 
-                        title: 'Assignment Due Soon', 
+                      {
+                        id: 2,
+                        type: 'deadline',
+                        title: 'Assignment Due Soon',
                         message: 'Your React Hooks assignment is due in 48 hours.',
                         time: '5 hours ago',
                         isNew: true
                       },
-                      { 
-                        id: 3, 
-                        type: 'update', 
-                        title: 'Course Material Updated', 
+                      {
+                        id: 3,
+                        type: 'update',
+                        title: 'Course Material Updated',
                         message: 'New material has been added to the Next.js Advanced course.',
                         time: '1 day ago',
                         isNew: false
                       },
-                      { 
-                        id: 4, 
-                        type: 'announcement', 
-                        title: 'Live Workshop', 
+                      {
+                        id: 4,
+                        type: 'announcement',
+                        title: 'Live Workshop',
                         message: 'Join us for a live workshop on CSS Grid this Friday at 3 PM.',
                         time: '2 days ago',
                         isNew: false
@@ -394,11 +409,10 @@ export default function Dashboard() {
                     ].map((notification) => (
                       <div key={notification.id} className={`px-6 py-4 ${notification.isNew ? 'bg-indigo-50' : ''}`}>
                         <div className="flex items-start">
-                          <div className={`flex-shrink-0 p-2 rounded-full ${
-                            notification.type === 'announcement' ? 'bg-blue-100 text-blue-600' :
+                          <div className={`flex-shrink-0 p-2 rounded-full ${notification.type === 'announcement' ? 'bg-blue-100 text-blue-600' :
                             notification.type === 'deadline' ? 'bg-red-100 text-red-600' :
-                            'bg-green-100 text-green-600'
-                          }`}>
+                              'bg-green-100 text-green-600'
+                            }`}>
                             <Bell size={16} />
                           </div>
                           <div className="ml-4 flex-1">
@@ -433,7 +447,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-white rounded-lg shadow p-6">
                     <h3 className="text-lg font-medium text-gray-900">Rank</h3>
                     <div className="mt-4 flex items-end justify-between">
@@ -446,7 +460,7 @@ export default function Dashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="bg-white rounded-lg shadow p-6">
                     <h3 className="text-lg font-medium text-gray-900">Recent Badge</h3>
                     <div className="mt-4 flex items-end justify-between">
@@ -460,7 +474,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Badges grid */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="px-6 py-4 border-b">
@@ -490,7 +504,7 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Badges to earn */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                   <div className="px-6 py-4 border-b">
@@ -513,8 +527,8 @@ export default function Dashboard() {
                           <p className="text-xs text-gray-600 mb-3">{badge.description}</p>
                           <div className="flex items-center">
                             <div className="flex-1 bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-indigo-600 h-2 rounded-full" 
+                              <div
+                                className="bg-indigo-600 h-2 rounded-full"
                                 style={{ width: `${badge.progress}%` }}
                               ></div>
                             </div>

@@ -17,6 +17,7 @@ const courseSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     instructor: { type: String, required: true },
     category: { type: String, required: true },
+    image: { type: String, required: false },
     modules: [moduleSchema], // Array of course modules
     totalDuration: { type: Number, default: 0 }, // Auto-calculated sum of module durations
     rating: { type: Number, default: 0 }, // Average rating (to be updated dynamically)

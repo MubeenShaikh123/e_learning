@@ -51,22 +51,23 @@ const Course = ({ isHome }) => {
                                 key={course._id}
                                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                             >
-                                {/* <div className="relative h-48">
+                                {course.image ? (<div className="relative h-48">
                                     <Image
                                         fill
                                         alt={course.title}
                                         className="object-cover"
-                                        src="/bg4.jfif"
+                                        src={course.image}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent" />
-                                </div> */}
-                                {/* Course Image Placeholder */}
-                                <div className="relative h-48 overflow-hidden rounded-t-xl">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-70"></div>
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <BookOpen className="w-16 h-16 text-white opacity-90" />
+                                </div>) : (
+                                    // Course Image Placeholder
+                                    <div className="relative h-48 overflow-hidden rounded-t-xl">
+                                        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-70"></div>
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <BookOpen className="w-16 h-16 text-white opacity-90" />
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                                 <div className="p-6">
                                     <div className="mb-3">

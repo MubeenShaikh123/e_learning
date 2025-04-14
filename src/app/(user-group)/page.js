@@ -8,10 +8,10 @@ import { useEffect } from 'react';
 import CoursesGrid from '@/components/CourseGrid';
 import QuizzesGrid from '@/components/QuizzesGrid';
 import { useSelector } from 'react-redux';
+import TestimonialsSection from '@/components/TestimonialsSection';
 
 export default function HomePage() {
   const user = useSelector((state) => state.user);
-  console.log(`user from store: ${JSON.stringify(user)}`)
   const router = useRouter();
   const [courses, setCourses] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
@@ -89,7 +89,7 @@ export default function HomePage() {
             <p className="mt-3 max-w-md mx-auto text-base text-indigo-100 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Access 5000+ online courses and quizzes from 500+ professional instructors.
             </p>
-            <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 invisible">
+            {/* <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 ">
               <input
                 type="text"
                 placeholder="Search courses..."
@@ -98,7 +98,7 @@ export default function HomePage() {
               <button className="mt-2 w-full sm:mt-0 sm:w-auto bg-white text-indigo-600 px-6 py-3 rounded-r-lg font-medium hover:bg-gray-100">
                 Search
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function HomePage() {
       <QuizzesGrid quizzes={quizzes} onViewAllQuizzes={() => router.push('/quizzes')} />
 
       {/* CTA Section */}
-      <div className="bg-indigo-700">
+      {/* <div className="bg-indigo-700">
         <div className="max-w-7xl mx-auto py-12 px-4 sm:py-16 sm:px-6 lg:px-8 lg:py-20">
           <div className="text-center">
             <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
@@ -126,7 +126,8 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+      <TestimonialsSection></TestimonialsSection>
 
       {/* Footer */}
       <footer className="bg-gray-800">
