@@ -1,35 +1,52 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 const CourseVideos = ({ params }) => {
   const router = useRouter();
   const { id } = params;
+  const user = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(true);
+  const [videos, setVideos] = useState([]);
 
-  // Updated Dummy videos with thumbnail and duration
-  const videos = [
-    {
-      id: 1,
-      title: "Introduction to Web Development",
-      url: "https://www.youtube.com/embed/MBKgWORXkYk?si=-45y0_102mTuSIAV",
-      thumbnail: "https://img.youtube.com/vi/MBKgWORXkYk/hqdefault.jpg",
-      duration: "10:30",
-    },
-    {
-      id: 2,
-      title: "HTML Basics",
-      url: "https://www.youtube.com/embed/qz0aGYrrlhU",
-      thumbnail: "https://img.youtube.com/vi/qz0aGYrrlhU/hqdefault.jpg",
-      duration: "8:15",
-    },
-    {
-      id: 3,
-      title: "CSS Basics",
-      url: "https://www.youtube.com/embed/1Rs2ND1ryYc",
-      thumbnail: "https://img.youtube.com/vi/1Rs2ND1ryYc/hqdefault.jpg",
-      duration: "12:45",
-    },
-  ];
+  useEffect(() => {
+    const fetchEnrollmentAndVideos = async () => {
+      if (!user.email) {
+        router.replace('/not-found');
+        return;
+      }
+
+      try {
+        const enrollRes = await fetch(`/api/courses/enroll/${id}?userId=${user.email}`);
+        const enrollData = await enrollRes.json();
+
+        if (!enrollRes.ok || !enrollData.enrolled) {
+          router.replace('/not-found');
+          return;
+        }
+
+        const videoRes = await fetch(`/api/courses/videos/${id}`);
+        const videoData = await videoRes.json();
+
+        if (videoRes.ok && videoData.videos) {
+          setVideos(videoData.videos);
+        } else {
+          console.error("Video fetch failed");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        router.replace('/not-found');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEnrollmentAndVideos();
+  }, [id, user.email, router]);
+
+  if (loading) return <p className="text-center mt-10 text-gray-500">Loading...</p>;
+  if (!videos.length) return <p className="text-center mt-10 text-gray-500">No videos available.</p>;
 
   const handleNavigate = (videoId) => {
     router.push(`/courses/${id}/videos/${videoId}`);
@@ -41,34 +58,31 @@ const CourseVideos = ({ params }) => {
         <h1 className="text-3xl font-bold mb-6 text-indigo-900 border-b border-indigo-200 pb-2">
           Course Videos
         </h1>
-        
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {videos.map((video) => (
-            <div 
-              key={video.id} 
-              onClick={() => handleNavigate(video.id)}
+            <div
+              key={video._id}
+              onClick={() => handleNavigate(video._id)}
               className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:translate-y-1 border border-gray-100"
             >
-              {/* Thumbnail */}
               <div className="relative">
-                <img 
+                <img
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-40 object-cover"
                 />
-                {/* Duration Overlay */}
                 <span className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
                   {video.duration}
                 </span>
               </div>
 
-              {/* Title and Button */}
               <div className="p-6">
                 <h2 className="text-lg font-semibold text-gray-800 mb-2">{video.title}</h2>
                 <button
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent parent click
-                    handleNavigate(video.id);
+                    e.stopPropagation();
+                    handleNavigate(video._id);
                   }}
                   className="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
                 >

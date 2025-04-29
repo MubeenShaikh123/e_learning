@@ -1,38 +1,64 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 const VideoPlayer = ({ params }) => {
-  const { videoId } = params;
+  const { id, videoId } = params;
+  const router = useRouter();
+  const user = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(true);
+  const [video, setVideo] = useState(null);
 
-  // Dummy video data
-  const videos = [
-    {
-      id: 1,
-      title: "Introduction to Web Development",
-      url: "https://www.youtube.com/embed/MBKgWORXkYk?si=-45y0_102mTuSIAV",
-    },
-    {
-      id: 2,
-      title: "HTML Basics",
-      url: "https://www.youtube.com/embed/qz0aGYrrlhU",
-    },
-    {
-      id: 3,
-      title: "CSS Basics",
-      url: "https://www.youtube.com/embed/1Rs2ND1ryYc",
-    },
-  ];
+  useEffect(() => {
+    const verifyAndFetch = async () => {
+      if (!user.email) {
+        router.replace('/not-found');
+        return;
+      }
 
-  // Find the video based on videoId
-  const video = videos.find((v) => v.id.toString() === videoId);
+      try {
+        // Step 1: Check Enrollment
+        console.log(`id: ${id}\nvideoId: ${videoId}`);
+        const enrollRes = await fetch(`/api/courses/enroll/${id}?userId=${user.email}`);
+        const enrollData = await enrollRes.json();
 
-  if (!video) {
+        if (!enrollRes.ok || !enrollData.enrolled) {
+          router.replace('/not-found');
+          return;
+        }
+
+        // Step 2: Fetch Video
+        const videoRes = await fetch(`/api/courses/videos/${id}/${videoId}`);
+        const videoData = await videoRes.json();
+
+        if (videoRes.ok && videoData?.video) {
+          console.log(`videoRes ok`);
+          setVideo(videoData.video);
+        } else {
+          console.log(`videoRes not ok`);
+          router.replace('/not-found');
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        router.replace('/not-found');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyAndFetch();
+  }, [id, videoId, user.email, router]);
+
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-gray-500">Video not found!</p>
+        <p className="text-xl text-gray-500">Loading...</p>
       </div>
     );
   }
+
+  if (!video) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

@@ -36,7 +36,6 @@ export default function AuthWrapper({ children }) {
           return;
         }
 
-        console.log(`data: ${JSON.stringify(data)}`)
         dispatch(setUser({ name: data.name, email: data.email }));
         setLoading(false); // Allow access after successful verification
       } catch (error) {

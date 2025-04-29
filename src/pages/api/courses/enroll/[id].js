@@ -8,8 +8,9 @@ const enrollCourse = async (req, res) => {
   if (req.method === 'POST') {
     try {
       const existingEnrollment = await Enrollment.findOne({ userId, courseId: id });
+      console.log(`existingEnrollment: ${existingEnrollment}`)
       if (existingEnrollment) {
-        return res.status(400).json({ success: false, message: 'Already enrolled' });
+        return res.status(400).json({ success: true, message: 'Already enrolled' });
       }
 
       const enrollment = new Enrollment({ userId, courseId: id });
@@ -24,7 +25,9 @@ const enrollCourse = async (req, res) => {
 
   if (req.method === 'GET') {
     try {
+      const { userId } = req.query;
       const enrollment = await Enrollment.findOne({ userId, courseId: id });
+      console.log(`enrollment: ${enrollment}`)
       if (enrollment) {
         return res.status(200).json({ success: true, enrolled: true });
       }
