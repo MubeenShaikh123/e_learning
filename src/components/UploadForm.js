@@ -6,6 +6,7 @@ import Docxtemplater from "docxtemplater";
 import saveAs from "file-saver";
 import html2pdf from "html2pdf.js";
 import mammoth from "mammoth";
+import { Upload, FileText, Download, Eye, Sparkles } from 'lucide-react';
 
 export default function UploadForm() {
   const [docFile, setDocFile] = useState(null);
@@ -116,50 +117,106 @@ export default function UploadForm() {
   };
 
   return (
-    <div>
-      <h2>Upload your .docx template with placeholders like {"{pos}"}, {"{hname}"}</h2>
-      <input type="file" accept=".docx" onChange={handleFileUpload} />
+    <div className="space-y-8">
+      {/* Upload Section */}
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4">
+            <Upload className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Upload Your Template</h2>
+          <p className="text-gray-600">
+            Upload your .docx template with placeholders like <code className="bg-gray-100 px-2 py-1 rounded text-sm">{"{position}"}</code>, <code className="bg-gray-100 px-2 py-1 rounded text-sm">{"{company}"}</code>
+          </p>
+        </div>
 
+        <div className="relative">
+          <input
+            type="file"
+            accept=".docx"
+            onChange={handleFileUpload}
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+            id="file-upload"
+          />
+          <label
+            htmlFor="file-upload"
+            className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-400 transition-colors cursor-pointer bg-gray-50 hover:bg-gray-100"
+          >
+            <FileText className="w-8 h-8 text-gray-400 mb-2" />
+            <span className="text-gray-600 font-medium">Click to browse files</span>
+            <span className="text-sm text-gray-400">or drag and drop your .docx file</span>
+          </label>
+        </div>
+      </div>
+
+      {/* Form Section */}
       {placeholders.length > 0 && (
-        <>
-          <h3>Fill placeholder values:</h3>
-          {placeholders.map((key) => (
-            <div key={key} style={{ marginBottom: 12 }}>
-              <label>
-                {key}:
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+          <div className="flex items-center mb-6">
+            <Sparkles className="w-6 h-6 text-purple-500 mr-3" />
+            <h3 className="text-2xl font-bold text-gray-800">Fill Your Details</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {placeholders.map((key) => (
+              <div key={key} className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700 capitalize">
+                  {key.replace(/([A-Z])/g, ' $1').trim()}
+                </label>
                 <input
                   type="text"
                   name={key}
                   value={formData[key]}
                   onChange={handleChange}
-                  style={{ marginLeft: 8, padding: 6, width: "300px" }}
+                  placeholder={`Enter ${key}`}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none hover:border-gray-300"
                 />
-              </label>
-            </div>
-          ))}
-
-          <button onClick={generateDocx} style={{ marginRight: 15 }}>
-            Download .DOCX
-          </button>
-          <button onClick={generatePDF}>Download PDF</button>
-
-          <div
-            id="preview"
-            style={{
-              marginTop: 40,
-              padding: 20,
-              backgroundColor: "#f9f9f9",
-              border: "1px solid #ccc",
-            }}
-          >
-            <h3>Preview (filled values):</h3>
-            {placeholders.map((key) => (
-              <p key={key}>
-                <strong>{key}:</strong> {formData[key]}
-              </p>
+              </div>
             ))}
           </div>
-        </>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-4 mb-8">
+            <button
+              onClick={generateDocx}
+              className="flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download DOCX
+            </button>
+            <button
+              onClick={generatePDF}
+              className="flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download PDF
+            </button>
+          </div>
+
+          {/* Preview Section */}
+          {/* <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200">
+            <div className="flex items-center mb-4">
+              <Eye className="w-5 h-5 text-gray-600 mr-2" />
+              <h4 className="text-lg font-semibold text-gray-800">Live Preview</h4>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {placeholders.map((key) => (
+                <div key={key} className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                  <div className="flex justify-between items-start">
+                    <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                      {key}
+                    </span>
+                  </div>
+                  <p className="text-gray-800 font-medium mt-1 min-h-[1.5rem]">
+                    {formData[key] || (
+                      <span className="text-gray-400 italic">Not filled yet</span>
+                    )}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div> */}
+        </div>
       )}
     </div>
   );
