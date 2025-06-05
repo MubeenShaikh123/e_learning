@@ -11,8 +11,10 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "crypto-js": "^4.2.0",
+    "docx-pdf": "^0.0.1",
     "docxtemplater": "^3.63.2",
     "file-saver": "^2.0.5",
+    "formidable": "^3.5.4",
     "html2pdf.js": "^0.10.3",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.513.0",

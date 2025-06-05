@@ -24,6 +24,17 @@ export default function UploadForm() {
     return Array.from(tags);
   };
 
+  function getFormattedDate() {
+    const today = new Date();
+
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = today.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     setDocFile(file);
@@ -43,7 +54,22 @@ export default function UploadForm() {
 
         // Initialize form data with empty strings for each placeholder
         const defaultData = {};
-        tags.forEach((tag) => (defaultData[tag] = ""));
+
+        tags.forEach((tag) => {
+          if (tag === 'position') {
+            defaultData[tag] = 'Full Stack Developer';
+          } else if (tag === 'date') {
+            defaultData[tag] = getFormattedDate();
+          } else if (tag === 'hr_name') {
+            defaultData[tag] = 'HR';
+          } else if (tag === 'applied_position') {
+            defaultData[tag] = 'Full Stack Developer';
+          } else if (tag === 'company_name') {
+            defaultData[tag] = 'StopSpoof';
+          } else {
+            defaultData[tag] = '';
+          }
+        });
 
         setPlaceholders(tags);
         setFormData(defaultData);
@@ -84,37 +110,55 @@ export default function UploadForm() {
     reader.readAsBinaryString(docFile);
   };
 
+  // ✅ generatePDF function (frontend)
   const generatePDF = () => {
-    if (!docFile) return alert("Upload and customize the document first");
+    if (!docFile) return alert("Upload a template first");
 
     const reader = new FileReader();
     reader.onload = async (event) => {
       try {
-        const arrayBuffer = event.target.result;
+        const content = event.target.result;
+        const zip = new PizZip(content);
+        const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
 
-        // Convert .docx to HTML
-        const { value: html } = await mammoth.convertToHtml({ arrayBuffer });
+        doc.setData(formData);
+        doc.render();
 
-        // Create hidden div for conversion
-        const container = document.createElement("div");
-        container.innerHTML = html;
-        container.style.position = "fixed";
-        container.style.top = "-9999px";
-        document.body.appendChild(container);
+        const out = doc.getZip().generate({
+          type: "blob",
+          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
 
-        // Generate and download PDF
-        await html2pdf().from(container).set({ filename: "Cover_Letter.pdf" }).save();
+        // Create FormData with generated docx blob
+        const formDataToSend = new FormData();
+        formDataToSend.append("file", out, "temp.docx");
 
-        // Clean up
-        document.body.removeChild(container);
+        // Send to backend API for conversion
+        const res = await fetch("/api/cv/docx_to_pdf", {
+          method: "POST",
+          body: formDataToSend,
+        });
+
+        if (!res.ok) {
+          alert("Failed to convert to PDF");
+          return;
+        }
+
+        const blobPDF = await res.blob();
+        const url = window.URL.createObjectURL(blobPDF);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Cover_Letter.pdf";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
       } catch (error) {
-        console.error("PDF generation failed:", error);
-        alert("PDF generation failed: " + error.message);
+        alert("Error generating PDF: " + error.message);
       }
     };
 
-    reader.readAsArrayBuffer(docFile);
-  };
+    reader.readAsBinaryString(docFile);
+  }
 
   return (
     <div className="space-y-8">
