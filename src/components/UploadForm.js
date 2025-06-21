@@ -39,6 +39,10 @@ export default function UploadForm() {
     const file = e.target.files[0];
     setDocFile(file);
 
+    // 🧹 Reset previous file data
+    setPlaceholders([]); // or whatever your placeholder state is
+    setFormData({});
+
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
@@ -56,15 +60,14 @@ export default function UploadForm() {
         const defaultData = {};
 
         tags.forEach((tag) => {
-          if (tag === 'position') {
-            defaultData[tag] = 'Full Stack Developer';
-          } else if (tag === 'date') {
+          ['date', 'current_position', 'applied_position', 'current_company_name', 'applied_company_name']
+          if (tag === 'date') {
             defaultData[tag] = getFormattedDate();
-          } else if (tag === 'hr_name') {
-            defaultData[tag] = 'HR';
+          } else if (tag === 'current_position') {
+            defaultData[tag] = 'Full Stack Developer';
           } else if (tag === 'applied_position') {
             defaultData[tag] = 'Full Stack Developer';
-          } else if (tag === 'company_name') {
+          } else if (tag === 'current_company_name') {
             defaultData[tag] = 'StopSpoof';
           } else {
             defaultData[tag] = '';
@@ -207,14 +210,25 @@ export default function UploadForm() {
                 <label className="block text-sm font-semibold text-gray-700 capitalize">
                   {key.replace(/([A-Z])/g, ' $1').trim()}
                 </label>
-                <input
-                  type="text"
-                  name={key}
-                  value={formData[key]}
-                  onChange={handleChange}
-                  placeholder={`Enter ${key}`}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none hover:border-gray-300"
-                />
+                {['date', 'current_position', 'applied_position', 'current_company_name', 'applied_company_name'].includes(key) ? (
+                  <input
+                    type="text"
+                    name={key}
+                    value={formData[key]}
+                    onChange={handleChange}
+                    placeholder={`Enter ${key}`}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none hover:border-gray-300"
+                  />
+                ) : (
+                  <textarea
+                    name={key}
+                    value={formData[key]}
+                    onChange={handleChange}
+                    placeholder={`Enter ${key}`}
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none hover:border-gray-300 resize-none"
+                  />
+                )}
               </div>
             ))}
           </div>
@@ -229,7 +243,8 @@ export default function UploadForm() {
               Download DOCX
             </button>
             <button
-              onClick={generatePDF}
+              // onClick={generatePDF}
+              onClick={() => { alert('This function is not yet implemented') }}
               className="flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all transform hover:scale-105 shadow-lg"
             >
               <Download className="w-5 h-5 mr-2" />
