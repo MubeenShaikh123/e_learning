@@ -250,6 +250,14 @@ export default function UploadForm() {
               <Download className="w-5 h-5 mr-2" />
               Download PDF
             </button>
+            <button
+              // onClick={showPreview}
+              onClick={() => { alert('This function is not yet implemented') }}
+              className="flex items-center px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105 shadow-lg"
+            >
+              <Eye className="w-5 h-5 text-gray-600 mr-2" />
+              Preview
+            </button>
           </div>
 
           {/* Preview Section */}

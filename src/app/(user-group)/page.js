@@ -5,10 +5,10 @@ import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect } from 'react';
-import CoursesGrid from '@/components/CourseGrid';
-import QuizzesGrid from '@/components/QuizzesGrid';
+import CoursesGrid from '@/components/Home/CourseGrid';
+import QuizzesGrid from '@/components/Home/QuizzesGrid';
 import { useSelector } from 'react-redux';
-import TestimonialsSection from '@/components/TestimonialsSection';
+import TestimonialsSection from '@/components/Home/TestimonialsSection';
 
 export default function HomePage() {
   const user = useSelector((state) => state.user);

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { FileText } from 'lucide-react';
 
-const UploadForm = dynamic(() => import("../../../components/UploadForm"), {
+const UploadForm = dynamic(() => import("../../../components/CV/UploadForm"), {
   ssr: false,
 });
 
