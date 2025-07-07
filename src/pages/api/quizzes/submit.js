@@ -7,20 +7,20 @@ const submitQuiz = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
-  
+
   const { quizId, userId, answers } = req.body;
-  
+
   if (!quizId || !userId || !answers || answers.length === 0) {
     return res.status(400).json({ message: "Quiz ID, User ID, and answers are required" });
   }
-  
+
   try {
     // Fetch the quiz to validate answers and calculate score
     const quiz = await QuizQuestion.findById(quizId);
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
-    
+
     // Calculate score
     let score = 0;
     quiz.questions.forEach((question) => {
@@ -30,6 +30,7 @@ const submitQuiz = async (req, res) => {
         score += 1;
       }
     });
+    let maxScore = quiz.questions.length;
 
     // Save the submission
     const newSubmission = new QuizSubmission({
@@ -37,6 +38,7 @@ const submitQuiz = async (req, res) => {
       userId,
       answers,
       score,
+      maxScore
     });
 
     await newSubmission.save();

@@ -6,7 +6,6 @@ const NotificationsTab = () => {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState("all");
-    const user = useSelector((state) => state.user);
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -28,7 +27,7 @@ const NotificationsTab = () => {
         };
 
         fetchNotifications();
-    }, [user]);
+    }, []);
 
     const filteredNotifications =
         activeCategory === "all"

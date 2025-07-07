@@ -4,7 +4,7 @@ const QuizSubmissionSchema = new mongoose.Schema(
     {
         quizId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "QuizQuestion",
+            ref: "Quizzes",
             required: true,
         },
         userId: {
@@ -25,7 +25,11 @@ const QuizSubmissionSchema = new mongoose.Schema(
         ],
         score: {
             type: Number,
-            default: null, // Will be calculated later
+            default: null,
+        },
+        maxScore: {
+            type: Number,
+            default: null,
         },
         submittedAt: {
             type: Date,

@@ -13,7 +13,6 @@ const getUserNotifications = async (req, res) => {
 
       return res.status(200).json({ success: true, data: notifications });
     } catch (error) {
-      console.error("Error fetching notifications:", error.message);
       return res.status(500).json({ success: false, message: "Failed to fetch notifications" });
     }
   } else {

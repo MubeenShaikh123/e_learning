@@ -1,114 +1,143 @@
-import React from 'react'
-import {
-    BookOpen, Award, BarChart2
-} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { BookOpen, Award, BarChart2, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 const QuizResultsTab = () => {
-    return (
-        <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Overall score card */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <h3 className="text-lg font-medium text-gray-900">Average Score</h3>
-                    <div className="mt-4 flex items-end justify-between">
-                        <div>
-                            <p className="text-3xl font-bold text-indigo-600">82%</p>
-                            <p className="text-sm text-gray-500">Across all quizzes</p>
-                        </div>
-                        <div className="h-16 w-16 text-indigo-600">
-                            <BarChart2 size={64} />
-                        </div>
-                    </div>
-                </div>
+  const [quizzSubmissions, setQuizzSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-                {/* Quizzes completed card */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <h3 className="text-lg font-medium text-gray-900">Quizzes Completed</h3>
-                    <div className="mt-4 flex items-end justify-between">
-                        <div>
-                            <p className="text-3xl font-bold text-indigo-600">12</p>
-                            <p className="text-sm text-gray-500">Out of 15 total</p>
-                        </div>
-                        <div className="h-16 w-16 text-indigo-600">
-                            <Award size={64} />
-                        </div>
-                    </div>
-                </div>
+  useEffect(() => {
+    const fetchQuizzSubmissions = async () => {
+      try {
+        const res = await fetch('/api/quizzes/get-submissions', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('x-access-token')}`,
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setQuizzSubmissions(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch quiz submissions', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                {/* Next quiz card */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <h3 className="text-lg font-medium text-gray-900">Next Quiz</h3>
-                    <div className="mt-4 flex items-end justify-between">
-                        <div>
-                            <p className="text-xl font-bold text-indigo-600">React Hooks</p>
-                            <p className="text-sm text-gray-500">Available now</p>
-                        </div>
-                        <button className="px-3 py-1 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700">
-                            Start
-                        </button>
-                    </div>
-                </div>
+    fetchQuizzSubmissions();
+  }, []);
+
+  const totalQuizzes = quizzSubmissions.length;
+  const averageScore = totalQuizzes > 0
+    ? Math.round(quizzSubmissions.reduce((acc, q) => acc + q.score, 0) / totalQuizzes)
+    : 0;
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Average score */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-lg font-medium text-gray-900">Average Score</h3>
+          <div className="mt-4 flex items-end justify-between">
+            <div>
+              <p className="text-3xl font-bold text-indigo-600">{averageScore}%</p>
+              <p className="text-sm text-gray-500">Across all quizzes</p>
             </div>
-
-            {/* Recent quiz results */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-6 py-4 border-b">
-                    <h3 className="text-lg font-medium text-gray-900">Recent Quiz Results</h3>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Quiz Name
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Date
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Score
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
-                                </th>
-                                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {[
-                                { id: 1, name: 'JavaScript Arrays', date: 'Mar 20, 2025', score: 90, status: 'Passed' },
-                                { id: 2, name: 'CSS Flexbox', date: 'Mar 15, 2025', score: 75, status: 'Passed' },
-                                { id: 3, name: 'React Components', date: 'Mar 10, 2025', score: 82, status: 'Passed' },
-                                { id: 4, name: 'Next.js Routing', date: 'Mar 5, 2025', score: 68, status: 'Passed' },
-                            ].map((quiz) => (
-                                <tr key={quiz.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-gray-900">{quiz.name}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-500">{quiz.date}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{quiz.score}%</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            {quiz.status}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button className="text-indigo-600 hover:text-indigo-900">Review</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+            <div className="h-16 w-16 text-indigo-600">
+              <BarChart2 size={64} />
             </div>
+          </div>
         </div>
-    )
-}
 
-export default QuizResultsTab   
+        {/* Quizzes completed */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-lg font-medium text-gray-900">Quizzes Completed</h3>
+          <div className="mt-4 flex items-end justify-between">
+            <div>
+              <p className="text-3xl font-bold text-indigo-600">{totalQuizzes}</p>
+              <p className="text-sm text-gray-500">Submissions</p>
+            </div>
+            <div className="h-16 w-16 text-indigo-600">
+              <Award size={64} />
+            </div>
+          </div>
+        </div>
+
+        {/* Next quiz card */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-lg font-medium text-gray-900">Next Quiz</h3>
+          <Link href='./quizzes'>
+            <div className="mt-4 flex items-end justify-between">
+              <div>
+                <p className="text-3xl font-bold text-indigo-600">Continue Learning</p>
+                <p className="text-sm text-gray-500">Click to explore quizzes</p>
+              </div>
+              <div className="h-16 w-16 text-indigo-600">
+                <ChevronRight size={64} />
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      {/* Recent quiz results table */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="px-6 py-4 border-b">
+          <h3 className="text-lg font-medium text-gray-900">Recent Quiz Results</h3>
+        </div>
+        <div className="overflow-x-auto">
+          {loading ? (
+            <div className="p-6 text-gray-500">Loading...</div>
+          ) : quizzSubmissions.length === 0 ? (
+            <div className="p-6 text-gray-500">No submissions found.</div>
+          ) : (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quiz Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Max Score</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  {/* <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th> */}
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {quizzSubmissions.map((quiz) => (
+                  <tr key={quiz._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{quiz.quizId.title || "Untitled Quiz"}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {new Date(quiz.createdAt).toLocaleDateString()}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{quiz.score}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{quiz.maxScore}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${(quiz.score / quiz.maxScore) * 100 >= 35 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                        }`}>
+                        {(quiz.score / quiz.maxScore) * 100 >= 35 ? "Passed" : "Failed"}
+                      </span>
+                    </td>
+                    {/* <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button className="text-indigo-600 hover:text-indigo-900">Review</button>
+                    </td> */}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default QuizResultsTab;

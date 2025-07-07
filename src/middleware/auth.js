@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 
 export default function withAuth(handler) {
   return async (req, res) => {
-    console.log("inside middleware")
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
 
