@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+export const initialCourseState = {
+  details: {},
+  isEnrolled: false,
+};
+
 const courseSlice = createSlice({
   name: 'course',
-  initialState: {
-    details: {},
-    isEnrolled: false
-  },
+  initialState:initialCourseState,
   reducers: {
     setCourseDetails(state, action) {
       state.details = action.payload;

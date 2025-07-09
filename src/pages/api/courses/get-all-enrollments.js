@@ -7,7 +7,6 @@ const enrollCourse = async (req, res) => {
 
   if (req.method === 'GET') {
     try {
-        console.log("getall hit enroll");
       const enrollment = await Enrollment.find({ userId }).populate('courseId', 'title description');
 
       if (enrollment.length > 0) {

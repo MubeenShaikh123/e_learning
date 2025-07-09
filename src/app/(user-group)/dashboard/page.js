@@ -3,31 +3,57 @@
 // pages/dashboard.js
 import React, { useState, useEffect } from 'react';
 import {
-  BookOpen, Award, Bell, BarChart2, Menu, X, ChevronRight
+  BookOpen, Award, Bell, BarChart2, Menu, X, ChevronRight,
+  LogOut
 } from 'lucide-react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CourseProgressTab from '@/components/Dashboard/CourseProgressTab';
 import QuizResultsTab from '@/components/Dashboard/QuizResultsTab';
 import NotificationsTab from '@/components/Dashboard/NotificationsTab';
 import BadgesTab from '@/components/Dashboard/BadgesTab';
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
   const MySwal = withReactContent(Swal);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('progress');
+  const dispatch = useDispatch();
+  const router = useRouter();
   const user = useSelector((state) => state.user);
 
-  // useEffect(() => {
-  //   MySwal.fire({
-  //     icon: 'info',
-  //     title: 'Demo Dashboard',
-  //     text: 'This is a demo dashboard. Personalized dashboard features are not implemented yet.',
-  //     showConfirmButton: false,
-  //     timer: 3000, // Auto close after 2 seconds (2000 milliseconds)
-  //   })
-  // });
+  const getInitials = (name) => {
+    if (!name) return '#';
+    const parts = name.trim().split(' ').filter(Boolean);
+
+    if (parts.length === 1) {
+      return parts[0][0].toUpperCase();
+    }
+
+    if (parts.length === 2) {
+      return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
+    }
+
+    // 3 or more words
+    return parts[0][0].toUpperCase() + parts[parts.length - 1][0].toUpperCase();
+  };
+
+  const handleLogout = async () => {
+    const result = await MySwal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to log out?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, logout',
+    });
+
+    if (result.isConfirmed) {
+      localStorage.removeItem('x-access-token');
+      dispatch({ type: 'LOGOUT' });
+      router.push('/auth/login');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -44,12 +70,12 @@ export default function Dashboard() {
             <h1 className="text-xl font-bold text-gray-800">{process.env.NEXT_PUBLIC_APP_NAME}</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="relative text-gray-600 hover:text-indigo-600">
+            <button className="relative text-gray-600 hover:text-indigo-600" onClick={() => { setActiveTab('notifications') }}>
               <Bell size={20} />
               <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
             </button>
             <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
-              JD
+              {getInitials(user.name)}
             </div>
           </div>
         </div>
@@ -83,24 +109,24 @@ export default function Dashboard() {
               <Bell size={20} />
               <span className="font-medium">Notifications</span>
             </button>
-            {/* <button
-              onClick={() => setActiveTab('badges')}
-              className={`flex items-center space-x-3 w-full px-4 py-3 rounded-lg ${activeTab === 'badges' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100'}`}
-            >
-              <Award size={20} />
-              <span className="font-medium">Badges12</span>
-            </button> */}
           </nav>
           <div className="p-4 border-t">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 mb-4">
               <div className="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
-                JD
+                {getInitials(user.name)}
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">{user.name}</p>
                 <p className="text-xs text-gray-500">{user.email}</p>
               </div>
             </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center space-x-3 w-full px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
+            >
+              <LogOut size={20} />
+              <span className="font-medium">Logout</span>
+            </button>
           </div>
         </div>
       </div>
@@ -117,12 +143,12 @@ export default function Dashboard() {
                 {activeTab === 'badges' && 'Badges Earned'}
               </h1>
               <div className="flex items-center space-x-4">
-                <button className="relative text-gray-600 hover:text-indigo-600">
+                <button className="relative text-gray-600 hover:text-indigo-600" onClick={() => { setActiveTab('notifications') }}>
                   <Bell size={20} />
                   <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                 </button>
                 <div className="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
-                  ##
+                  {getInitials(user.name)}
                 </div>
               </div>
             </div>
@@ -131,22 +157,22 @@ export default function Dashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
             {/* Course Progress Tab */}
             {activeTab === 'progress' && (
-              <CourseProgressTab/>
+              <CourseProgressTab />
             )}
 
             {/* Quiz Results Tab */}
             {activeTab === 'results' && (
-              <QuizResultsTab/>
+              <QuizResultsTab />
             )}
 
             {/* Notifications Tab */}
             {activeTab === 'notifications' && (
-              <NotificationsTab/>
+              <NotificationsTab />
             )}
 
             {/* Badges Tab */}
             {activeTab === 'badges' && (
-              <BadgesTab/>
+              <BadgesTab />
             )}
           </div>
         </div>

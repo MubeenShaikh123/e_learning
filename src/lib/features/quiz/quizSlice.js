@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { act } from 'react';
 
-const initialState = {
+export const initialQuizState = {
   quiz: {
     title: '',
     questions: [],
@@ -13,7 +13,7 @@ const initialState = {
 
 const quizSlice = createSlice({
   name: 'quiz',
-  initialState,
+  initialState: initialQuizState,
   reducers: {
     setQuiz: (state, action) => {
       state.quiz = action.payload;
@@ -31,9 +31,9 @@ const quizSlice = createSlice({
     },
     saveAnswer: (state, action) => {
       const { index, questionId, answer } = action.payload;
-      state.answers[index]=answer
+      state.answers[index] = answer
       for (let i = 0; i < state.answers.length; i++) {
-        console.log(` ${i} : `,state.answers[i]);
+        console.log(` ${i} : `, state.answers[i]);
       }
     },
     setQuestionIndex: (state, action) => {
