@@ -16,10 +16,10 @@ export default function CVPage() {
             <FileText className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4">
-            Dynamic Cover Letter Generator
+            Dynamic Document Generator
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Create professional cover letters in seconds. Upload your template, fill in the details, and download your personalized document.
+            Create professional resumes, cover letters, and CVs in seconds. Upload your template, fill in the details, and download your personalized document.
           </p>
         </div>
 
@@ -28,7 +28,7 @@ export default function CVPage() {
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">How to Use</h2>
             <p className="text-gray-600 text-lg">
-              Follow these simple steps to create your perfect cover letter
+              Follow these simple steps to create your perfect cover letter, resume, or CV
             </p>
           </div>
 
@@ -116,7 +116,7 @@ export default function CVPage() {
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">AI-Powered Content Generation</h3>
             <p className="text-gray-600 text-center mb-6">
-              Our AI can help you create compelling content for various sections of your cover letter and resume:
+              Our AI can help you create compelling content for various sections of your cover letters, resumes, and CVs:
             </p>
             
             <div className="grid md:grid-cols-3 gap-4">
