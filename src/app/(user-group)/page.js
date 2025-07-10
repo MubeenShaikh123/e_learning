@@ -51,7 +51,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
-        <title>SkillUp - Online Learning Platform</title>
+        <title>{process.env.NEXT_PUBLIC_APP_NAME} - Online Learning Platform</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Head>
 
@@ -60,7 +60,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-indigo-600">SkillUp</h1>
+              <h1 className="text-2xl font-bold text-indigo-600">{process.env.NEXT_PUBLIC_APP_NAME}</h1>
               <div className="hidden md:flex space-x-8 ml-10">
                 <Link href="/" className="text-gray-700 hover:text-indigo-600">Home</Link>
                 <Link href="/courses" className="text-gray-700 hover:text-indigo-600">Courses</Link>
@@ -118,7 +118,7 @@ export default function HomePage() {
               Start Learning Today
             </h2>
             <p className="mt-3 max-w-4xl mx-auto text-xl text-indigo-100">
-              Join thousands of students already learning with SkillUp. Get access to premium courses, quizzes, and learning resources.
+              Join thousands of students already learning with {process.env.NEXT_PUBLIC_APP_NAME}. Get access to premium courses, quizzes, and learning resources.
             </p>
             <div className="mt-8">
               <button className="bg-white text-indigo-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors">
@@ -135,7 +135,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             <div>
-              <h3 className="text-white text-lg font-semibold mb-4">SkillUp</h3>
+              <h3 className="text-white text-lg font-semibold mb-4">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
               <p className="text-gray-400">Empowering learners through quality education.</p>
             </div>
             <div>
@@ -166,7 +166,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="mt-8 border-t border-gray-700 pt-8 text-center">
-            <p className="text-gray-400">&copy; 2023 SkillUp. All rights reserved.</p>
+            <p className="text-gray-400">&copy; 2023 {process.env.NEXT_PUBLIC_APP_NAME}. All rights reserved.</p>
           </div>
         </div>
       </footer>
