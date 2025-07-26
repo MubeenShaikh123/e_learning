@@ -25,3 +25,14 @@ body {
     text-wrap: balance;
   }
 }
+
+.swiper-wrapper {
+  margin-bottom: 2rem;
+}
+
+.swiper-slide{
+  /* max-height:100% !important; */
+  height: initial !important;
+  /* overflow: visible; */
+  /* background-color: aqua; */
+}

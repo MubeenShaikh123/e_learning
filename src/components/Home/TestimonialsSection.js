@@ -1,11 +1,43 @@
 'use client';
-
 import { useEffect, useState } from 'react';
-import { StarIcon } from 'lucide-react';
+import { Star } from 'lucide-react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+// Testimonial Card Component
+const TestimonialCard = ({ testimonial }) => {
+  return (
+    <div className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg w-full h-full flex flex-col">
+      <div className="flex mb-4">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+            fill={i < testimonial.rating ? 'currentColor' : 'none'}
+          />
+        ))}
+      </div>
+      <p className="text-gray-700 mb-6 italic flex-grow overflow-y-auto">"{testimonial.content}"</p>
+      <div className="flex items-center mt-auto">
+        <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold flex-shrink-0">
+          {testimonial.author?.charAt(0)}
+        </div>
+        <div className="ml-3">
+          <p className="font-medium text-gray-900">{testimonial.author}</p>
+          <p className="text-gray-600 text-sm">{testimonial.role}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const TestimonialsSection = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -15,6 +47,7 @@ const TestimonialsSection = () => {
         setTestimonials(data.data || []);
       } catch (error) {
         console.error('Error fetching testimonials:', error);
+        setError(error);
       } finally {
         setLoading(false);
       }
@@ -32,36 +65,46 @@ const TestimonialsSection = () => {
         </div>
 
         {loading ? (
-          <p className="text-center text-gray-500">Loading testimonials...</p>
-        ) : (
-          <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-            {testimonials.map((testimonial) => (
-              <div 
-                key={testimonial._id || testimonial.id}
-                className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg"
-              >
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon 
-                      key={i}
-                      className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                      fill={i < testimonial.rating ? 'currentColor' : 'none'}
-                    />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
-                <div className="flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">
-                    {testimonial.author?.charAt(0)}
-                  </div>
-                  <div className="ml-3">
-                    <p className="font-medium text-gray-900">{testimonial.author}</p>
-                    <p className="text-gray-600 text-sm">{testimonial.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <p className="ml-4 text-center text-gray-500">Loading testimonials...</p>
           </div>
+        ) : error ? (
+          <div className="text-center text-red-600 text-lg">
+            Failed to load testimonials. Please try again later.
+          </div>
+        ) : (
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            pagination={{ clickable: true }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            loop={testimonials.length > 3}
+            breakpoints={{
+              640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+              },
+            }}
+          >
+            {testimonials.map((testimonial) => (
+              <SwiperSlide key={testimonial._id || testimonial.id} className="min-h-full">
+                <TestimonialCard testimonial={testimonial} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         )}
       </div>
     </section>
