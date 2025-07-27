@@ -9,6 +9,7 @@ import CoursesGrid from '@/components/Home/CourseGrid';
 import QuizzesGrid from '@/components/Home/QuizzesGrid';
 import { useSelector } from 'react-redux';
 import TestimonialsSection from '@/components/Home/TestimonialsSection';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Github, Mail } from 'lucide-react';
 
 export default function HomePage() {
   const user = useSelector((state) => state.user);
@@ -31,8 +32,8 @@ export default function HomePage() {
     };
     const fetchQuizzes = async () => {
       try {
-        const response = await fetch("/api/quizzes/getall?limit=3",{
-          cache:'no-store'
+        const response = await fetch("/api/quizzes/getall?limit=3", {
+          cache: 'no-store'
         });
         const data = await response.json();
         setQuizzes(data.data);
@@ -135,38 +136,114 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             <div>
-              <h3 className="text-white text-lg font-semibold mb-4">{process.env.NEXT_PUBLIC_APP_NAME}</h3>
-              <p className="text-gray-400">Empowering learners through quality education.</p>
+              <h3 className="text-white text-lg font-semibold mb-4">
+                {process.env.NEXT_PUBLIC_APP_NAME || 'EduLearn'}
+              </h3>
+              <p className="text-gray-400">
+                Empowering learners through quality education and innovative learning experiences.
+              </p>
             </div>
+
             <div>
               <h4 className="text-white font-medium mb-4">Company</h4>
               <ul className="space-y-2">
-                <li><a href="/about" className="text-gray-400 hover:text-white">About</a></li>
-                {/* <li><a href="#" className="text-gray-400 hover:text-white">Careers</a></li> */}
-                <li><a href="/contact-us" className="text-gray-400 hover:text-white">Contact</a></li>
+                <li>
+                  <a href="/about" className="text-gray-400 hover:text-white transition-colors duration-300">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact-us" className="text-gray-400 hover:text-white transition-colors duration-300">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
+
             <div>
               <h4 className="text-white font-medium mb-4">Legal</h4>
               <ul className="space-y-2">
-                <li><a href="/privacy" className="text-gray-400 hover:text-white">Privacy</a></li>
-                <li><a href="/privacy" className="text-gray-400 hover:text-white">Terms</a></li>
-                {/* <li><a href="#" className="text-gray-400 hover:text-white">Security</a></li> */}
+                <li>
+                  <a href="/privacy-terms" className="text-gray-400 hover:text-white transition-colors duration-300">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="/privacy-terms" className="text-gray-400 hover:text-white transition-colors duration-300">
+                    Terms of Service
+                  </a>
+                </li>
               </ul>
             </div>
+
             <div>
               <h4 className="text-white font-medium mb-4">Follow Us</h4>
+              <p className="text-gray-400 text-sm mb-4">
+                Stay connected for updates and learning tips
+              </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <span className="sr-only">Twitter</span>
-                  {/* Add social media icons here */}
+                <a
+                  href="https://www.facebook.com/profile.php?id=100048574524041&mibextid=ZbWKwL"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-500 transform hover:scale-110 transition-all duration-300"
+                  aria-label="Follow us on Facebook"
+                >
+                  <Facebook className="w-6 h-6" />
                 </a>
-                {/* Add other social media links */}
+
+                {/* <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transform hover:scale-110 transition-all duration-300"
+                  aria-label="Follow us on Twitter"
+                >
+                  <Twitter className="w-6 h-6" />
+                </a> */}
+
+                <a
+                  href="https://www.instagram.com/__mubeen_shaikh?igsh=ZWF5MTg4Z2Zuamg0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-pink-500 transform hover:scale-110 transition-all duration-300"
+                  aria-label="Follow us on Instagram"
+                >
+                  <Instagram className="w-6 h-6" />
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/in/mubeen-shaikh-6276b7247"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-600 transform hover:scale-110 transition-all duration-300"
+                  aria-label="Follow us on LinkedIn"
+                >
+                  <Linkedin className="w-6 h-6" />
+                </a>
+
+                <a
+                  href="https://github.com/MubeenShaikh123"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-red-500 transform hover:scale-110 transition-all duration-300"
+                  aria-label="Follow us on YouTube"
+                >
+                  <Github className="w-6 h-6" />
+                </a>
               </div>
             </div>
           </div>
-          <div className="mt-8 border-t border-gray-700 pt-8 text-center">
-            <p className="text-gray-400">&copy; 2023 {process.env.NEXT_PUBLIC_APP_NAME}. All rights reserved.</p>
+
+          <div className="mt-8 border-t border-gray-700 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-gray-400 text-sm">
+                &copy; 2025 {process.env.NEXT_PUBLIC_APP_NAME || 'EduLearn'}. All rights reserved.
+              </p>
+              <div className="flex space-x-6 mt-4 md:mt-0">
+                <span className="text-gray-400 text-sm">Made with ❤️ for learners worldwide</span>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
