@@ -70,11 +70,11 @@ export default function HomePage() {
                 <Link href="/dashboard" className="text-gray-700 hover:text-indigo-600">Dashboard</Link>
               </div>
             </div>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
                 Sign In
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>
