@@ -6,6 +6,7 @@ import { EyeIcon, EyeOffIcon, MailIcon, LockIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/lib/features/user/userSlice';
+import { signIn } from 'next-auth/react';
 
 const Login = () => {
     const router = useRouter();
@@ -139,6 +140,13 @@ const Login = () => {
                             Sign In
                         </button>
                     </form>
+
+                    <button
+                        className="bg-black text-white px-4 py-2 rounded"
+                        onClick={() => signIn('github', { callbackUrl: '/' })}
+                    >
+                        Sign in with GitHub
+                    </button>
 
                     {/* Sign Up Link */}
                     <div className="text-center mt-6">

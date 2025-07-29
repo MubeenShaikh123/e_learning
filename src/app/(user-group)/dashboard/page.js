@@ -14,6 +14,7 @@ import QuizResultsTab from '@/components/Dashboard/QuizResultsTab';
 import NotificationsTab from '@/components/Dashboard/NotificationsTab';
 import BadgesTab from '@/components/Dashboard/BadgesTab';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 export default function Dashboard() {
   const MySwal = withReactContent(Swal);
@@ -126,6 +127,12 @@ export default function Dashboard() {
             >
               <LogOut size={20} />
               <span className="font-medium">Logout</span>
+            </button>
+            <button
+              onClick={() => signOut({ callbackUrl: '/auth/login' })}
+              className="bg-red-600 text-white px-4 py-2 rounded"
+            >
+              Logout
             </button>
           </div>
         </div>
