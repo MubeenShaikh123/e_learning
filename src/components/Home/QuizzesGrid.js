@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client'
+
+import React, { useEffect, useState } from 'react';
 import {
     Clock,
     Star,
@@ -6,6 +8,7 @@ import {
     ChevronRight
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const QuizCard = ({ quiz, onStartQuiz }) => {
     return (
@@ -72,16 +75,27 @@ const QuizCard = ({ quiz, onStartQuiz }) => {
     );
 };
 
-const QuizzesGrid = ({ quizzes, onViewAllQuizzes }) => {
-    const [visibleQuizzes, setVisibleQuizzes] = useState(6);
+const QuizzesGrid = () => {
+    const router = useRouter();
+    const [quizzes, setQuizzes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const handleStartQuiz = (quizId) => {
-        console.log(`Navigate to quiz ${quizId}`);
-    };
-
-    const loadMoreQuizzes = () => {
-        setVisibleQuizzes(prev => prev + 6);
-    };
+    useEffect(() => {
+        const fetchQuizzes = async () => {
+            try {
+                const response = await fetch("/api/quizzes/getall?limit=3", {
+                    cache: 'no-store'
+                });
+                const data = await response.json();
+                setQuizzes(data.data);
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchQuizzes();
+    }, []);
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
@@ -95,38 +109,21 @@ const QuizzesGrid = ({ quizzes, onViewAllQuizzes }) => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {quizzes.slice(0, visibleQuizzes).map((quiz) => (
+                {quizzes.map((quiz) => (
                     <QuizCard
                         key={quiz._id}
                         quiz={quiz}
-                        onStartQuiz={() => handleStartQuiz(quiz._id)}
                     />
                 ))}
             </div>
 
-            {visibleQuizzes < quizzes.length && (
-                <div className="mt-10 text-center">
-                    <button
-                        onClick={loadMoreQuizzes}
-                        className="flex items-center justify-center mx-auto 
-                        bg-indigo-600 text-white px-8 py-3 rounded-lg 
-                        text-base font-semibold 
-                        hover:bg-indigo-700 transition-colors duration-300 
-                        shadow-md hover:shadow-lg transform hover:scale-105"
-                    >
-                        Load More Quizzes
-                        <ChevronRight className="ml-2 w-5 h-5" />
-                    </button>
-                </div>
-            )}
-
             <div className="mt-10 text-center">
                 <button
-                    onClick={onViewAllQuizzes}
-                    className="bg-indigo-600 text-white px-8 py-3 rounded-lg 
-                    text-base font-semibold 
-                    hover:bg-indigo-700 transition-colors duration-300 
-                    shadow-md hover:shadow-lg transform hover:scale-105"
+                    onClick={() => router.push('/quizzes')}
+                    className="bg-indigo-600 text-white px-8 py-3 rounded-lg
+                     text-base font-semibold
+                     hover:bg-indigo-700 transition-colors duration-300
+                     shadow-md hover:shadow-lg transform hover:scale-105"
                 >
                     View All Quizzes
                 </button>

@@ -2,7 +2,6 @@ import dbConnect from "@/middleware/mongoose";
 import testimonialModel from "@/models/home/testimonialModel";
 
 const addTestimonials = async (req, res) => {
-  await dbConnect();
 
   if (req.method === 'POST') {
     try {
@@ -35,4 +34,4 @@ const addTestimonials = async (req, res) => {
   }
 };
 
-export default addTestimonials;
+export default dbConnect(addTestimonials);

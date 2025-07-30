@@ -1,7 +1,10 @@
-import React from 'react';
+'use client'
+
+import React, { useEffect, useState } from 'react';
 import { BookOpen, Clock, Star, UserCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const CourseCard = ({ course, onSelectCourse }) => {
   return (
@@ -68,12 +71,25 @@ const CourseCard = ({ course, onSelectCourse }) => {
   );
 };
 
-const CoursesGrid = ({ courses, onViewAllCourses }) => {
-  const handleCourseSelect = (courseId) => {
-    // Implement navigation logic
-    // For example: router.push(`/courses/${courseId}`)
-    console.log(`Navigate to course ${courseId}`);
-  };
+const CoursesGrid = () => {
+  const router = useRouter();
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/courses/getall?limit=3");
+        const data = await response.json();
+        setCourses(data.data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -91,14 +107,13 @@ const CoursesGrid = ({ courses, onViewAllCourses }) => {
           <CourseCard
             key={course.id}
             course={course}
-            onSelectCourse={() => handleCourseSelect(course.id)}
           />
         ))}
       </div>
 
       <div className="mt-12 text-center">
         <button
-          onClick={onViewAllCourses}
+          onClick={() => router.push('/courses')}
           className="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-semibold 
           hover:bg-indigo-700 transition-colors duration-300 
           shadow-md hover:shadow-lg transform hover:scale-105"

@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { Star } from 'lucide-react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';

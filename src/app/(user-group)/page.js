@@ -1,52 +1,15 @@
-"use client";
+'use client'
 
-import { useState } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect } from 'react';
 import CoursesGrid from '@/components/Home/CourseGrid';
 import QuizzesGrid from '@/components/Home/QuizzesGrid';
-import { useSelector } from 'react-redux';
 import TestimonialsSection from '@/components/Home/TestimonialsSection';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Github, Mail } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Github, Mail, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
 export default function HomePage() {
-  const user = useSelector((state) => state.user);
-  const router = useRouter();
-  const [courses, setCourses] = useState([]);
-  const [quizzes, setQuizzes] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch("/api/courses/getall?limit=3");
-        const data = await response.json();
-        setCourses(data.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    const fetchQuizzes = async () => {
-      try {
-        const response = await fetch("/api/quizzes/getall?limit=3", {
-          cache: 'no-store'
-        });
-        const data = await response.json();
-        setQuizzes(data.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCourses();
-    fetchQuizzes();
-  }, []);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -55,6 +18,7 @@ export default function HomePage() {
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Head>
 
+      {/* Navigation */}
       {/* Navigation */}
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,12 +33,60 @@ export default function HomePage() {
                 <Link href="/dashboard" className="text-gray-700 hover:text-indigo-600">Dashboard</Link>
               </div>
             </div>
-            {/* <div className="flex items-center">
-              <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
-                Sign In
+
+            {/* Mobile menu button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-gray-700 hover:text-indigo-600 focus:outline-none"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
-            </div> */}
+            </div>
           </div>
+
+          {/* Mobile menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden">
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+                <Link
+                  href="/"
+                  className="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/courses"
+                  className="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Courses
+                </Link>
+                <Link
+                  href="/quizzes"
+                  className="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Quizzes
+                </Link>
+                <Link
+                  href="/cv"
+                  className="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Doc's
+                </Link>
+                <Link
+                  href="/dashboard"
+                  className="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -90,25 +102,18 @@ export default function HomePage() {
             <p className="mt-3 max-w-md mx-auto text-base text-indigo-100 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
               Access 5000+ online courses and quizzes from 500+ professional instructors.
             </p>
-            {/* <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8 ">
-              <input
-                type="text"
-                placeholder="Search courses..."
-                className="w-full px-4 py-3 rounded-l-lg focus:outline-none"
-              />
-              <button className="mt-2 w-full sm:mt-0 sm:w-auto bg-white text-indigo-600 px-6 py-3 rounded-r-lg font-medium hover:bg-gray-100">
-                Search
-              </button>
-            </div> */}
           </div>
         </div>
       </div>
 
       {/* Featured Courses */}
-      <CoursesGrid courses={courses} onViewAllCourses={() => router.push('/courses')} />
+      <CoursesGrid />
 
       {/* Popular Quizzes Section */}
-      <QuizzesGrid quizzes={quizzes} onViewAllQuizzes={() => router.push('/quizzes')} />
+      <QuizzesGrid />
+
+      {/* Testimonial Section */}
+      <TestimonialsSection />
 
       {/* CTA Section */}
       {/* <div className="bg-indigo-700">
@@ -128,7 +133,6 @@ export default function HomePage() {
           </div>
         </div>
       </div> */}
-      <TestimonialsSection></TestimonialsSection>
 
       {/* Footer */}
       <footer className="bg-gray-800">
