@@ -1,22 +1,19 @@
-import jwt from 'jsonwebtoken';
+// middleware/withAuth.js
+import { getToken } from 'next-auth/jwt';
 
 export default function withAuth(handler) {
   return async (req, res) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized: No token provided' });
+      return res.status(401).json({ message: 'Unauthorized: Invalid or missing token' });
     }
+    console.log('token: ', token);
+    // Attach token data to request
+    req.id = token.id;
+    req.email = token.email;
+    req.name = token.name;
 
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.id = decoded.id;
-      req.email = decoded.email;
-      req.name = decoded.name;
-      return handler(req, res); // now call the actual handler
-    } catch (err) {
-      return res.status(401).json({ message: "Invalid Token" });
-    }
+    return handler(req, res);
   };
 }

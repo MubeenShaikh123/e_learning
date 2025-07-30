@@ -54,6 +54,13 @@ export const authOptions = {
         //     clientSecret: process.env.FACEBOOK_SECRET
         // }),
     ],
+    session: {
+        strategy: "jwt",
+        maxAge: 60 * 60, // ✅ 1 hour in seconds
+    },
+    jwt: {
+        maxAge: 60 * 60, // ✅ 1 hour in seconds
+    },
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: "/auth/login",
