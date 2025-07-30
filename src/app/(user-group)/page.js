@@ -37,7 +37,6 @@ export default function HomePage() {
         });
         const data = await response.json();
         setQuizzes(data.data);
-        // setQuizzes(dummyQuizzes);
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
