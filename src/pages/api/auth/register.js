@@ -49,7 +49,7 @@ const register = async (req, res) => {
     const hashedPassword = CryptoJS.SHA256(password).toString();
 
     // Create a new user document
-    const newUser = new userModel({ name, email, password: hashedPassword });
+    const newUser = new userModel({ name, email, password: hashedPassword, authProvider:"Credentials" });
     await newUser.save();
 
     // Delete the OTP record after successful registration

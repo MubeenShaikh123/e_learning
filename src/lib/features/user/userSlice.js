@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 export const initialUserState = {
   name: '',
   email: '',
+  image: '',
+  id: '',
 };
 
 const userSlice = createSlice({
@@ -12,8 +14,9 @@ const userSlice = createSlice({
     setUser(state, action) {
       state.name = action.payload.name;
       state.email = action.payload.email;
+      state.image = action.payload.image;
+      state.id = action.payload.id;
     },
-    // Add other user-related reducers
   }
 });
 

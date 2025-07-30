@@ -5,27 +5,39 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  phone: {
-    type: String,
-    // required: true,
-  },
-  location: {
-    type: String,
-    // required: true,
-  },
   email: {
     type: String,
     required: true,
     unique: true,
   },
+  authProvider: {
+    type: String,
+    required: true, // e.g., 'google', 'credentials'
+  },
+  authId: {
+    type: String,
+    // optional: e.g., Google profile ID
+  },
   password: {
     type: String,
-    required: true,
+    required: true, // dummy password for OAuth users
+  },
+  image: {
+    type: String,
+    // optional: profile image URL
+  },
+  phone: {
+    type: String,
+    // optional
+  },
+  location: {
+    type: String,
+    // optional
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-},{timestamps:true});
+}, { timestamps: true });
 
 export default mongoose.models.User || mongoose.model('User', userSchema);

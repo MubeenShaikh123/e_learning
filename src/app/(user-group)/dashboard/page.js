@@ -50,9 +50,7 @@ export default function Dashboard() {
     });
 
     if (result.isConfirmed) {
-      localStorage.removeItem('x-access-token');
-      dispatch({ type: 'LOGOUT' });
-      router.push('/auth/login');
+      signOut({ callbackUrl: '/auth/login' })
     }
   };
 
@@ -127,12 +125,6 @@ export default function Dashboard() {
             >
               <LogOut size={20} />
               <span className="font-medium">Logout</span>
-            </button>
-            <button
-              onClick={() => signOut({ callbackUrl: '/auth/login' })}
-              className="bg-red-600 text-white px-4 py-2 rounded"
-            >
-              Logout
             </button>
           </div>
         </div>

@@ -13,28 +13,21 @@ export const metadata = {
 
 export default async function UserGroupLayout({ children }) {
   const session = await getServerSession(authOptions);
-  console.log(`session.user: ${JSON.stringify(session)}`);
-
   if (!session) {
     redirect("/auth/login");
   }
+  console.log(`session.user: ${JSON.stringify(session)}`);
   return (
     <html lang="en">
       <Head>
         <title>E_learning app</title>
       </Head>
       <body>
-        {/* <AuthWrapper> */}
-        {/* <header>
-          <Navbar />
-          </header> */}
-        <main className="min-h-screen">
-          {children}
-        </main>
-        {/* <footer className="text-gray-600 body-font border-t">
-          <Footer></Footer>
-          </footer> */}
-        {/* </AuthWrapper> */}
+        <AuthWrapper user={session.user}>
+          <main className="min-h-screen">
+            {children}
+          </main>
+        </AuthWrapper>
       </body>
     </html>
   );
