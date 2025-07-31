@@ -118,20 +118,20 @@ export default function CVPage() {
             <p className="text-gray-600 text-center mb-6">
               Our AI can help you create compelling content for various sections of your cover letters, resumes, and CVs:
             </p>
-            
+
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-white rounded-lg p-4 shadow-sm">
                 <Target className="w-8 h-8 text-indigo-600 mb-3" />
                 <h4 className="font-semibold text-gray-800 mb-2">Professional Summary</h4>
                 <p className="text-sm text-gray-600">Generate impactful opening statements that highlight your key strengths and career objectives.</p>
               </div>
-              
+
               <div className="bg-white rounded-lg p-4 shadow-sm">
                 <Sparkles className="w-8 h-8 text-purple-600 mb-3" />
                 <h4 className="font-semibold text-gray-800 mb-2">Skills & Achievements</h4>
                 <p className="text-sm text-gray-600">Create compelling descriptions of your accomplishments and technical skills relevant to the job.</p>
               </div>
-              
+
               <div className="bg-white rounded-lg p-4 shadow-sm">
                 <Edit3 className="w-8 h-8 text-emerald-600 mb-3" />
                 <h4 className="font-semibold text-gray-800 mb-2">Job-Specific Content</h4>
@@ -185,6 +185,9 @@ export default function CVPage() {
                 </li>
               </ul>
             </div>
+          </div>
+          <div className="bg-red-50 rounded-xl p-6 mt-6">
+            <p className="text-red-700"><span className="font-bold">Note:</span> AI features not yet implemented</p>
           </div>
         </div>
 
