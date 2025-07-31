@@ -34,7 +34,8 @@ const QuizzPage = async ({ params }) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl">
                     <div className="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-[1.01]">
-                        <div className={`h-16 bg-gradient-to-r ${quizz.color} flex items-center px-6`}>
+                        {/* <div className={`h-16 bg-gradient-to-r ${quizz.color} flex items-center px-6`}> */}
+                        <div className={`h-16 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex items-center px-6`}>
                             <span className="text-3xl mr-4">{quizz.icon}</span>
                             <h1 className="text-2xl font-bold text-white">{quizz.title}</h1>
                         </div>

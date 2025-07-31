@@ -48,7 +48,8 @@ const Quizz = ({ isHome }) => {
                             key={quiz._id} 
                             className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
                         >
-                            <div className={`h-36 bg-gradient-to-r ${quiz.color} relative flex items-center justify-center`}>
+                            {/* <div className={`h-36 bg-gradient-to-r ${quiz.color} relative flex items-center justify-center`}> */}
+                            <div className={`h-36 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 relative flex items-center justify-center`}>
                                 <span className="text-6xl">{quiz.icon}</span>
                                 <div className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full px-3 py-1 text-xs font-semibold">
                                     {quiz.difficulty}

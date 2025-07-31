@@ -33,6 +33,47 @@ const QuestionPage = ({ initialQuiz, userId }) => {
         setSelectedAnswer(answers[currentQuestionIndex]);
     }, [currentQuestionIndex, answers]);
 
+    const handleSubmit = useCallback(async () => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+
+        const payload = {
+            quizId: quiz._id,
+            userId: "mubeenshaikh8072@gmail.com", // Ensure userId is included
+            answers: quiz.questions.map((question, index) => ({
+                questionId: question._id,
+                answer: answers[index] || null
+            })),
+            markedForReview: quiz.questions.reduce((acc, question, index) => {
+                if (markedForReview[index]) {
+                    acc[question._id] = true;
+                }
+                return acc;
+            }, {})
+        };
+
+        try {
+            const response = await fetch("/api/quizzes/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("✅ Quiz submitted successfully!");
+            } else {
+                alert("❌ Failed to submit quiz: " + data.message);
+            }
+        } catch (error) {
+            console.error("Error submitting quiz:", error);
+            alert("❌ An error occurred. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }, [isSubmitting, quiz, answers, markedForReview]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (timeLeft <= 0) {
@@ -79,47 +120,6 @@ const QuestionPage = ({ initialQuiz, userId }) => {
             [currentQuestionIndex]: !prev[currentQuestionIndex],
         }));
     };
-
-    const handleSubmit = useCallback(async () => {
-        if (isSubmitting) return;
-        setIsSubmitting(true);
-
-        const payload = {
-            quizId: quiz._id,
-            userId: "mubeenshaikh8072@gmail.com", // Ensure userId is included
-            answers: quiz.questions.map((question, index) => ({
-                questionId: question._id,
-                answer: answers[index] || null
-            })),
-            markedForReview: quiz.questions.reduce((acc, question, index) => {
-                if (markedForReview[index]) {
-                    acc[question._id] = true;
-                }
-                return acc;
-            }, {})
-        };
-
-        try {
-            const response = await fetch("/api/quizzes/submit", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                alert("✅ Quiz submitted successfully!");
-            } else {
-                alert("❌ Failed to submit quiz: " + data.message);
-            }
-        } catch (error) {
-            console.error("Error submitting quiz:", error);
-            alert("❌ An error occurred. Please try again.");
-        } finally {
-            setIsSubmitting(false);
-        }
-    }, [isSubmitting, quiz, answers, markedForReview]);
 
     const renderQuestionOptions = () => {
         if (!currentQuestion) return null;
