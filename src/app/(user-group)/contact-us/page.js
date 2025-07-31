@@ -53,7 +53,7 @@ export default function ContactPage() {
           <div className="bg-white rounded-2xl p-8 shadow-xl">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Send us a Message</h2>
-              <p className="text-gray-600">Fill out the form below and we'll respond as soon as possible.</p>
+              <p className="text-gray-600">{`Fill out the form below and we'll respond as soon as possible.`}</p>
             </div>
             
             {isSubmitted && (

@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 
-const forgotpass = () => {
+const Forgotpass = () => {
     const router = useRouter();
     const MySwal = withReactContent(Swal);
     const [formData, setFormData] = useState({
@@ -251,4 +251,4 @@ const forgotpass = () => {
     );
 };
 
-export default forgotpass;
+export default Forgotpass;

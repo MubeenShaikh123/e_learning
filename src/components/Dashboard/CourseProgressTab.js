@@ -85,7 +85,7 @@ const CourseProgressTab = () => {
                     {loading ? (
                         <div className="px-6 py-4 text-gray-500">Loading...</div>
                     ) : enrolledCourses.length === 0 ? (
-                        <div className="px-6 py-4 text-gray-500">You're not enrolled in any courses yet.</div>
+                        <div className="px-6 py-4 text-gray-500">{`You're not enrolled in any courses yet.`}</div>
                     ) : (
                         enrolledCourses.map((course, i) => (
                             <div key={course._id || i} className="px-6 py-4">

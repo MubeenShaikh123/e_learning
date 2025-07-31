@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable @next/next/no-page-custom-font */
 
 import Head from 'next/head';
 import Link from 'next/link';
@@ -29,7 +30,7 @@ export default function HomePage() {
                 <Link href="/" className="text-gray-700 hover:text-indigo-600">Home</Link>
                 <Link href="/courses" className="text-gray-700 hover:text-indigo-600">Courses</Link>
                 <Link href="/quizzes" className="text-gray-700 hover:text-indigo-600">Quizzes</Link>
-                <Link href="/cv" className="text-gray-700 hover:text-indigo-600">Doc's</Link>
+                <Link href="/cv" className="text-gray-700 hover:text-indigo-600">{`Doc's`}</Link>
                 <Link href="/dashboard" className="text-gray-700 hover:text-indigo-600">Dashboard</Link>
               </div>
             </div>
@@ -75,7 +76,7 @@ export default function HomePage() {
                   className="block px-3 py-2 text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Doc's
+                  {`Doc's`}
                 </Link>
                 <Link
                   href="/dashboard"

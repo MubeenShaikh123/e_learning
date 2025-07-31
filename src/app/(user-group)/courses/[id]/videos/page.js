@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
+import Image from 'next/image';
 
 const CourseVideos = ({ params }) => {
   const router = useRouter();
@@ -67,10 +68,13 @@ const CourseVideos = ({ params }) => {
               className="cursor-pointer bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:translate-y-1 border border-gray-100"
             >
               <div className="relative">
-                <img
+                <Image
                   src={video.thumbnail}
                   alt={video.title}
+                  width={400}
+                  height={160}
                   className="w-full h-40 object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
                 <span className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
                   {video.duration}

@@ -21,7 +21,7 @@ const TestimonialCard = ({ testimonial }) => {
           />
         ))}
       </div>
-      <p className="text-gray-700 mb-6 italic flex-grow overflow-y-auto">"{testimonial.content}"</p>
+      <p className="text-gray-700 mb-6 italic flex-grow overflow-y-auto">{`${testimonial.content}`}</p>
       <div className="flex items-center mt-auto">
         <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold flex-shrink-0">
           {testimonial.author?.charAt(0)}

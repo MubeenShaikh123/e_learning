@@ -109,7 +109,7 @@ export default function CVPage() {
             </div>
             <div className="mt-4 p-3 bg-white rounded-lg">
               <p className="text-sm text-amber-700">
-                <strong>Example:</strong> "Dear Hiring Manager at {"{company_name}"}, I am writing to express my interest in the {"{position}"} role. {"{professional_summary}"}"
+                <strong>Example:</strong> {`"Dear Hiring Manager at {company_name}, I am writing to express my interest in the {position} role. {professional_summary}"`}
               </p>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function CVPage() {
                 </li>
                 <li className="flex items-center space-x-2">
                   <Edit3 className="w-5 h-5 flex-shrink-0" />
-                  <span>Overcoming writer's block</span>
+                  <span>{`Overcoming writer's block`}</span>
                 </li>
               </ul>
             </div>

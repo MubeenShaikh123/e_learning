@@ -20,7 +20,7 @@ export default function AuthWrapper({ user, children }) {
     } else {
       router.push("/auth/login");
     }
-  }, [user]);
+  }, [user, dispatch, router]);
 
   return <>{children}</>;
 }

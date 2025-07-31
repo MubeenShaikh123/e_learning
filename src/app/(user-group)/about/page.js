@@ -115,10 +115,10 @@ export default function AboutPage() {
                                 Our Mission
                             </h2>
                             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                                We believe that quality education should be accessible to everyone, regardless of their background or location. Our platform combines innovative technology with expert-crafted content to create personalized learning experiences that adapt to each student's unique needs and pace.
+                                {`We believe that quality education should be accessible to everyone, regardless of their background or location. Our platform combines innovative technology with expert-crafted content to create personalized learning experiences that adapt to each student's unique needs and pace.`}
                             </p>
                             <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                                From interactive courses and intelligent assessments to comprehensive progress tracking and professional CV building tools, we provide everything learners need to succeed in today's competitive landscape.
+                                {`From interactive courses and intelligent assessments to comprehensive progress tracking and professional CV building tools, we provide everything learners need to succeed in today's competitive landscape.`}
                             </p>
                             <div className="flex items-center space-x-4">
                                 <CheckCircle className="w-6 h-6 text-green-500" />

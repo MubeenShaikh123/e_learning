@@ -358,7 +358,7 @@ export default function PrivacyTermsPage(defaultTab) {
                                         </h2>
                                         <div className="bg-gray-50 p-6 rounded-xl">
                                             <p className="text-gray-700 mb-4">
-                                                Our platform is provided "as is" without warranties of any kind. While we strive to provide high-quality educational content, we cannot guarantee specific learning outcomes or career results.
+                                                {`Our platform is provided "as is" without warranties of any kind. While we strive to provide high-quality educational content, we cannot guarantee specific learning outcomes or career results.`}
                                             </p>
                                             <div className="grid md:grid-cols-2 gap-4">
                                                 <div>

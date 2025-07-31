@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     nextQuestion,
@@ -33,6 +33,7 @@ const QuestionPage = ({ initialQuiz, userId }) => {
         setSelectedAnswer(answers[currentQuestionIndex]);
     }, [currentQuestionIndex, answers]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (timeLeft <= 0) {
             handleSubmit();
@@ -44,7 +45,7 @@ const QuestionPage = ({ initialQuiz, userId }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [timeLeft]);
+    }, [timeLeft, handleSubmit]);
 
     const formatTime = (seconds) => {
         const minutes = Math.floor(seconds / 60);
@@ -79,48 +80,46 @@ const QuestionPage = ({ initialQuiz, userId }) => {
         }));
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
         if (isSubmitting) return;
         setIsSubmitting(true);
-      
+
         const payload = {
-          quizId: quiz._id,
-          userId:"mubeenshaikh8072@gmail.com", // Ensure userId is included
-          answers: quiz.questions.map((question, index) => ({
-            questionId: question._id, 
-            answer: answers[index] || null 
-          })),
-          markedForReview: quiz.questions.reduce((acc, question, index) => {
-            if (markedForReview[index]) {
-              acc[question._id] = true;
-            }
-            return acc;
-          }, {})
+            quizId: quiz._id,
+            userId: "mubeenshaikh8072@gmail.com", // Ensure userId is included
+            answers: quiz.questions.map((question, index) => ({
+                questionId: question._id,
+                answer: answers[index] || null
+            })),
+            markedForReview: quiz.questions.reduce((acc, question, index) => {
+                if (markedForReview[index]) {
+                    acc[question._id] = true;
+                }
+                return acc;
+            }, {})
         };
-      
-        console.log(`Payload: ${JSON.stringify(payload)}`);
-      
+
         try {
-          const response = await fetch("/api/quizzes/submit", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-      
-          const data = await response.json();
-      
-          if (response.ok) {
-            alert("✅ Quiz submitted successfully!");
-          } else {
-            alert("❌ Failed to submit quiz: " + data.message);
-          }
+            const response = await fetch("/api/quizzes/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("✅ Quiz submitted successfully!");
+            } else {
+                alert("❌ Failed to submit quiz: " + data.message);
+            }
         } catch (error) {
-          console.error("Error submitting quiz:", error);
-          alert("❌ An error occurred. Please try again.");
+            console.error("Error submitting quiz:", error);
+            alert("❌ An error occurred. Please try again.");
         } finally {
-          setIsSubmitting(false);
+            setIsSubmitting(false);
         }
-    };
+    }, [isSubmitting, quiz, answers, markedForReview]);
 
     const renderQuestionOptions = () => {
         if (!currentQuestion) return null;
@@ -133,8 +132,8 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                             <button
                                 key={index}
                                 className={`w-full text-left p-4 rounded-lg transition-all duration-200 hover:shadow-md ${selectedAnswer === option
-                                        ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg"
-                                        : "bg-white border border-gray-200 hover:border-green-300"
+                                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg"
+                                    : "bg-white border border-gray-200 hover:border-green-300"
                                     }`}
                                 onClick={() =>
                                     handleSaveAnswer({
@@ -161,8 +160,8 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                             <button
                                 key={index}
                                 className={`w-full text-left p-4 rounded-lg transition-all duration-200 hover:shadow-md ${selectedAnswer === option
-                                        ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg"
-                                        : "bg-white border border-gray-200 hover:border-green-300"
+                                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg"
+                                    : "bg-white border border-gray-200 hover:border-green-300"
                                     }`}
                                 onClick={() =>
                                     handleSaveAnswer({
@@ -257,8 +256,8 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                                     {/* Mark for Review */}
                                     <button
                                         className={`mt-6 px-4 py-2 rounded-lg transition-colors ${markedForReview[currentQuestionIndex]
-                                                ? "bg-yellow-500 text-white hover:bg-yellow-600"
-                                                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                            ? "bg-yellow-500 text-white hover:bg-yellow-600"
+                                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                                             }`}
                                         onClick={handleMarkForReview}
                                     >
@@ -274,15 +273,14 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                                 <button
                                     onClick={handlePrev}
                                     disabled={currentQuestionIndex === 0}
-                                    className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                                        currentQuestionIndex === 0
-                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                                    }`}
+                                    className={`flex items-center px-4 py-2 rounded-lg transition-colors ${currentQuestionIndex === 0
+                                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                        }`}
                                 >
                                     <FcPrevious className="mr-2" /> Previous
                                 </button>
-                                
+
                                 {allQuestionsAnswered && (
                                     <button
                                         onClick={handleSubmit}
@@ -292,15 +290,14 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                                         {isSubmitting ? "Submitting..." : "Submit Quiz"}
                                     </button>
                                 )}
-                                
+
                                 <button
                                     onClick={handleNext}
                                     disabled={currentQuestionIndex === quiz.questions.length - 1}
-                                    className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                                        currentQuestionIndex === quiz.questions.length - 1
-                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                                    }`}
+                                    className={`flex items-center px-4 py-2 rounded-lg transition-colors ${currentQuestionIndex === quiz.questions.length - 1
+                                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                        }`}
                                 >
                                     Next <FcNext className="ml-2" />
                                 </button>
@@ -319,17 +316,15 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                                     return (
                                         <button
                                             key={index}
-                                            className={`w-10 h-10 rounded-full text-sm font-medium transition-all border-2 ${
-                                                isCurrent
-                                                    ? "border-indigo-500 ring-2 ring-indigo-200"
-                                                    : "border-transparent"
-                                            } ${
-                                                isMarked
+                                            className={`w-10 h-10 rounded-full text-sm font-medium transition-all border-2 ${isCurrent
+                                                ? "border-indigo-500 ring-2 ring-indigo-200"
+                                                : "border-transparent"
+                                                } ${isMarked
                                                     ? "bg-yellow-500 text-white"
                                                     : isAnswered
                                                         ? "bg-green-500 text-white"
                                                         : "bg-white border border-gray-300 text-gray-700"
-                                            }`}
+                                                }`}
                                             onClick={() => handleQuestionChange(index)}
                                             title={`Question ${index + 1} - ${getQuestionTypeLabel(question.type)} ${isAnswered ? "(Answered)" : ""} ${isMarked ? "(Marked)" : ""}`}
                                         >
@@ -338,7 +333,7 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                                     );
                                 })}
                             </div>
-                            
+
                             {/* Legend */}
                             <div className="mt-4 flex flex-wrap gap-4 text-sm">
                                 <div className="flex items-center">
