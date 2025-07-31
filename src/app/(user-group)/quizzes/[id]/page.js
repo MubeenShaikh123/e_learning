@@ -4,7 +4,7 @@ import Button from "./button";
 async function fetchQuizData(id) {
     try {
         // Use absolute URL for fetch inside a server component
-        const response = await fetch(`/api/quizzes/get/${id}`, { 
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/quizzes/get/${id}`, { 
             cache: "no-store" // Ensures fresh data every time
         });
         

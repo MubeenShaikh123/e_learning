@@ -4,7 +4,7 @@ import Details from './details/details';
 import { BookOpen } from 'lucide-react';
 
 const CoursePage = async ({ params }) => {
-  const res = await fetch(`/api/courses/get/${params.id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/get/${params.id}`, {
     cache: "no-store",
   });
   const jsonResponse = await res.json();
