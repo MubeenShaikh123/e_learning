@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import dbConnect from "@/middleware/mongoose";
 import User from '@/models/auth/userModel';
-import Otp from '@/models/auth/otpModel'; // Assuming you have an OTP model
+import Otp from '@/models/auth/otpModel';
 
 const changepassword = async (req, res) => {
   if (req.method !== 'POST') {
