@@ -89,7 +89,9 @@ const CoursesGrid = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("/api/courses/getall?limit=3");
+        const response = await fetch("/api/courses/getall?limit=3",{
+                    cache: 'no-store'
+                });
         const data = await response.json();
         setCourses(data.data);
         setError(null); // Clear any previous errors

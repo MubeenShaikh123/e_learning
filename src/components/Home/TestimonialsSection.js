@@ -43,7 +43,9 @@ const TestimonialsSection = () => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const res = await fetch('/api/testimonial/get');
+        const res = await fetch('/api/testimonial/get',{
+                    cache: 'no-store'
+                });
         const data = await res.json();
         setTestimonials(data.data || []);
       } catch (error) {

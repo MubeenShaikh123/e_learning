@@ -116,25 +116,6 @@ export default function HomePage() {
       {/* Testimonial Section */}
       <TestimonialsSection />
 
-      {/* CTA Section */}
-      {/* <div className="bg-indigo-700">
-        <div className="max-w-7xl mx-auto py-12 px-4 sm:py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
-              Start Learning Today
-            </h2>
-            <p className="mt-3 max-w-4xl mx-auto text-xl text-indigo-100">
-              Join thousands of students already learning with {process.env.NEXT_PUBLIC_APP_NAME}. Get access to premium courses, quizzes, and learning resources.
-            </p>
-            <div className="mt-8">
-              <button className="bg-white text-indigo-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors">
-                Get Started Now
-              </button>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
       {/* Footer */}
       <footer className="bg-gray-800">
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -195,16 +176,6 @@ export default function HomePage() {
                 >
                   <Facebook className="w-6 h-6" />
                 </a>
-
-                {/* <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transform hover:scale-110 transition-all duration-300"
-                  aria-label="Follow us on Twitter"
-                >
-                  <Twitter className="w-6 h-6" />
-                </a> */}
 
                 <a
                   href="https://www.instagram.com/__mubeen_shaikh?igsh=ZWF5MTg4Z2Zuamg0"

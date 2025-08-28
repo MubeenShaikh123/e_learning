@@ -1,12 +1,17 @@
-import dynamic from "next/dynamic";
-import { FileText, Upload, Edit3, Download, Sparkles, Target, Clock, Shield } from 'lucide-react';
+"use client";
 
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import { FileText, Upload, Edit3, Download, Sparkles, Target, Clock, Shield, Bot, User } from 'lucide-react';
+import GenerateWithAi from "@/components/CV/GenerateWithAi";
 
 const UploadForm = dynamic(() => import("../../../components/CV/UploadForm"), {
   ssr: false,
 });
 
 export default function CVPage() {
+  const [activeMode, setActiveMode] = useState('manual'); // 'ai' or 'manual'
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       <div className="max-w-4xl mx-auto px-6 py-12">
@@ -21,6 +26,78 @@ export default function CVPage() {
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Create professional resumes, cover letters, and CVs in seconds. Upload your template, fill in the details, and download your personalized document.
           </p>
+        </div>
+
+        {/* Mode Toggle */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 mb-8">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Choose Your Method</h2>
+            <p className="text-gray-600">Select how you want to generate your document content</p>
+          </div>
+
+          <div className="flex justify-center mb-6">
+            <div className="bg-gray-100 p-1 rounded-lg flex">
+              <button
+                onClick={() => setActiveMode('ai')}
+                className={`flex items-center px-6 py-3 rounded-md font-semibold transition-all duration-200 ${
+                  activeMode === 'ai'
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg'
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                <Bot className="w-5 h-5 mr-2" />
+                AI Generated
+              </button>
+              <button
+                onClick={() => setActiveMode('manual')}
+                className={`flex items-center px-6 py-3 rounded-md font-semibold transition-all duration-200 ${
+                  activeMode === 'manual'
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                <User className="w-5 h-5 mr-2" />
+                Manual Entry
+              </button>
+            </div>
+          </div>
+
+          {/* Mode Descriptions */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className={`p-6 rounded-xl border-2 transition-all ${
+              activeMode === 'ai' 
+                ? 'border-purple-200 bg-purple-50' 
+                : 'border-gray-200 bg-gray-50'
+            }`}>
+              <div className="flex items-center mb-3">
+                <Bot className="w-6 h-6 text-purple-600 mr-2" />
+                <h3 className="text-lg font-semibold text-gray-800">AI Generated</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>• Upload template + job description</li>
+                <li>• AI generates personalized content</li>
+                <li>• Perfect for quick applications</li>
+                <li>• Smart content matching</li>
+              </ul>
+            </div>
+
+            <div className={`p-6 rounded-xl border-2 transition-all ${
+              activeMode === 'manual' 
+                ? 'border-blue-200 bg-blue-50' 
+                : 'border-gray-200 bg-gray-50'
+            }`}>
+              <div className="flex items-center mb-3">
+                <User className="w-6 h-6 text-blue-600 mr-2" />
+                <h3 className="text-lg font-semibold text-gray-800">Manual Entry</h3>
+              </div>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li>• Upload template only</li>
+                <li>• Fill each field manually</li>
+                <li>• Full control over content</li>
+                <li>• Perfect for custom templates</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         {/* How to Use Section */}
@@ -113,6 +190,7 @@ export default function CVPage() {
               </p>
             </div>
           </div>
+
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">AI-Powered Content Generation</h3>
             <p className="text-gray-600 text-center mb-6">
@@ -186,20 +264,11 @@ export default function CVPage() {
               </ul>
             </div>
           </div>
-          <div className="bg-red-50 rounded-xl p-6 mt-6">
-            <p className="text-red-700"><span className="font-bold">Note:</span> AI features not yet implemented</p>
-          </div>
         </div>
 
-        {/* Main Content */}
-        <UploadForm />
+        {/* Dynamic Component Rendering */}
+        {activeMode === 'ai' ? <GenerateWithAi /> : <UploadForm />}
 
-        {/* Footer */}
-        <div className="text-center mt-16 text-gray-500">
-          <p className="text-sm">
-            Powered by modern web technologies • Secure & Private
-          </p>
-        </div>
       </div>
     </div>
   );
