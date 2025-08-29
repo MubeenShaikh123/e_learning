@@ -10,7 +10,7 @@ const UploadForm = dynamic(() => import("../../../components/CV/UploadForm"), {
 });
 
 export default function CVPage() {
-  const [activeMode, setActiveMode] = useState('manual'); // 'ai' or 'manual'
+  const [activeMode, setActiveMode] = useState('ai'); // 'ai' or 'manual'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
