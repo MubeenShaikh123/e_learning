@@ -59,45 +59,42 @@ export default function AboutPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 relative overflow-hidden">
+            {/* Animated Background Elements */}
+            <div className="fixed top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl animate-pulse"></div>
+            <div className="fixed bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-teal-200/20 to-emerald-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+            <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-200/10 to-blue-200/10 rounded-full blur-2xl animate-pulse delay-500"></div>
+
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white">
-                <div className="absolute inset-0 bg-black/20"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-purple-600/90"></div>
-
-                {/* Animated background elements */}
-                <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                    <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
-                    <div className="absolute top-32 right-20 w-16 h-16 bg-white/5 rounded-full animate-bounce"></div>
-                    <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-pulse"></div>
-                </div>
-
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-                    <div className="text-center">
-                        <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-                            About {process.env.NEXT_PUBLIC_APP_NAME || 'SkillUp'}
+            <section className="relative py-24 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center relative z-10">
+                        <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8">
+                            <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
+                                About SkillUp
+                            </span>
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
                             Empowering learners worldwide with cutting-edge educational technology and personalized learning experiences.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link href='/' className="px-8 py-4 bg-white text-blue-600 rounded-full font-semibold hover:bg-blue-50 transform hover:scale-105 transition-all duration-300 shadow-lg">
-                                Start Learning Today
-                                <ArrowRight className="inline-block ml-2 w-5 h-5" />
-                            </Link>
-                        </div>
+                        <Link href='/' className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-2xl font-semibold hover:from-blue-600 hover:to-cyan-600 transform hover:scale-105 transition-all duration-300 shadow-2xl">
+                            Start Learning Today
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                        </Link>
                     </div>
                 </div>
             </section>
 
             {/* Stats Section */}
-            <section className="py-16 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <section className="relative py-16 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {stats.map((stat, index) => (
-                            <div key={index} className="text-center group">
-                                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 group-hover:shadow-lg transition-all duration-300">
-                                    <div className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">{stat.number}</div>
+                            <div key={index} className="text-center">
+                                <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:shadow-3xl hover:bg-white/80">
+                                    <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+                                        {stat.number}
+                                    </div>
                                     <div className="text-gray-600 font-medium">{stat.label}</div>
                                 </div>
                             </div>
@@ -107,44 +104,49 @@ export default function AboutPage() {
             </section>
 
             {/* Mission Section */}
-            <section className="py-20 bg-gradient-to-r from-indigo-50 to-blue-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div>
+                        <div className="relative z-10">
                             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                                 Our Mission
                             </h2>
                             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-                                {`We believe that quality education should be accessible to everyone, regardless of their background or location. Our platform combines innovative technology with expert-crafted content to create personalized learning experiences that adapt to each student's unique needs and pace.`}
+                                We believe that quality education should be accessible to everyone, regardless of their background or location. Our platform combines innovative technology with expert-crafted content to create personalized learning experiences that adapt to each student's unique needs and pace.
                             </p>
                             <p className="text-lg text-gray-700 mb-8 leading-relaxed">
-                                {`From interactive courses and intelligent assessments to comprehensive progress tracking and professional CV building tools, we provide everything learners need to succeed in today's competitive landscape.`}
+                                From interactive courses and intelligent assessments to comprehensive progress tracking and professional CV building tools, we provide everything learners need to succeed in today's competitive landscape.
                             </p>
                             <div className="flex items-center space-x-4">
-                                <CheckCircle className="w-6 h-6 text-green-500" />
-                                <span className="text-gray-700">Trusted by thousands of learners worldwide</span>
+                                <CheckCircle className="w-6 h-6 text-emerald-500" />
+                                <span className="text-gray-700 font-medium">Trusted by thousands of learners worldwide</span>
                             </div>
                         </div>
                         <div className="relative">
-                            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl p-8 text-white shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                                <div className="bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
-                                    <h3 className="text-2xl font-bold mb-4">Learning Made Simple</h3>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center space-x-3">
-                                            <div className="w-3 h-3 bg-white rounded-full"></div>
-                                            <span>Personalized learning paths</span>
-                                        </div>
-                                        <div className="flex items-center space-x-3">
-                                            <div className="w-3 h-3 bg-white rounded-full"></div>
-                                            <span>Real-time progress tracking</span>
-                                        </div>
-                                        <div className="flex items-center space-x-3">
-                                            <div className="w-3 h-3 bg-white rounded-full"></div>
-                                            <span>Expert-led content</span>
-                                        </div>
-                                        <div className="flex items-center space-x-3">
-                                            <div className="w-3 h-3 bg-white rounded-full"></div>
-                                            <span>Career development tools</span>
+                            <div className="backdrop-blur-xl bg-gradient-to-r from-blue-500/80 to-cyan-500/80 border border-white/50 rounded-3xl p-8 text-white shadow-2xl transform hover:scale-105 transition-all duration-500 relative overflow-hidden">
+                                {/* Glass shine effect */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+                                
+                                <div className="relative z-10">
+                                    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                                        <h3 className="text-2xl font-bold mb-6">Learning Made Simple</h3>
+                                        <div className="space-y-4">
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-3 h-3 bg-white rounded-full shadow-lg"></div>
+                                                <span className="font-medium">Personalized learning paths</span>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-3 h-3 bg-white rounded-full shadow-lg"></div>
+                                                <span className="font-medium">Real-time progress tracking</span>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-3 h-3 bg-white rounded-full shadow-lg"></div>
+                                                <span className="font-medium">Expert-led content</span>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-3 h-3 bg-white rounded-full shadow-lg"></div>
+                                                <span className="font-medium">Career development tools</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -155,26 +157,31 @@ export default function AboutPage() {
             </section>
 
             {/* Features Section */}
-            <section className="py-20 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
+            <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16 relative z-10">
                         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                             What Makes Us Different
                         </h2>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                        <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                             Discover the powerful features that make learning engaging, effective, and enjoyable.
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
                         {features.map((feature, index) => (
                             <div key={index} className="group">
-                                <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
-                                    <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl p-4 inline-block mb-6 group-hover:scale-110 transition-transform duration-300">
-                                        {feature.icon}
+                                <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:shadow-3xl hover:bg-white/80 h-full relative overflow-hidden">
+                                    {/* Glass shine effect */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+                                    
+                                    <div className="relative z-10">
+                                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-2xl p-4 inline-block mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                                            {feature.icon}
+                                        </div>
+                                        <h3 className="text-xl font-bold text-gray-900 mb-4">{feature.title}</h3>
+                                        <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-4">{feature.title}</h3>
-                                    <p className="text-gray-600 leading-relaxed">{feature.description}</p>
                                 </div>
                             </div>
                         ))}
@@ -183,44 +190,61 @@ export default function AboutPage() {
             </section>
 
             {/* Values Section */}
-            <section className="py-20 bg-gradient-to-br from-gray-900 to-blue-900 text-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Core Values</h2>
-                        <p className="text-xl text-blue-200 max-w-3xl mx-auto">
-                            The principles that guide everything we do and every decision we make.
-                        </p>
-                    </div>
+            <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+                <div className="backdrop-blur-xl bg-gradient-to-r from-gray-900/80 to-blue-900/80 border-y border-white/10 relative overflow-hidden">
+                    {/* Background elements for this section */}
+                    <div className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+                    <div className="absolute bottom-10 right-10 w-40 h-40 bg-cyan-300/10 rounded-full blur-2xl"></div>
+                    
+                    <div className="max-w-7xl mx-auto relative z-10">
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Our Core Values</h2>
+                            <p className="text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
+                                The principles that guide everything we do and every decision we make.
+                            </p>
+                        </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {values.map((value, index) => (
-                            <div key={index} className="text-center group h-full">
-                                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 h-full flex flex-col">
-                                    <div className="bg-gradient-to-r from-blue-400 to-purple-400 rounded-full p-4 inline-block mb-6 mx-auto">
-                                        {value.icon}
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {values.map((value, index) => (
+                                <div key={index} className="text-center group h-full">
+                                    <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-105 h-full flex flex-col relative overflow-hidden">
+                                        {/* Glass shine effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
+                                        
+                                        <div className="relative z-10 flex flex-col h-full">
+                                            <div className="bg-gradient-to-r from-blue-400 to-cyan-400 rounded-2xl p-4 inline-block mb-6 mx-auto shadow-lg">
+                                                {value.icon}
+                                            </div>
+                                            <h3 className="text-xl font-bold text-white mb-4">{value.title}</h3>
+                                            <p className="text-blue-200 flex-grow leading-relaxed">{value.description}</p>
+                                        </div>
                                     </div>
-                                    <h3 className="text-xl font-bold mb-4">{value.title}</h3>
-                                    <p className="text-blue-200 flex-grow">{value.description}</p>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
 
             {/* CTA Section */}
-            <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
-                <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                        Ready to Start Your Learning Journey?
-                    </h2>
-                    <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-                        Join thousands of learners who are already transforming their careers with our comprehensive platform.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/" className="px-10 py-4 bg-white text-blue-600 rounded-full font-bold text-lg hover:bg-blue-50 transform hover:scale-105 transition-all duration-300 shadow-lg">
-                            Get Started Free
-                        </Link>
+            <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-4xl mx-auto text-center relative z-10">
+                    <div className="backdrop-blur-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-white/50 shadow-2xl rounded-3xl p-12 relative overflow-hidden">
+                        {/* Glass shine effect */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+                        
+                        <div className="relative z-10">
+                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                                Ready to Start Your Learning Journey?
+                            </h2>
+                            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                                Join thousands of learners who are already transforming their careers with our comprehensive platform.
+                            </p>
+                            <Link href="/" className="inline-flex items-center px-10 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-cyan-600 transform hover:scale-105 transition-all duration-300 shadow-2xl">
+                                Get Started Free
+                                <ArrowRight className="ml-2 w-5 h-5" />
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </section>

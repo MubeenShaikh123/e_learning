@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle } from 'lucide-react';
+import { Mail, Send, CheckCircle, MapPin, Phone, MessageSquare } from 'lucide-react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -35,108 +35,182 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="fixed top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="fixed bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-teal-200/20 to-emerald-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-200/10 to-blue-200/10 rounded-full blur-2xl animate-pulse delay-500"></div>
+
       {/* Hero Section */}
-      {/* <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <Mail className="w-16 h-16 mx-auto mb-6 text-blue-200" />
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl text-blue-100">
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-2xl">
+            <Mail className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              Contact Us
+            </span>
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
             Have a question or need help? Send us a message and we'll get back to you soon.
           </p>
         </div>
-      </section> */}
+      </section>
 
-      {/* Contact Form */}
-      <section className="py-16">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl p-8 shadow-xl">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Send us a Message</h2>
-              <p className="text-gray-600">{`Fill out the form below and we'll respond as soon as possible.`}</p>
-            </div>
+      {/* Contact Form & Info Section */}
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
             
-            {isSubmitted && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <p className="text-green-800 font-medium">Your email client should open now!</p>
-              </div>
-            )}
-
-            <div className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                    placeholder="Enter your name"
-                    required
-                  />
+            {/* Contact Form */}
+            <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl p-8 relative overflow-hidden">
+              {/* Glass shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+              
+              <div className="relative z-10">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+                    Send us a Message
+                  </h2>
+                  <p className="text-gray-600">Fill out the form below and we'll respond as soon as possible.</p>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                    placeholder="your@email.com"
-                    required
-                  />
-                </div>
-              </div>
+                
+                {isSubmitted && (
+                  <div className="mb-6 p-4 bg-emerald-100/80 backdrop-blur-sm border border-emerald-200/50 rounded-2xl flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-emerald-600" />
+                    <p className="text-emerald-800 font-medium">Your email client should open now!</p>
+                  </div>
+                )}
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
-                <input
-                  type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                  placeholder="What's this about?"
-                />
-              </div>
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
+                        placeholder="Enter your name"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
+                        placeholder="your@email.com"
+                        required
+                      />
+                    </div>
+                  </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
-                  placeholder="Tell us how we can help you..."
-                  required
-                />
-              </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
+                    <input
+                      type="text"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
+                      placeholder="What's this about?"
+                    />
+                  </div>
 
-              <button
-                onClick={handleSubmit}
-                disabled={!formData.name || !formData.email || !formData.message}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                <Send className="w-5 h-5" />
-                <span>Send Message</span>
-              </button>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      rows={6}
+                      className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg resize-none"
+                      placeholder="Tell us how we can help you..."
+                      required
+                    />
+                  </div>
 
-              <div className="text-center">
-                <p className="text-sm text-gray-500">
-                  Or email us directly at{' '}
-                  <a 
-                    href="mailto:mubeenshaikh5029@gmail.com" 
-                    className="text-blue-600 hover:text-blue-700 font-medium"
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!formData.name || !formData.email || !formData.message}
+                    className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-2xl font-semibold hover:from-blue-600 hover:to-cyan-600 transform hover:scale-[1.02] transition-all duration-300 shadow-2xl flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    mubeenshaikh5029@gmail.com
-                  </a>
-                </p>
+                    <Send className="w-5 h-5" />
+                    <span>Send Message</span>
+                  </button>
+                </div>
               </div>
             </div>
+
+            {/* Contact Information */}
+            <div className="space-y-6">
+              {/* Quick Contact */}
+              <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl mb-6 flex items-center justify-center">
+                    <MessageSquare className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Get in Touch</h3>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    We're here to help you succeed in your learning journey. Reach out to us anytime!
+                  </p>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <Mail className="w-5 h-5 text-blue-600" />
+                      <a 
+                        href="mailto:mubeenshaikh2222@gmail.com" 
+                        className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                      >
+                        mubeenshaikh2222@gmail.com
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* FAQ */}
+              <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl p-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Quick Help</h3>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-blue-50/80 backdrop-blur-sm rounded-2xl">
+                      <h4 className="font-semibold text-gray-800 mb-2">Course Access Issues?</h4>
+                      <p className="text-sm text-gray-600">Check your internet connection and try refreshing the page.</p>
+                    </div>
+                    <div className="p-4 bg-cyan-50/80 backdrop-blur-sm rounded-2xl">
+                      <h4 className="font-semibold text-gray-800 mb-2">Payment Questions?</h4>
+                      <p className="text-sm text-gray-600">Contact us with your order details for quick resolution.</p>
+                    </div>
+                    <div className="p-4 bg-teal-50/80 backdrop-blur-sm rounded-2xl">
+                      <h4 className="font-semibold text-gray-800 mb-2">Technical Support?</h4>
+                      <p className="text-sm text-gray-600">Our team responds to technical queries within 24 hours.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Response Time Notice */}
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="backdrop-blur-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-white/50 shadow-xl rounded-3xl p-8 text-center">
+            <CheckCircle className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">We're Here to Help</h3>
+            <p className="text-gray-700 leading-relaxed">
+              We typically respond to messages within 24 hours. For urgent matters, 
+              please include "URGENT" in your subject line.
+            </p>
           </div>
         </div>
       </section>
