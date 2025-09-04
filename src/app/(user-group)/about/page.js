@@ -75,7 +75,7 @@ export default function AboutPage() {
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                     <div className="text-center">
                         <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-                            About {process.env.NEXT_PUBLIC_APP_NAME || 'EduLearn'}
+                            About {process.env.NEXT_PUBLIC_APP_NAME || 'SkillUp'}
                         </h1>
                         <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
                             Empowering learners worldwide with cutting-edge educational technology and personalized learning experiences.

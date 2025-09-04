@@ -83,7 +83,7 @@ const Forgotpass = () => {
             setMessage({ type: "error", text: "Please verify your email first" });
             return;
         }
-        
+
         try {
             const response = await fetch("/api/auth/change-password", {
                 method: "POST",
@@ -103,16 +103,16 @@ const Forgotpass = () => {
                     icon: 'success',
                     showConfirmButton: false,
                     timer: 2000, // Auto close after 2 seconds (2000 milliseconds)
-                  }).then(() => {
+                }).then(() => {
                     setFormData({
-                      email: '',
-                      password: '',
-                      confirmPassword: '',
-                      otp: '',
+                        email: '',
+                        password: '',
+                        confirmPassword: '',
+                        otp: '',
                     });
                     setOtpSent(false);
                     router.push('/auth/login');
-                  });
+                });
             } else {
                 setMessage({ type: "error", text: result.message });
             }
@@ -122,28 +122,38 @@ const Forgotpass = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
-            <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
-                {/* Header Section */}
-                <div className="bg-blue-600 text-white p-6 text-center">
-                    <h1 className="text-3xl font-bold mb-2">Change Password</h1>
-                </div>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 flex items-center justify-center px-4 py-8 relative overflow-hidden">
+            {/* Animated Background Elements */}
+            <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-200/30 to-cyan-200/30 rounded-full blur-xl animate-pulse"></div>
+            <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-teal-200/30 to-emerald-200/30 rounded-full blur-xl animate-pulse delay-1000"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-cyan-200/20 to-blue-200/20 rounded-full blur-2xl animate-pulse delay-500"></div>
 
-                {/* Form Section */}
-                <div className="p-8">
-                    {/* Error/Success Message */}
+            <div className="relative w-full max-w-md">
+                <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl p-8 relative overflow-hidden">
+                    {/* Glass shine effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
+
+                    {/* Header */}
+                    <div className="text-center mb-8 relative z-10">
+                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
+                            <LockIcon className="h-8 w-8 text-white" />
+                        </div>
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">Change Password</h1>
+                        <p className="text-gray-600">Reset your account password</p>
+                    </div>
+
+                    {/* Message */}
                     {message && (
-                        <div className={`mb-4 p-3 rounded-lg text-center ${message.type === "error" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+                        <div className={`mb-6 p-4 rounded-2xl backdrop-blur-sm border text-center font-medium ${message.type === 'error' ? 'bg-red-100/80 text-red-700 border-red-200/50' : 'bg-emerald-100/80 text-emerald-700 border-emerald-200/50'}`}>
                             {message.text}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-
-                        {/* Email Input */}
+                    <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                        {/* Email */}
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <MailIcon className="h-5 w-5 text-gray-400" />
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <MailIcon className="h-5 w-5 text-blue-500" />
                             </div>
                             <input
                                 type="email"
@@ -151,25 +161,25 @@ const Forgotpass = () => {
                                 placeholder="Email Address"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full pl-12 pr-4 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
                                 required
                             />
                             {isEmailValid && (
                                 <button
                                     type="button"
                                     onClick={handleSendOtp}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-600 hover:underline"
+                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors"
                                 >
                                     Send OTP
                                 </button>
                             )}
                         </div>
 
-                        {/* OTP Input */}
+                        {/* OTP */}
                         {otpSent && (
                             <div className="relative">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <LockIcon className="h-5 w-5 text-gray-400" />
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <LockIcon className="h-5 w-5 text-blue-500" />
                                 </div>
                                 <input
                                     type="text"
@@ -177,43 +187,39 @@ const Forgotpass = () => {
                                     placeholder="Enter OTP"
                                     value={formData.otp}
                                     onChange={handleChange}
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    className="w-full pl-12 pr-4 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
                                     required
                                 />
                             </div>
                         )}
 
-                        {/* Password Input */}
+                        {/* Password */}
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <LockIcon className="h-5 w-5 text-gray-400" />
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <LockIcon className="h-5 w-5 text-blue-500" />
                             </div>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
-                                placeholder="Password"
+                                placeholder="New Password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full pl-12 pr-12 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
                                 required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center"
                             >
-                                {showPassword ? (
-                                    <EyeOffIcon className="h-5 w-5 text-gray-400" />
-                                ) : (
-                                    <EyeIcon className="h-5 w-5 text-gray-400" />
-                                )}
+                                {showPassword ? <EyeOffIcon className="h-5 w-5 text-blue-500 hover:text-blue-700 transition-colors" /> : <EyeIcon className="h-5 w-5 text-blue-500 hover:text-blue-700 transition-colors" />}
                             </button>
                         </div>
 
-                        {/* Confirm Password Input */}
+                        {/* Confirm Password */}
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <LockIcon className="h-5 w-5 text-gray-400" />
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <LockIcon className="h-5 w-5 text-blue-500" />
                             </div>
                             <input
                                 type={showConfirmPassword ? "text" : "password"}
@@ -221,26 +227,22 @@ const Forgotpass = () => {
                                 placeholder="Confirm Password"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
-                                className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full pl-12 pr-12 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
                                 required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                className="absolute inset-y-0 right-0 pr-4 flex items-center"
                             >
-                                {showConfirmPassword ? (
-                                    <EyeOffIcon className="h-5 w-5 text-gray-400" />
-                                ) : (
-                                    <EyeIcon className="h-5 w-5 text-gray-400" />
-                                )}
+                                {showConfirmPassword ? <EyeOffIcon className="h-5 w-5 text-blue-500 hover:text-blue-700 transition-colors" /> : <EyeIcon className="h-5 w-5 text-blue-500 hover:text-blue-700 transition-colors" />}
                             </button>
                         </div>
 
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 ease-in-out transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-2xl hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-semibold shadow-lg"
                         >
                             Change Password
                         </button>
@@ -248,7 +250,7 @@ const Forgotpass = () => {
                 </div>
             </div>
         </div>
-    );
+    )
 };
 
 export default Forgotpass;

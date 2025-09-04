@@ -23,7 +23,7 @@ export default function ContactPage() {
 
   const handleSubmit = () => {
     // Create mailto link with form data
-    const subject = encodeURIComponent(formData.subject || 'Contact from ' + (process.env.NEXT_PUBLIC_APP_NAME || 'EduLearn'));
+    const subject = encodeURIComponent(formData.subject || 'Contact from ' + (process.env.NEXT_PUBLIC_APP_NAME || 'SkillUp'));
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );

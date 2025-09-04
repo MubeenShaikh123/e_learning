@@ -75,7 +75,7 @@ export default function PrivacyTermsPage(defaultTab) {
                             <div className="prose prose-lg max-w-none">
                                 <div className="mb-8">
                                     <p className="text-lg text-gray-700 leading-relaxed">
-                                        At {process.env.NEXT_PUBLIC_APP_NAME || 'EduLearn'}, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our e-learning platform.
+                                        At {process.env.NEXT_PUBLIC_APP_NAME || 'SkillUp'}, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, and safeguard your data when you use our e-learning platform.
                                     </p>
                                 </div>
 
@@ -233,7 +233,7 @@ export default function PrivacyTermsPage(defaultTab) {
                             <div className="prose prose-lg max-w-none">
                                 <div className="mb-8">
                                     <p className="text-lg text-gray-700 leading-relaxed">
-                                        Welcome to {process.env.NEXT_PUBLIC_APP_NAME || 'EduLearn'}. These Terms of Service govern your use of our e-learning platform, including courses, quizzes, dashboard features, and CV builder tools. By using our services, you agree to these terms.
+                                        Welcome to {process.env.NEXT_PUBLIC_APP_NAME || 'SkillUp'}. These Terms of Service govern your use of our e-learning platform, including courses, quizzes, dashboard features, and CV builder tools. By using our services, you agree to these terms.
                                     </p>
                                 </div>
 
