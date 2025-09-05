@@ -23,7 +23,7 @@ const TestimonialCard = ({ testimonial }) => {
       </div>
       
       <blockquote className="text-gray-700 mb-8 italic flex-grow text-lg leading-relaxed">
-        "{testimonial.content}"
+        &quot;{testimonial.content}&quot;
       </blockquote>
       
       <div className="flex items-center mt-auto">
@@ -79,7 +79,7 @@ const TestimonialsSection = () => {
           What Our Students Say
         </h2>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Join our community of successful learners who've transformed their careers
+          Join our community of successful learners who&apos;ve transformed their careers
         </p>
       </div>
 

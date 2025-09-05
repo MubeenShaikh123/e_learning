@@ -256,7 +256,7 @@ export default function CVPage() {
                   <div className="w-8 h-8 bg-green-500/20 backdrop-blur-sm border border-green-500/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                     <Edit3 className="w-4 h-4" />
                   </div>
-                  <span>Overcoming writer's block</span>
+                  <span>Overcoming writer&apos;s block</span>
                 </li>
               </ul>
             </div>

@@ -53,7 +53,7 @@ export default function ContactPage() {
             </span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">
-            Have a question or need help? Send us a message and we'll get back to you soon.
+            Have a question or need help? Send us a message and we&apos;ll get back to you soon.
           </p>
         </div>
       </section>
@@ -73,7 +73,7 @@ export default function ContactPage() {
                   <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
                     Send us a Message
                   </h2>
-                  <p className="text-gray-600">Fill out the form below and we'll respond as soon as possible.</p>
+                  <p className="text-gray-600">Fill out the form below and we&apos;ll respond as soon as possible.</p>
                 </div>
                 
                 {isSubmitted && (
@@ -119,7 +119,7 @@ export default function ContactPage() {
                       value={formData.subject}
                       onChange={handleInputChange}
                       className="w-full px-4 py-4 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 text-gray-700 placeholder-gray-500 shadow-lg"
-                      placeholder="What's this about?"
+                      placeholder="What&apos;s this about?"
                     />
                   </div>
 
@@ -159,7 +159,7 @@ export default function ContactPage() {
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">Get in Touch</h3>
                   <p className="text-gray-600 mb-6 leading-relaxed">
-                    We're here to help you succeed in your learning journey. Reach out to us anytime!
+                    We&apos;re here to help you succeed in your learning journey. Reach out to us anytime!
                   </p>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
@@ -206,10 +206,10 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto">
           <div className="backdrop-blur-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-white/50 shadow-xl rounded-3xl p-8 text-center">
             <CheckCircle className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">We're Here to Help</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">We&apos;re Here to Help</h3>
             <p className="text-gray-700 leading-relaxed">
               We typically respond to messages within 24 hours. For urgent matters, 
-              please include "URGENT" in your subject line.
+              please include &quot;URGENT&quot; in your subject line.
             </p>
           </div>
         </div>
