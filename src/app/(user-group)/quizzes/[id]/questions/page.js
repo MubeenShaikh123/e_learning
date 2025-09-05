@@ -253,13 +253,25 @@ const QuestionPage = ({ initialQuiz, userId }) => {
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="max-w-4xl mx-auto">
                         <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl overflow-hidden">
-                            {/* Timer and Progress */}
-                            <div className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 p-6 text-white flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                                <h2 className="text-2xl sm:text-3xl font-bold">{quiz?.title || "Quiz Title"}</h2>
-                                <div className="text-lg font-bold bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-2xl border border-white/30">
-                                    ⏳ {formatTime(timeLeft)}
-                                </div>
-                            </div>
+                            {/* Timer and Progress - Fixed responsive header */}
+<div className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 p-4 sm:p-6 text-white">
+    <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center">
+        {/* Quiz Title - Responsive with proper text wrapping */}
+        <div className="flex-1 min-w-0 pr-0 sm:pr-4">
+            <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold leading-tight break-words">
+                {quiz?.title || "Quiz Title"}
+            </h2>
+        </div>
+        
+        {/* Timer - Fixed width to prevent layout shifts */}
+        <div className="flex-shrink-0">
+            <div className="inline-flex items-center text-base sm:text-lg font-bold bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-2xl border border-white/30 min-w-[100px] justify-center">
+                <span className="mr-2">⏳</span>
+                <span className="tabular-nums">{formatTime(timeLeft)}</span>
+            </div>
+        </div>
+    </div>
+</div>
 
                             <div className="p-6 sm:p-8">
                                 {currentQuestion ? (
