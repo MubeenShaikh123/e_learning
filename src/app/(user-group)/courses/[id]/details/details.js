@@ -9,32 +9,39 @@ const Details = ({ course }) => {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">{course.title}</h1>
-        <div className="flex items-center space-x-4 text-gray-600">
-          <span className="flex items-center">
-            ★ {course.rating} ({course.reviews} reviews)
-          </span>
-          <span>•</span>
-          <span>{course.totalDuration} Minutes</span>
-          <span>•</span>
-          <span>Instructor: {course.instructor}</span>
+      <div className="mb-12">
+        <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-6 leading-tight">
+          {course.title}
+        </h1>
+        <div className="flex flex-wrap items-center gap-4 text-gray-600">
+          <div className="flex items-center backdrop-blur-xl bg-white/60 border border-white/50 rounded-full px-4 py-2">
+            <span className="text-yellow-400 mr-1">★</span>
+            <span className="font-semibold text-gray-700">{course.rating}</span>
+            <span className="text-gray-500 ml-1">({course.reviews} reviews)</span>
+          </div>
+          <div className="backdrop-blur-xl bg-white/60 border border-white/50 rounded-full px-4 py-2">
+            <span className="font-medium text-gray-700">{course.totalDuration} Minutes</span>
+          </div>
+          <div className="backdrop-blur-xl bg-white/60 border border-white/50 rounded-full px-4 py-2">
+            <span className="font-medium text-gray-700">Instructor: {course.instructor}</span>
+          </div>
         </div>
       </div>
 
-      <div className="border-b border-gray-200 mb-8">
-        <nav className="flex space-x-8">
+      <div className="backdrop-blur-xl bg-white/50 border border-white/50 shadow-lg rounded-2xl p-2 mb-10">
+        <nav className="flex flex-col sm:flex-row sm:space-x-1 space-y-1 sm:space-y-0">
           {['description', 'contents', 'reviews'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 px-1 border-b-2 font-medium ${
-                activeTab === tab
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+              className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-300 text-sm sm:text-base min-w-0 ${activeTab === tab
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg transform scale-[1.02]'
+                : 'text-gray-600 hover:text-blue-600 hover:bg-white/60 hover:scale-[1.01]'
+                }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              <span className="block truncate">
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </span>
             </button>
           ))}
         </nav>

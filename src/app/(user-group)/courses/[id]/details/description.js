@@ -65,32 +65,38 @@ const Description = ({ course }) => {
 
   return (
     <>
-      <p className="leading-relaxed mb-4">{course.description}</p>
+      <p className="leading-relaxed text-gray-700 mb-8 text-lg">{course.description}</p>
 
-      <div className="flex border-t border-gray-200 py-2">
-        <span className="text-gray-500">Duration</span>
-        <span className="ml-auto text-gray-900">{course.duration || '1'} Month</span>
-      </div>
-      <div className="flex border-t border-gray-200 py-2">
-        <span className="text-gray-500">Starting From</span>
-        <span className="ml-auto text-gray-900">{course.startingFrom || '1 Aug 2024'}</span>
+      <div className="backdrop-blur-xl bg-white/60 border border-white/50 shadow-lg rounded-2xl p-6 mb-8">
+        <div className="flex items-center justify-between py-4 border-b border-white/50">
+          <span className="text-gray-600 font-medium">Duration</span>
+          <span className="font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            {course.duration || '1'} Month
+          </span>
+        </div>
+        <div className="flex items-center justify-between py-4">
+          <span className="text-gray-600 font-medium">Starting From</span>
+          <span className="font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            {course.startingFrom || '1 Aug 2024'}
+          </span>
+        </div>
       </div>
 
-      <div className="flex">
+      <div className="flex gap-4">
         <button
           onClick={handleEnroll}
-          className="flex ml-auto w-full text-white bg-gradient-to-br from-[#3442D2] to-[#B24EFF] border-0 py-2 px-6 focus:outline-none rounded justify-center disabled:opacity-50"
+          className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-4 rounded-2xl text-lg font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 transform hover:scale-[1.02] shadow-2xl hover:shadow-3xl disabled:opacity-50 disabled:transform-none flex items-center justify-center"
           disabled={loading}
         >
           {isEnrolled ? 'Access Content' : loading ? 'Enrolling...' : 'Enroll Now'}
         </button>
-        <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+        <button className="w-14 h-14 backdrop-blur-xl bg-white/70 border border-white/50 shadow-lg rounded-2xl flex items-center justify-center text-blue-600 hover:bg-white/80 hover:scale-105 transition-all duration-300 hover:shadow-xl">
           <svg
             fill="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2"
-            className="w-5 h-5"
+            className="w-6 h-6"
             viewBox="0 0 24 24"
           >
             <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
