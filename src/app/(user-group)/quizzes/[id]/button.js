@@ -62,18 +62,21 @@ const Button = ({ quiz, userId }) => {
         });
     };
 
-    return (
-        <div className="flex">
-            <button
-                onClick={handleClick}
-                disabled={isAttempted}
-                className={`flex ml-auto w-full text-white ${isAttempted ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-br from-[#3442D2] to-[#B24EFF]'
-                    } border-0 py-2 px-6 focus:outline-none rounded justify-center uppercase`}
-            >
-                {loading ? "Checking..." : isAttempted ? "Already Attempted" : "Attempt Now"}
-            </button>
-        </div>
-    );
+return (
+    <div className="flex w-full">
+        <button
+            onClick={handleClick}
+            disabled={isAttempted}
+            className={`flex w-full justify-center items-center py-3 px-6 rounded-2xl font-semibold text-white transition-all duration-300 transform shadow-lg ${
+                isAttempted 
+                    ? 'bg-gradient-to-r from-gray-400 to-gray-500 cursor-not-allowed' 
+                    : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 hover:scale-105 hover:shadow-xl'
+            }`}
+        >
+            {loading ? "Checking..." : isAttempted ? "Already Attempted" : "Attempt Now"}
+        </button>
+    </div>
+);
 };
 
 export default Button;
