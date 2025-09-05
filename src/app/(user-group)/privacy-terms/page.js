@@ -39,7 +39,7 @@ export default function PrivacyTermsPage() {
             </section>
 
             {/* Tab Navigation */}
-            <section className="relative backdrop-blur-xl bg-white/60 border border-white/50 shadow-lg sticky top-0 z-50 mx-4 sm:mx-6 lg:mx-8 rounded-2xl mb-8">
+            <section className="backdrop-blur-xl bg-white/60 border border-white/50 shadow-lg sticky top-0 z-50 mx-4 sm:mx-6 lg:mx-8 rounded-2xl mb-8">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex space-x-0">
                         <button
