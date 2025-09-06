@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 const QuizCard = ({ quiz, onStartQuiz }) => {
     // Icon selection based on category or default
@@ -101,30 +102,21 @@ const QuizCard = ({ quiz, onStartQuiz }) => {
     );
 };
 
+const fetchQuizzes = async () => {
+    const response = await fetch("/api/quizzes/getall?limit=3");
+    if (!response.ok) {
+        throw new Error(`Failed to fetch quizzes: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.data;
+};
+
 const QuizzesGrid = () => {
     const router = useRouter();
-    const [quizzes, setQuizzes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchQuizzes = async () => {
-            try {
-                const response = await fetch("/api/quizzes/getall?limit=3", {
-                    cache: 'no-store'
-                });
-                const data = await response.json();
-                setQuizzes(data.data);
-                setError(null);
-            } catch (error) {
-                console.error("Error fetching quizzes:", error);
-                setError("Failed to load quizzes. Please try again later.");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchQuizzes();
-    }, []);
+    const { data: quizzes = [], isLoading, isError, error } = useQuery({
+        queryKey: ['quizzes', { limit: 3 }],
+        queryFn: fetchQuizzes,
+    });
 
     return (
         <div className="backdrop-blur-xl bg-white/30 border-y border-white/50">
@@ -138,7 +130,7 @@ const QuizzesGrid = () => {
                     </p>
                 </div>
 
-                {loading ? (
+                {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-64">
                         <div className="relative">
                             <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
@@ -149,7 +141,7 @@ const QuizzesGrid = () => {
                 ) : error ? (
                     <div className="text-center">
                         <div className="backdrop-blur-xl bg-red-50/80 border border-red-200/50 rounded-3xl p-8 max-w-md mx-auto">
-                            <p className="text-red-600 text-lg font-medium">{error}</p>
+                            <p className="text-red-600 text-lg font-medium">{error.message || "Something went wrong"}</p>
                         </div>
                     </div>
                 ) : (

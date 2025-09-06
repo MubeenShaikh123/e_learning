@@ -5,11 +5,12 @@ import { BookOpen, Clock, Star, UserCircle, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 const CourseCard = ({ course, onSelectCourse }) => {
   return (
     <div className="group h-full">
-      <div 
+      <div
         className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl hover:bg-white/80 h-full flex flex-col cursor-pointer"
         onClick={onSelectCourse}
       >
@@ -81,30 +82,21 @@ const CourseCard = ({ course, onSelectCourse }) => {
   );
 };
 
+const fetchCourses = async () => {
+  const response = await fetch("/api/courses/getall?limit=3");
+  if (!response.ok) {
+    throw new Error(`Failed to fetch courses: ${response.status}`);
+  }
+  const data = await response.json();
+  return data.data;
+};
+
 const CoursesGrid = () => {
   const router = useRouter();
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch("/api/courses/getall?limit=3", {
-          cache: 'no-store'
-        });
-        const data = await response.json();
-        setCourses(data.data);
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-        setError("Failed to load courses. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCourses();
-  }, []);
+  const { data: courses = [], isLoading, isError, error } = useQuery({
+    queryKey: ["courses", { limit: 3 }],
+    queryFn: fetchCourses,
+  });
 
   return (
     <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 relative z-10">
@@ -117,7 +109,7 @@ const CoursesGrid = () => {
         </p>
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <div className="flex flex-col items-center justify-center h-64">
           <div className="relative">
             <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
@@ -128,7 +120,7 @@ const CoursesGrid = () => {
       ) : error ? (
         <div className="text-center">
           <div className="backdrop-blur-xl bg-red-50/80 border border-red-200/50 rounded-3xl p-8 max-w-md mx-auto">
-            <p className="text-red-600 text-lg font-medium">{error}</p>
+            <p className="text-red-600 text-lg font-medium">{error.message || "Something went wrong."}</p>
           </div>
         </div>
       ) : (

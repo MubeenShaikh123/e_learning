@@ -5,6 +5,7 @@ import Course from '@/models/course/courseModel';
 const getCourses = async (req, res) => {
   if (req.method === 'GET') {
     try {
+      console.log('getall route triggered-------------------------------------------');
       // Get limit from query params, convert to number, default to null (no limit)
       const limit = req.query.limit ? parseInt(req.query.limit) : null;
 

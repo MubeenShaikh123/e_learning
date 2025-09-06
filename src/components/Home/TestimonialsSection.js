@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { useQuery } from '@tanstack/react-query';
 
 // Testimonial Card Component
 const TestimonialCard = ({ testimonial }) => {
@@ -21,11 +22,11 @@ const TestimonialCard = ({ testimonial }) => {
           />
         ))}
       </div>
-      
+
       <blockquote className="text-gray-700 mb-8 italic flex-grow text-lg leading-relaxed">
         &quot;{testimonial.content}&quot;
       </blockquote>
-      
+
       <div className="flex items-center mt-auto">
         <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white font-bold text-xl flex-shrink-0 shadow-lg">
           {testimonial.author?.charAt(0)}
@@ -39,30 +40,22 @@ const TestimonialCard = ({ testimonial }) => {
   );
 };
 
+const fetchTestimonials = async () => {
+  const response = await fetch('/api/testimonial/get');
+  if (!response.ok) {
+    throw new Error(`Failed to fetch testimonials: ${response.status}`);
+  }
+  const data = await response.json();
+  return data.data || [];
+};
+
 const TestimonialsSection = () => {
-  const [testimonials, setTestimonials] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [swiperRef, setSwiperRef] = useState(null);
 
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const res = await fetch('/api/testimonial/get', {
-          cache: 'no-store'
-        });
-        const data = await res.json();
-        setTestimonials(data.data || []);
-      } catch (error) {
-        console.error('Error fetching testimonials:', error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTestimonials();
-  }, []);
+  const { data: testimonials = [], isLoading, isError, error } = useQuery({
+    queryKey: ['testimonials'],
+    queryFn: fetchTestimonials,
+  });
 
   const goNext = () => {
     if (swiperRef) swiperRef.slideNext();
@@ -83,7 +76,7 @@ const TestimonialsSection = () => {
         </p>
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <div className="flex flex-col items-center justify-center h-64">
           <div className="relative">
             <div className="w-16 h-16 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
@@ -94,7 +87,7 @@ const TestimonialsSection = () => {
       ) : error ? (
         <div className="text-center">
           <div className="backdrop-blur-xl bg-red-50/80 border border-red-200/50 rounded-3xl p-8 max-w-md mx-auto">
-            <p className="text-red-600 text-lg font-medium">Failed to load testimonials. Please try again later.</p>
+            <p className="text-red-600 text-lg font-medium">{error.message || "Something went wrong"}</p>
           </div>
         </div>
       ) : testimonials.length === 0 ? (
@@ -115,7 +108,7 @@ const TestimonialsSection = () => {
               <ChevronLeft className="w-6 h-6 text-emerald-600" />
             </button>
           </div>
-          
+
           <div className="absolute top-1/2 -translate-y-1/2 -right-4 z-10">
             <button
               onClick={goNext}
@@ -131,7 +124,7 @@ const TestimonialsSection = () => {
             spaceBetween={32}
             slidesPerView={1}
             onSwiper={setSwiperRef}
-            pagination={{ 
+            pagination={{
               clickable: true,
               bulletClass: 'swiper-pagination-bullet !bg-emerald-500 !opacity-50',
               bulletActiveClass: 'swiper-pagination-bullet-active !opacity-100 !bg-emerald-600'

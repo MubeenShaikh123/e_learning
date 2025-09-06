@@ -1,7 +1,8 @@
 import StoreProvider from "./StoreProvider";
+import QueryProvider from "./QueryProvider";
 
 export const metadata = {
-  title: `${process.env.NEXT_PUBLIC_APP_NAME}`,
+    title: `${process.env.NEXT_PUBLIC_APP_NAME}`,
 };
 
 export default function RootLayout({ children }) {
@@ -9,7 +10,9 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body>
                 <StoreProvider>
-                    {children}
+                    <QueryProvider>
+                        {children}
+                    </QueryProvider>
                 </StoreProvider>
             </body>
         </html>
