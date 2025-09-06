@@ -28,7 +28,7 @@ export default function ContactPage() {
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
     
-    window.location.href = `mailto:mubeenshaikh2222@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:mubeenshaikh8072@gmail.com?subject=${subject}&body=${body}`;
     
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 3000);
@@ -165,10 +165,10 @@ export default function ContactPage() {
                     <div className="flex items-center space-x-3">
                       <Mail className="w-5 h-5 text-blue-600" />
                       <a 
-                        href="mailto:mubeenshaikh2222@gmail.com" 
+                        href="mailto:mubeenshaikh8072@gmail.com" 
                         className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
                       >
-                        mubeenshaikh2222@gmail.com
+                        mubeenshaikh8072@gmail.com
                       </a>
                     </div>
                   </div>
