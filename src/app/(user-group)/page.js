@@ -118,7 +118,7 @@ const ModernHomepage = () => {
                         { name: 'Home', href: '/' },
                         { name: 'Courses', href: '/courses' },
                         { name: 'Quizzes', href: '/quizzes' },
-                        { name: "Doc's", href: '/docs' },
+                        { name: "Doc's", href: '/cv' },
                         { name: 'Dashboard', href: '/dashboard' }
                       ].map((item) => (
                         <Link
