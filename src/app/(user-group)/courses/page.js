@@ -4,30 +4,30 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchCourses = async () => {
+    const response = await fetch("/api/courses/getall");
+    if (!response.ok) {
+        throw new Error(`Failed to fetch courses: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(`courses: ${JSON.stringify(data)}`);
+    return data.data;
+};
 
 const Course = ({ isHome }) => {
-    const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { data: courses = [], isLoading, isError, error } = useQuery({
+        queryKey: ['courses', 'all'],
+        queryFn: fetchCourses,
+    });
 
-    useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                const response = await fetch("/api/courses/getall");
-                const data = await response.json();
-                console.log(`courses: ${JSON.stringify(data)}`)
-                setCourses(data.data);
-            } catch (error) {
-                console.error("Error fetching courses:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCourses();
-    }, []);
-
-    if (loading) {
+    if (isLoading) {
         return <p className="text-center text-gray-600">Loading courses...</p>;
+    }
+
+    if (isError) {
+        return <p className="text-center text-red-600">Error loading courses: {error.message}</p>;
     }
 
     return (
@@ -49,7 +49,7 @@ const Course = ({ isHome }) => {
                         </p>
                     </div>
 
-                    {loading ? (
+                    {isLoading ? (
                         <div className="flex flex-col items-center justify-center h-64">
                             <div className="relative">
                                 <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>

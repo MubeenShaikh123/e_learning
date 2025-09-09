@@ -2,21 +2,40 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Details from './details/details';
 import { BookOpen } from 'lucide-react';
+import Course from '@/models/course/courseModel';
+import connectDB from '@/middleware/connectDB';
+
+// Direct database query - no API needed!
+const fetchCourse = async (id) => {
+  try {
+    // Connect to database
+    await connectDB();
+    
+    // Direct MongoDB query
+    const course = await Course.findById(id).lean(); // .lean() for better performance
+    
+    if (!course) {
+      return null;
+    }
+    
+    // Convert MongoDB _id to string for Next.js serialization
+    return {
+      ...course,
+      _id: course._id.toString(),
+    };
+  } catch (error) {
+    console.error('Database error:', error.message);
+    return null;
+  }
+};
 
 const CoursePage = async ({ params }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/get/${params.id}`, {
-    cache: "no-store",
-  });
-  const jsonResponse = await res.json();
-  const { data: course } = jsonResponse;
+  const course = await fetchCourse(params.id);
+
   if (!course) {
     notFound();
   }
 
-  // ✅ If course not found, show 404
-  if (!course) {
-    notFound();
-  }
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 relative overflow-hidden">
       {/* Animated Background Elements */}
