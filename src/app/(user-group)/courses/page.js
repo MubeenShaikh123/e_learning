@@ -1,37 +1,33 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import Course from '@/models/course/courseModel';
+import connectDB from "@/middleware/connectDB";
 
+// Server Component - Direct database query
 const fetchCourses = async () => {
-    const response = await fetch("/api/courses/getall");
-    if (!response.ok) {
-        throw new Error(`Failed to fetch courses: ${response.status}`);
+    try {
+        await connectDB();
+        const courses = await Course.find({}, "-modules").lean();
+        
+        // Convert MongoDB ObjectIds to strings
+        return courses.map(course => ({
+            ...course,
+            _id: course._id.toString(),
+            createdAt: course.createdAt?.toISOString(),
+            updatedAt: course.updatedAt?.toISOString()
+        }));
+    } catch (error) {
+        console.error('Error fetching courses:', error);
+        return [];
     }
-    const data = await response.json();
-    console.log(`courses: ${JSON.stringify(data)}`);
-    return data.data;
 };
 
-const Course = ({ isHome }) => {
-    const { data: courses = [], isLoading, isError, error } = useQuery({
-        queryKey: ['courses', 'all'],
-        queryFn: fetchCourses,
-    });
-
-    if (isLoading) {
-        return <p className="text-center text-gray-600">Loading courses...</p>;
-    }
-
-    if (isError) {
-        return <p className="text-center text-red-600">Error loading courses: {error.message}</p>;
-    }
+const CoursesPage = async () => {
+    const courses = await fetchCourses();
 
     return (
-        // Course Component Return JSX
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-teal-50 relative overflow-hidden">
             {/* Animated Background Elements */}
             <div className="fixed top-20 left-20 w-72 h-72 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl animate-pulse"></div>
@@ -49,15 +45,7 @@ const Course = ({ isHome }) => {
                         </p>
                     </div>
 
-                    {isLoading ? (
-                        <div className="flex flex-col items-center justify-center h-64">
-                            <div className="relative">
-                                <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-cyan-400 rounded-full animate-spin animate-reverse"></div>
-                            </div>
-                            <p className="mt-6 text-center text-gray-600 font-medium">Loading amazing courses...</p>
-                        </div>
-                    ) : courses.length === 0 ? (
+                    {courses.length === 0 ? (
                         <div className="text-center">
                             <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl p-12 max-w-md mx-auto">
                                 <BookOpen className="w-16 h-16 mx-auto mb-6 text-blue-500" />
@@ -127,24 +115,10 @@ const Course = ({ isHome }) => {
                             ))}
                         </div>
                     )}
-
-                    {isHome && (
-                        <div className="mt-16 text-center">
-                            <Link
-                                href="/courses"
-                                className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-10 py-4 rounded-2xl text-lg font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl inline-flex items-center"
-                            >
-                                View All Courses
-                                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                            </Link>
-                        </div>
-                    )}
                 </div>
             </section>
         </div>
     );
 };
 
-export default Course;
+export default CoursesPage;
