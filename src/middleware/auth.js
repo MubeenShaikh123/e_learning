@@ -8,8 +8,6 @@ export default function withAuth(handler) {
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized: Invalid or missing token' });
     }
-    console.log('token: ', token);
-    // Attach token data to request
     req.id = token._id;
     req.email = token.email;
     req.name = token.name;

@@ -15,6 +15,7 @@ import NotificationsTab from '@/components/Dashboard/NotificationsTab';
 import BadgesTab from '@/components/Dashboard/BadgesTab';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function Dashboard({
     user,
@@ -99,8 +100,22 @@ export default function Dashboard({
                             <Bell size={18} />
                             <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-gradient-to-r from-red-500 to-pink-500 animate-pulse"></span>
                         </button>
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white font-semibold shadow-lg border-2 border-white/50">
-                            {getInitials(user.name)}
+                        <div className={`h-12 w-12 rounded-full flex items-center justify-center text-white font-semibold shadow-lg border-2 border-white/50 overflow-hidden relative ${user?.image ? 'bg-white' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                            }`}>
+                            {user?.image ? (
+                                <Image
+                                    src={user.image}
+                                    alt={user.name || "Profile"}
+                                    width={48}
+                                    height={48}
+                                    className="rounded-full object-cover w-full h-full"
+                                    priority={false}
+                                />
+                            ) : (
+                                <span className="text-white font-semibold">
+                                    {getInitials(user.name)}
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -174,8 +189,22 @@ export default function Dashboard({
                     <div className="p-4 border-t border-white/30">
                         <div className="backdrop-blur-xl bg-white/60 border border-white/50 shadow-xl rounded-3xl p-4 mb-4">
                             <div className="flex items-center space-x-3 mb-3">
-                                <div className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white font-semibold shadow-lg border-2 border-white/50">
-                                    {getInitials(user.name)}
+                                <div className={`h-12 w-12 rounded-full flex items-center justify-center text-white font-semibold shadow-lg border-2 border-white/50 overflow-hidden relative ${user?.image ? 'bg-white' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                                    }`}>
+                                    {user?.image ? (
+                                        <Image
+                                            src={user.image}
+                                            alt={user.name || "Profile"}
+                                            width={48}
+                                            height={48}
+                                            className="rounded-full object-cover w-full h-full"
+                                            priority={false}
+                                        />
+                                    ) : (
+                                        <span className="text-white font-semibold">
+                                            {getInitials(user.name)}
+                                        </span>
+                                    )}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
@@ -222,8 +251,22 @@ export default function Dashboard({
                                     <Bell size={20} />
                                     <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-gradient-to-r from-red-500 to-pink-500 animate-pulse"></span>
                                 </button>
-                                <div className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white font-semibold shadow-lg border-2 border-white/50">
-                                    {getInitials(user.name)}
+                                <div className={`h-12 w-12 rounded-full flex items-center justify-center text-white font-semibold shadow-lg border-2 border-white/50 overflow-hidden relative ${user?.image ? 'bg-white' : 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                                    }`}>
+                                    {user?.image ? (
+                                        <Image
+                                            src={user.image}
+                                            alt={user.name || "Profile"}
+                                            width={48}
+                                            height={48}
+                                            className="rounded-full object-cover w-full h-full"
+                                            priority={false}
+                                        />
+                                    ) : (
+                                        <span className="text-white font-semibold">
+                                            {getInitials(user.name)}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
