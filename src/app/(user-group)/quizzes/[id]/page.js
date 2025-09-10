@@ -1,32 +1,30 @@
+// app/quizzes/[id]/page.js - SERVER COMPONENT
 import { notFound } from "next/navigation";
 import Button from "./button";
+import connectDB from "@/middleware/connectDB";
+import QuizQuestion from "@/models/quizz/quizzModel";
 
-async function fetchQuizData(id) {
-    try {
-        // Use absolute URL for fetch inside a server component
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/quizzes/get/${id}`, {
-            cache: "no-store" // Ensures fresh data every time
-        });
-
-        if (!response.ok) {
-            console.log(`Quiz not found: ${id}`);
-            return null;
-        }
-
-        const data = await response.json();
-        return data.data; // Assuming the response structure has `{ quiz: {...} }`
-    } catch (error) {
-        console.error("Error fetching quiz:", error);
-        return null;
-    }
+async function getQuizById(id) {
+   try {
+       await connectDB();
+       const quiz = await QuizQuestion.findById(id).lean();
+       if (!quiz) {
+           return null;
+       }
+       return JSON.parse(JSON.stringify(quiz));
+   } catch (error) {
+       console.error("Error fetching quiz:", error);
+       return null;
+   }
 }
 
-const QuizzPage = async ({ params }) => {
+const QuizPage = async ({ params }) => {
+    // Await params if using Next.js 15+
+    const quizId = params.id;
+    const quiz = await getQuizById(quizId);
 
-    const quizz = await fetchQuizData(params.id);
-
-    if (!quizz) {
-        return notFound(); // Fix: Ensure `notFound()` is returned immediately
+    if (!quiz) {
+        return notFound();
     }
 
     return (
@@ -40,22 +38,22 @@ const QuizzPage = async ({ params }) => {
                     <div className="mx-auto max-w-3xl">
                         <div className="backdrop-blur-xl bg-white/70 border border-white/50 shadow-2xl rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.01] hover:shadow-3xl">
                             <div className="h-20 bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 flex items-center px-8">
-                                <span className="text-4xl mr-6 opacity-90">{quizz.icon}</span>
-                                <h1 className="text-3xl font-bold text-white">{quizz.title}</h1>
+                                <span className="text-4xl mr-6 opacity-90">{quiz.icon}</span>
+                                <h1 className="text-3xl font-bold text-white">{quiz.title}</h1>
                             </div>
 
                             <div className="p-8">
                                 <div className="mb-8">
-                                    <p className="text-gray-700 text-xl mb-6 leading-relaxed">{quizz.description}</p>
+                                    <p className="text-gray-700 text-xl mb-6 leading-relaxed">{quiz.description}</p>
                                     <div className="flex flex-wrap gap-3">
                                         <span className="px-4 py-2 bg-blue-500/20 backdrop-blur-sm text-blue-700 rounded-full text-sm font-medium border border-blue-500/30">
-                                            {quizz.category}
+                                            {quiz.category}
                                         </span>
                                         <span className="px-4 py-2 bg-emerald-500/20 backdrop-blur-sm text-emerald-700 rounded-full text-sm font-medium border border-emerald-500/30">
-                                            {quizz.difficulty}
+                                            {quiz.difficulty}
                                         </span>
                                         <span className="px-4 py-2 bg-purple-500/20 backdrop-blur-sm text-purple-700 rounded-full text-sm font-medium border border-purple-500/30">
-                                            ${quizz.price}
+                                            ${quiz.price}
                                         </span>
                                     </div>
                                 </div>
@@ -68,7 +66,7 @@ const QuizzPage = async ({ params }) => {
                                             </svg>
                                             <span className="font-medium">Time Limit</span>
                                         </div>
-                                        <span className="text-gray-900 font-bold text-lg">{quizz.timeLimit || "30"} Minutes</span>
+                                        <span className="text-gray-900 font-bold text-lg">{quiz.timeLimit || "30"} Minutes</span>
                                     </div>
 
                                     <div className="flex justify-between items-center py-3 border-b border-white/20 last:border-b-0">
@@ -78,7 +76,7 @@ const QuizzPage = async ({ params }) => {
                                             </svg>
                                             <span className="font-medium">Number of Questions</span>
                                         </div>
-                                        <span className="text-gray-900 font-bold text-lg">{quizz.questions.length || "N/A"}</span>
+                                        <span className="text-gray-900 font-bold text-lg">{quiz.questions?.length || quiz.questionCount || "N/A"}</span>
                                     </div>
 
                                     <div className="flex justify-between items-center py-3">
@@ -88,12 +86,12 @@ const QuizzPage = async ({ params }) => {
                                             </svg>
                                             <span className="font-medium">Instructor</span>
                                         </div>
-                                        <span className="text-gray-900 font-bold text-lg">{quizz.instructor}</span>
+                                        <span className="text-gray-900 font-bold text-lg">{quiz.instructor}</span>
                                     </div>
                                 </div>
 
                                 <div className="flex justify-center">
-                                    <Button quiz={quizz} />
+                                    <Button quiz={quiz} />
                                 </div>
                             </div>
                         </div>
@@ -104,4 +102,4 @@ const QuizzPage = async ({ params }) => {
     );
 };
 
-export default QuizzPage;
+export default QuizPage;
