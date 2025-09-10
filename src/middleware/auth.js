@@ -10,7 +10,7 @@ export default function withAuth(handler) {
     }
     console.log('token: ', token);
     // Attach token data to request
-    req.id = token.id;
+    req.id = token._id;
     req.email = token.email;
     req.name = token.name;
 

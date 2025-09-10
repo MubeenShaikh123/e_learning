@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import { Bell } from 'lucide-react';
 import { useSelector } from 'react-redux';
@@ -10,11 +12,7 @@ const NotificationsTab = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const res = await fetch('/api/dashboard/notification/get', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('x-access-token')}`
-                    }
-                });
+                const res = await fetch('/api/dashboard/notification/get');
                 const data = await res.json();
                 if (data.success) {
                     setNotifications(data.data);
@@ -50,8 +48,8 @@ const NotificationsTab = () => {
                             key={btn.type}
                             onClick={() => setActiveCategory(btn.type)}
                             className={`px-4 py-2 text-sm font-medium rounded-md border ${activeCategory === btn.type
-                                    ? "bg-indigo-600 text-white"
-                                    : "bg-white text-gray-700 border-gray-300"
+                                ? "bg-indigo-600 text-white"
+                                : "bg-white text-gray-700 border-gray-300"
                                 }`}
                         >
                             {btn.label}
@@ -80,14 +78,14 @@ const NotificationsTab = () => {
                             <div key={notification._id} className={`px-6 py-4 ${notification.isNew ? 'bg-indigo-50' : ''}`}>
                                 <div className="flex items-start">
                                     <div className={`flex-shrink-0 p-2 rounded-full ${notification.type === 'general'
-                                            ? 'bg-blue-100 text-blue-600'
-                                            : notification.type === 'reminder'
-                                                ? 'bg-yellow-100 text-yellow-600'
-                                                : notification.type === 'course'
-                                                    ? 'bg-green-100 text-green-600'
-                                                    : notification.type === 'quizz'
-                                                        ? 'bg-purple-100 text-purple-600'
-                                                        : 'bg-gray-100 text-gray-600'
+                                        ? 'bg-blue-100 text-blue-600'
+                                        : notification.type === 'reminder'
+                                            ? 'bg-yellow-100 text-yellow-600'
+                                            : notification.type === 'course'
+                                                ? 'bg-green-100 text-green-600'
+                                                : notification.type === 'quizz'
+                                                    ? 'bg-purple-100 text-purple-600'
+                                                    : 'bg-gray-100 text-gray-600'
                                         }`}>
                                         <Bell size={16} />
                                     </div>

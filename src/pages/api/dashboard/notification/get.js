@@ -5,6 +5,7 @@ import withAuth from "@/middleware/auth";
 const getUserNotifications = async (req, res) => {
   if (req.method === "GET") {
     const userId = req.id;
+    console.log(`userId notification: ${userId}`)
 
     try {
       const notifications = await Notifications.find({

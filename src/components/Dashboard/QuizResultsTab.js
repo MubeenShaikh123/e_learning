@@ -1,33 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { BookOpen, Award, BarChart2, ChevronRight } from 'lucide-react';
+"use client"
+
+import React, { useState } from 'react';
+import { Award, BarChart2, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-const QuizResultsTab = () => {
-  const [quizzSubmissions, setQuizzSubmissions] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchQuizzSubmissions = async () => {
-      try {
-        const res = await fetch('/api/quizzes/get-submissions', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('x-access-token')}`,
-          },
-        });
-        const data = await res.json();
-        if (data.success) {
-          setQuizzSubmissions(data.data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch quiz submissions', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuizzSubmissions();
-  }, []);
-
+const QuizResultsTab = ({ submissions }) => {
+  const [quizzSubmissions, setQuizzSubmissions] = useState(submissions || []);
   const totalQuizzes = quizzSubmissions.length;
   const averageScore = totalQuizzes > 0
     ? Math.round(quizzSubmissions.reduce((acc, q) => acc + q.score, 0) / totalQuizzes)
@@ -87,9 +65,7 @@ const QuizResultsTab = () => {
           <h3 className="text-lg font-medium text-gray-900">Recent Quiz Results</h3>
         </div>
         <div className="overflow-x-auto">
-          {loading ? (
-            <div className="p-6 text-gray-500">Loading...</div>
-          ) : quizzSubmissions.length === 0 ? (
+          {quizzSubmissions.length === 0 ? (
             <div className="p-6 text-gray-500">No submissions found.</div>
           ) : (
             <table className="min-w-full divide-y divide-gray-200">

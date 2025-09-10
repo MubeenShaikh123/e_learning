@@ -1,45 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { BookOpen, BarChart2, ChevronRight } from 'lucide-react';
+"use client"
+
+import React, { useState } from 'react';
+import { BookOpen, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-const CourseProgressTab = () => {
+const CourseProgressTab = ({ enrolled, recommended }) => {
 
-    const [enrolledCourses, setEnrolledCourses] = useState([]);
-    const [recommendedCourses, setRecommendedCourses] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                const token = localStorage.getItem('x-access-token');
-
-                const [enrolledRes, recommendedRes] = await Promise.all([
-                    fetch('/api/courses/get-all-enrollments', {
-                        headers: { authorization: `Bearer ${token}` },
-                    }),
-                    fetch('/api/courses/getall?limit=2'),
-                ]);
-
-                const enrolledData = await enrolledRes.json();
-                const recommendedData = await recommendedRes.json();
-
-                if (enrolledData.success) {
-                    setEnrolledCourses(enrolledData.data);
-                }
-
-                if (recommendedData.success) {
-                    setRecommendedCourses(recommendedData.data);
-                }
-            } catch (err) {
-                console.error('Failed to fetch course data:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCourses();
-    }, []);
-
+    const [enrolledCourses, setEnrolledCourses] = useState(enrolled || []);
+    const [recommendedCourses, setRecommendedCourses] = useState(recommended || []);
     const totalEnrolled = enrolledCourses.length;
     const totalLessonsCompleted = 0;
 
@@ -82,9 +50,7 @@ const CourseProgressTab = () => {
                     <h3 className="text-lg font-medium text-gray-900">Courses In Progress</h3>
                 </div>
                 <div className="divide-y">
-                    {loading ? (
-                        <div className="px-6 py-4 text-gray-500">Loading...</div>
-                    ) : enrolledCourses.length === 0 ? (
+                    {enrolledCourses.length === 0 ? (
                         <div className="px-6 py-4 text-gray-500">{`You're not enrolled in any courses yet.`}</div>
                     ) : (
                         enrolledCourses.map((course, i) => (
@@ -114,9 +80,7 @@ const CourseProgressTab = () => {
                     <h3 className="text-lg font-medium text-gray-900">Recommended Courses</h3>
                 </div>
                 <div className="divide-y">
-                    {loading ? (
-                        <div className="px-6 py-4 text-gray-500">Loading...</div>
-                    ) : recommendedCourses.length === 0 ? (
+                    {recommendedCourses.length === 0 ? (
                         <div className="px-6 py-4 text-gray-500">No recommendations available.</div>
                     ) : (
                         recommendedCourses.map((course) => (
