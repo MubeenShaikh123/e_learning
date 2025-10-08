@@ -28,13 +28,15 @@ A personalized area for users to manage their **profile details**, track their *
 
 ## Getting Started
 
-First, run the development server:
+To get the latest version of the project, you should first clone the repository and switch to the development branch.
+
+### 1. Clone the Repository and Switch Branch
+
+The latest changes are available on the **`new-ui-auth`** branch. Use the following command to clone the project and check out this branch immediately:
 
 ```bash
+git clone https://github.com/MubeenShaikh123/e_learning.git
+
+git checkout new-ui-auth
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
