@@ -26,11 +26,17 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const result = await signIn("credentials", {
-            email: formData.email,
-            password: formData.password,
-            redirect: false,
-        });
+        let result;
+        try {
+            result = await signIn("credentials", {
+                email: formData.email,
+                password: formData.password,
+                redirect: false,
+            });
+        } catch {
+            setMessage({ type: "error", text: "Network error. Please try again." });
+            return;
+        }
 
         if (result?.ok) {
             setMessage({ type: "success", text: "Login successful" });
@@ -38,7 +44,9 @@ const Login = () => {
         } else {
             setMessage({
                 type: "error",
-                text: result?.error || "Invalid email or password",
+                text: result?.error === "CredentialsSignin"
+                    ? "Invalid email or password"
+                    : result?.error || "Something went wrong. Please try again.",
             });
         }
     };

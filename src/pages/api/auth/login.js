@@ -41,7 +41,7 @@ const login = async (req, res) => {
       return res.status(200).json({ message: 'Login successful', token: token, email: user.email, name: user.name, phone: user.phone });
     } catch (error) {
       console.error('Error logging in:', error.message);
-      return res.status(500).json({ message: 'Failed to login user', error: error.message });
+      return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
   } else {
     return res.status(405).json({ message: 'Method Not Allowed' });

@@ -20,10 +20,18 @@ export const authOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                if (mongoose.connections[0].readyState === 0) {
-                    await mongoose.connect(process.env.MONGODB_URI);
+                let user;
+                try {
+                    if (mongoose.connections[0].readyState === 0) {
+                        await mongoose.connect(process.env.MONGODB_URI, {
+                            serverSelectionTimeoutMS: 5000,
+                        });
+                    }
+                    user = await User.findOne({ email: credentials.email });
+                } catch (err) {
+                    console.error("Auth DB error:", err.message);
+                    throw new Error("Service temporarily unavailable. Please try again later.");
                 }
-                const user = await User.findOne({ email: credentials.email });
 
                 if (!user) {
                     throw new Error("User not found");
